@@ -11,7 +11,9 @@
     transition: width 0.28s;
     width: $sideBarWidth !important;
     background-color: $menuBg;
-    height: 100%;
+    //background-color: #fff;
+    //height: 100%;
+    height: calc(100vh - 80px);
     position: fixed;
     font-size: 0px;
     top: 0;
@@ -19,6 +21,7 @@
     left: 0;
     z-index: 1001;
     overflow: hidden;
+    padding-bottom: 100px;
 
     // reset element-ui css
     .horizontal-collapse-transition {

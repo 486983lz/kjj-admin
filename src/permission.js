@@ -8,12 +8,11 @@ import getPageTitle from '@/utils/get-page-title'
 
 NProgress.configure({showSpinner: false}); // NProgress Configuration
 
-const whiteList = ['/', '/login', '/auth-redirect']; // no redirect whitelist
+const whiteList = ['/', '/login','/admin-login', '/auth-redirect','/home-page','/declare-guide','/register']; // no redirect whitelist
 
 router.beforeEach(async (to, from, next) => {
     // start progress bar
     NProgress.start();
-
     // set page title
     document.title = getPageTitle(to.meta.title);
 
@@ -23,6 +22,7 @@ router.beforeEach(async (to, from, next) => {
     if (hasToken) {
         if (to.path === '/login') {
             // if is logged in, redirect to the home page
+
             next({path: '/'});
             NProgress.done()
         } else {
@@ -30,12 +30,16 @@ router.beforeEach(async (to, from, next) => {
             if (hasRoles) {
                 next()
             } else {
-                next()
+                next();
                 try {
                     const user_info = await store.dispatch('user/getAdminInfo');
+                    // const accessRoutes = await store.dispatch('permission/generateCommonRoutes');
+                    // router.addRoutes(accessRoutes);
+                    // next({ ...to, replace: true })
+
                     const accessRoutes = await store.dispatch('permission/generateCommonRoutes');
                     router.addRoutes(accessRoutes);
-                    next({ ...to, replace: true })
+                    next();
                 } catch (error) {
                     next(`/login?redirect=${to.path}`);
                     NProgress.done();
@@ -94,7 +98,7 @@ router.beforeEach(async (to, from, next) => {
             next()
         } else {
             // other pages that do not have permission to access are redirected to the login page.
-            next(`/login?redirect=${to.path}`);
+            next(`/home-page?redirect=${to.path}`);
             NProgress.done()
         }
     }

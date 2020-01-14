@@ -14,8 +14,14 @@
       >
         <sidebar-item v-for="route in permission_routes" :key="route.path" :item="route" :base-path="route.path" />
       </el-menu>
+
     </el-scrollbar>
+    <div class="menu-bottom">
+      <p>包头市科技局</p>
+      <p>科技创新项目管理信息系统</p>
+    </div>
   </div>
+
 </template>
 
 <script>
@@ -52,3 +58,21 @@ export default {
   }
 }
 </script>
+<style lang="scss" scoped>
+  .menu-bottom {
+    position: absolute;
+    width: 100%;
+    height: 100px;
+    z-index: 99999;
+    bottom: 0px;
+    color: #AAAAAA;
+  }
+  .menu-bottom p{
+    width: 100%;
+    height: 30px;
+    line-height: 50px;
+    font-size:14px;
+    margin: 0 auto;
+    text-align: center;
+  }
+</style>

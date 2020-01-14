@@ -2,15 +2,20 @@
   <div :class="classObj" class="app-wrapper">
     <div v-if="device==='mobile'&&sidebar.opened" class="drawer-bg" @click="handleClickOutside" />
     <sidebar class="sidebar-container" />
+    <navbar />
     <div :class="{hasTagsView:needTagsView}" class="main-container">
       <div :class="{'fixed-header':fixedHeader}">
-        <navbar />
-        <tags-view v-if="needTagsView" />
+
+        <!--<tags-view v-if="needTagsView" />-->
+      </div>
+      <div style="height: 35px;overflow: hidden;position: relative;z-index: 998;">
+        <div class="breadcrumb" style="position: absolute;left: 0;">当前位置:</div>
+        <breadcrumb style="position: absolute;left: 10px;" id="breadcrumb-container" class="breadcrumb-container"/>
       </div>
       <app-main />
-      <right-panel v-if="showSettings">
-        <settings />
-      </right-panel>
+      <!--<right-panel v-if="showSettings">-->
+        <!--<settings />-->
+      <!--</right-panel>-->
     </div>
   </div>
 </template>
@@ -20,6 +25,7 @@ import RightPanel from '@/components/RightPanel'
 import { AppMain, Navbar, Settings, Sidebar, TagsView } from './components'
 import ResizeMixin from './mixin/ResizeHandler'
 import { mapState } from 'vuex'
+import Breadcrumb from '@/components/Breadcrumb'
 
 export default {
   name: 'Layout',
@@ -29,7 +35,8 @@ export default {
     RightPanel,
     Settings,
     Sidebar,
-    TagsView
+    TagsView,
+    Breadcrumb
   },
   mixins: [ResizeMixin],
   computed: {
@@ -99,4 +106,22 @@ export default {
   .mobile .fixed-header {
     width: 100%;
   }
+  .sidebar-container {
+    margin-top: 80px;
+  }
+  .main-container {
+    padding-top: 79px;
+    background-color: rgba(244, 247, 250, 1);
+  }
+  .breadcrumb {
+    position: fixed;
+    height: 50px;
+    font-size: 14px;
+    line-height: 50px;
+    cursor: text;
+    margin-left: 20px;
+    z-index: 2;
+  }
+
+
 </style>

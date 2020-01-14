@@ -47,7 +47,8 @@
 
     .dashboard-editor-container {
         background-color: #e3e3e3;
-        min-height: 100vh;
+        /*min-height: 100vh;*/
+        min-height: calc(100vh - 114px);
         padding: 50px 60px 0px;
 
         .pan-info-roles {

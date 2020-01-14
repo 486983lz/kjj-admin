@@ -1,41 +1,44 @@
 <template>
     <div class="navbar">
-        <hamburger id="hamburger-container" :is-active="sidebar.opened" class="hamburger-container"
-                   @toggleClick="toggleSideBar"/>
+        <!--<hamburger id="hamburger-container" :is-active="sidebar.opened" class="hamburger-container"-->
+                   <!--@toggleClick="toggleSideBar"/>-->
+        <kjj-logo id="target-logo" :is-active="sidebar.opened" class="hamburger-container"
+                     @toggleClick="toggleSideBar"/>
 
-        <breadcrumb id="breadcrumb-container" class="breadcrumb-container"/>
+        <!--<breadcrumb id="breadcrumb-container" class="breadcrumb-container"/>-->
 
         <div class="right-menu">
-            <template v-if="device!=='mobile'">
-                <search id="header-search" class="right-menu-item"/>
+            <!--<template v-if="device!=='mobile'">-->
+                <!--<search id="header-search" class="right-menu-item"/>-->
 
-                <error-log class="errLog-container right-menu-item hover-effect"/>
+                <!--<error-log class="errLog-container right-menu-item hover-effect"/>-->
 
-                <screenfull id="screenfull" class="right-menu-item hover-effect"/>
+                <!--<screenfull id="screenfull" class="right-menu-item hover-effect"/>-->
 
-                <el-tooltip content="Global Size" effect="dark" placement="bottom">
-                    <size-select id="size-select" class="right-menu-item hover-effect"/>
-                </el-tooltip>
+                <!--<el-tooltip content="Global Size" effect="dark" placement="bottom">-->
+                    <!--<size-select id="size-select" class="right-menu-item hover-effect"/>-->
+                <!--</el-tooltip>-->
 
-            </template>
+            <!--</template>-->
 
             <el-dropdown class="avatar-container right-menu-item hover-effect" trigger="click">
                 <div class="avatar-wrapper">
-                    <img :src="avatar+'?imageView2/1/w/80/h/80'" class="user-avatar">
-                    <i class="el-icon-caret-bottom"/>
+                    <!--<img :src="avatar+'?imageView2/1/w/80/h/80'" class="user-avatar">-->
+                    XXXXXXXXXX公司
+                    <i class="el-icon-arrow-down"/>
                 </div>
                 <el-dropdown-menu slot="dropdown">
                     <router-link to="/profile/index">
-                        <el-dropdown-item>个人资料</el-dropdown-item>
+                        <el-dropdown-item>账号设置</el-dropdown-item>
                     </router-link>
-                    <router-link to="/">
-                        <el-dropdown-item>主页</el-dropdown-item>
-                    </router-link>
-                    <a target="_blank" href="https://panjiachen.github.io/vue-element-admin-site/#/">
-                        <el-dropdown-item>文档</el-dropdown-item>
-                    </a>
+                    <!--<router-link to="/">-->
+                        <!--<el-dropdown-item>主页</el-dropdown-item>-->
+                    <!--</router-link>-->
+                    <!--<a target="_blank" href="https://panjiachen.github.io/vue-element-admin-site/#/">-->
+                        <!--<el-dropdown-item>文档</el-dropdown-item>-->
+                    <!--</a>-->
                     <el-dropdown-item divided>
-                        <span style="display:block;" @click="signout">注销</span>
+                        <span style="display:block;" @click="signout">退出登录</span>
                     </el-dropdown-item>
                 </el-dropdown-menu>
             </el-dropdown>
@@ -45,21 +48,22 @@
 
 <script>
     import {mapGetters} from 'vuex'
-    import Breadcrumb from '@/components/Breadcrumb'
+    // import Breadcrumb from '@/components/Breadcrumb'
     import Hamburger from '@/components/Hamburger'
     import ErrorLog from '@/components/ErrorLog'
     import Screenfull from '@/components/Screenfull'
     import SizeSelect from '@/components/SizeSelect'
     import Search from '@/components/HeaderSearch'
-
+    import KjjLogo from '@/components/KjjLogo'
     export default {
         components: {
-            Breadcrumb,
+            // Breadcrumb,
             Hamburger,
             ErrorLog,
             Screenfull,
             SizeSelect,
-            Search
+            Search,
+            KjjLogo
         },
         computed: {
             ...mapGetters([
@@ -86,11 +90,18 @@
 
 <style lang="scss" scoped>
     .navbar {
-        height: 50px;
+        height: 80px;
         overflow: hidden;
-        position: relative;
-        background: #fff;
+        position: fixed;
+        top:0;
+        background-color: rgba(112, 159, 225, 1);;
+        width: 100%;
+
+        background-size: 1920px 1080px;
         box-shadow: 0 1px 4px rgba(0, 21, 41, .08);
+        z-index: 999;
+        font-size: 22px;
+
 
         .hamburger-container {
             line-height: 46px;
@@ -101,7 +112,7 @@
             -webkit-tap-highlight-color: transparent;
 
             &:hover {
-                background: rgba(0, 0, 0, .025)
+                /*background: rgba(0, 0, 0, .025)*/
             }
         }
 
@@ -136,7 +147,7 @@
                     transition: background .3s;
 
                     &:hover {
-                        background: rgba(0, 0, 0, .025)
+                        /*background: rgba(0, 0, 0, .025)*/
                     }
                 }
             }
@@ -147,6 +158,9 @@
                 .avatar-wrapper {
                     margin-top: 5px;
                     position: relative;
+                    color: #FFF;
+                    height: 80px;
+                    line-height: 80px;
 
                     .user-avatar {
                         cursor: pointer;
@@ -165,5 +179,8 @@
                 }
             }
         }
+    }
+    .el-dropdown-menu--medium {
+        top: 68px !important;
     }
 </style>

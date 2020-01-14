@@ -39,6 +39,36 @@ import tableRouter from './modules/table'
  * all roles can be accessed
  */
 export const constantRoutes = [
+
+    // {
+    //     path: '/redirect',
+    //     component: Layout,
+    //     hidden: true,
+    //     children: [
+    //         {
+    //             path: '/redirect/:path*',
+    //             component: () => import('@/views/redirect/index')
+    //         }
+    //     ]
+    // },
+    // {
+    //     path: '/login',
+    //     component: () => import('@/views/login/index'),
+    //     name: 'login',
+    //     hidden: true
+    // },
+    // {
+    //     path: '/auth-redirect',
+    //     component: () => import('@/views/login/auth-redirect'),
+    //     hidden: true
+    // },
+    // {
+    //     path: '/404',
+    //     component: () => import('@/views/error-page/404'),
+    //     name: '404',
+    //
+    // },
+
     {
         path: '/redirect',
         component: Layout,
@@ -50,24 +80,37 @@ export const constantRoutes = [
             }
         ]
     },
+    // 首页
+    {
+        path: '/home-page',
+        component: () => import('@/views/home-page/index'),
+        name: 'home_page',
+    },
+    // 登录
     {
         path: '/login',
-        component: () => import('@/views/login/index'),
+        component: () => import('@/views/login/admin_index'),
+        name: 'login',
+        hidden: true
+    },
+    // 管理员登录
+    {
+        path: '/admin-login',
+        component: () => import('@/views/login/admin_index'),
+        name: 'admin_login',
+        hidden: true
+    },
+    // 了解申报指南
+    {
+        path: '/declare-guide',
+        component: () => import('@/views/declare-guide/index'),
+        name: 'declare_guide',
         hidden: true
     },
     {
-        path: '/auth-redirect',
-        component: () => import('@/views/login/auth-redirect'),
-        hidden: true
-    },
-    {
-        path: '/404',
-        component: () => import('@/views/error-page/404'),
-        hidden: true
-    },
-    {
-        path: '/401',
-        component: () => import('@/views/error-page/401'),
+        path: '/register',
+        component: () => import('@/views/register/index'),
+        name: 'register',
         hidden: true
     },
     {
@@ -79,118 +122,201 @@ export const constantRoutes = [
                 path: 'dashboard',
                 component: () => import('@/views/dashboard/index'),
                 name: 'Dashboard',
-                meta: {title: '首页', icon: 'dashboard', affix: true}
+                meta: {title: '首页', icon: 'data1', affix: true}
+            }
+        ]
+    },
+
+    // {
+    //     path: '/rbac',
+    //     component: Layout,
+    //     name: 'rbac',
+    //     meta: {
+    //         title: '角色/权限',
+    //         icon: 'lock',
+    //     },
+    //     redirect: '/rbac/permission/permission-index',
+    //     alwaysShow: false,
+    //     children: [
+    //         {
+    //             path: 'user',
+    //             name: 'user',
+    //             component: () => import('@/views/nested/common'),
+    //             meta: {title: '用户管理', icon: 'dashboard'},
+    //             redirect: '/rbac/user/',
+    //             children: [
+    //                 {
+    //                     path: 'user-index',
+    //                     name: 'user.index',
+    //                     // component: () => import('@/views')
+    //                 }
+    //             ]
+    //         },
+    //         {
+    //             path: 'role',
+    //             name: 'role',
+    //             component: () => import('@/views/nested/common'),
+    //             meta: {title: '角色管理', icon: 'dashboard'},
+    //             redirect: '/rbac/role/',
+    //             children: [
+    //                 {
+    //                     path: 'role-index',
+    //                     name: 'role.index',
+    //                     component: () => import('@/views/rbac/role/index'),
+    //                     meta: {title: '角色管理', icon: 'dashboard'}
+    //                 },
+    //                 {
+    //                     path: 'assignation-role-to-user',
+    //                     name: 'role.assign.user',
+    //                     component: () => import('@/views/rbac/role/assignation_to_user'),
+    //                     meta: {title: '分配角色', icon: 'dashboard'}
+    //                 }
+    //             ]
+    //         },
+    //         {
+    //             path: 'permission',
+    //             name: 'permission',
+    //             meta: {title: '权限管理', icon: 'dashboard'},
+    //             component: () => import('@/views/nested/common'),
+    //             redirect: '/rbac/permission/',
+    //             children: [
+    //                 {
+    //                     path: 'permission-index',
+    //                     name: 'permission.index',
+    //                     component: () => import('@/views/rbac/permission/index'),
+    //                     meta: {title: '权限管理', icon: 'dashboard'}
+    //                 },
+    //                 {
+    //                     path: 'assignation-permission-to-role',
+    //                     name: 'permission.assign.role',
+    //                     component: () => import('@/views/rbac/permission/assignation_to_role'),
+    //                     meta: {title: '分配权限', icon: 'dashboard'}
+    //                 },
+    //             ]
+    //         },
+    //     ]
+    // },
+    {
+        path: '/project',
+        component: Layout,
+        name: 'project',
+        meta: {
+            title: '项目管理',
+            icon: 'project',
+        },
+        children: [
+            {
+                path: 'project-wait',
+                name: 'project_wait',
+                component: () => import('@/views/project/wait'),
+                meta: {title: '待申报项目',permissions:[]}
+            },
+            {
+                path: 'project-approval',
+                name: 'project_approval',
+                component: () => import('@/views/project/approval'),
+                meta: {title: '已立项项目',permissions:[]}
+            },
+            {
+                path: 'project-implementation',
+                name: 'project_implementation',
+                component: () => import('@/views/project/implementation'),
+                meta: {title: '已实施项目',permissions:[]}
             }
         ]
     },
     {
-        path: '/rbac',
+        path: '/problem',
         component: Layout,
-        name: 'rbac',
+        name: 'problem',
         meta: {
-            title: '角色/权限',
-            icon: 'lock',
+            icon: 'problem',
         },
-        redirect: '/rbac/permission/permission-index',
-        alwaysShow: false,
         children: [
             {
-                path: 'user',
-                name: 'user',
-                component: () => import('@/views/nested/common'),
-                meta: {title: '用户管理', icon: 'dashboard'},
-                redirect: '/rbac/user/',
-                children: [
-                    {
-                        path: 'user-index',
-                        name: 'user.index',
-                        // component: () => import('@/views')
-                    }
-                ]
-            },
-            {
-                path: 'role',
-                name: 'role',
-                component: () => import('@/views/nested/common'),
-                meta: {title: '角色管理', icon: 'dashboard'},
-                redirect: '/rbac/role/',
-                children: [
-                    {
-                        path: 'role-index',
-                        name: 'role.index',
-                        component: () => import('@/views/rbac/role/index'),
-                        meta: {title: '角色管理', icon: 'dashboard'}
-                    },
-                    {
-                        path: 'assignation-role-to-user',
-                        name: 'role.assign.user',
-                        component: () => import('@/views/rbac/role/assignation_to_user'),
-                        meta: {title: '分配角色', icon: 'dashboard'}
-                    }
-                ]
-            },
-            {
-                path: 'permission',
-                name: 'permission',
-                meta: {title: '权限管理', icon: 'dashboard'},
-                component: () => import('@/views/nested/common'),
-                redirect: '/rbac/permission/',
-                children: [
-                    {
-                        path: 'permission-index',
-                        name: 'permission.index',
-                        component: () => import('@/views/rbac/permission/index'),
-                        meta: {title: '权限管理', icon: 'dashboard'}
-                    },
-                    {
-                        path: 'assignation-permission-to-role',
-                        name: 'permission.assign.role',
-                        component: () => import('@/views/rbac/permission/assignation_to_role'),
-                        meta: {title: '分配权限', icon: 'dashboard'}
-                    },
-                ]
-            },
+                path: 'problem-index',
+                name: 'problem_index',
+                component: () => import('@/views/problem/index'),
+                meta: {title: '难题管理',permissions:[]}
+            }
         ]
     },
+    {
+        path: '/notice',
+        component: Layout,
+        name: 'notice',
+        meta: {
+            icon: 'notice',
+        },
+        children: [
+            {
+                path: 'notice-index',
+                name: 'notice_index',
+                component: () => import('@/views/notice/index'),
+                meta: {title: '公告',permissions:[]}
+            }
+        ]
+    },
+    {
+        path: '/contact',
+        component: Layout,
+        name: 'contact',
+        meta: {
+            icon: 'phone',
+        },
+        children: [
+            {
+                path: 'contact-index',
+                name: 'contact_index',
+                component: () => import('@/views/contact/index'),
+                meta: {title: '联系我们',permissions:[]}
+            }
+        ]
+    },
+
+
     // {
-    //   path: '/documentation',
-    //   component: Layout,
-    //   children: [
-    //     {
-    //       path: 'index',
-    //       component: () => import('@/views/documentation/index'),
-    //       name: 'Documentation',
-    //       meta: { title: 'Documentation', icon: 'documentation', affix: true }
-    //     }
-    //   ]
+    //     path: 'logo9',
+    //     name: 'logo9',
+    //     meta: {title: '难题管理', icon: 'lock',permissions:[]},
+    //     component: () => import('@/views/nested/common'),
+    //     children: [
+    //         {
+    //             path: 'logo-top3',
+    //             name: 'logo_top3',
+    //             component: () => import('@/views/rbac/role/index'),
+    //             meta: {title: '难题管理',permissions:[]}
+    //         }
+    //     ]
     // },
     // {
-    //   path: '/guide',
-    //   component: Layout,
-    //   redirect: '/guide/index',
-    //   children: [
-    //     {
-    //       path: 'index',
-    //       component: () => import('@/views/guide/index'),
-    //       name: 'Guide',
-    //       meta: { title: 'Guide', icon: 'guide', noCache: true }
-    //     }
-    //   ]
+    //     path: 'logo8',
+    //     name: 'logo8',
+    //     meta: {title: '公告', icon: 'lock'},
+    //     component: () => import('@/views/nested/common'),
+    //     children: [
+    //         {
+    //             path: 'logo-top4',
+    //             name: 'logo_top4',
+    //             component: () => import('@/views/rbac/role/index'),
+    //             meta: {title: '公告'}
+    //         }
+    //     ]
     // },
     // {
-    //   path: '/profile',
-    //   component: Layout,
-    //   redirect: '/profile/index',
-    //   hidden: true,
-    //   children: [
-    //     {
-    //       path: 'index',
-    //       component: () => import('@/views/profile/index'),
-    //       name: 'Profile',
-    //       meta: { title: 'Profile', icon: 'user', noCache: true }
-    //     }
-    //   ]
-    // }
+    //     path: 'logo7',
+    //     name: 'logo7',
+    //     meta: {title: '联系我们', icon: 'lock',permissions:[]},
+    //     component: () => import('@/views/nested/common'),
+    //     children: [
+    //         {
+    //             path: 'logo-top5',
+    //             name: 'logo_top5',
+    //             component: () => import('@/views/rbac/role/index'),
+    //             meta: {title: '联系我们',permissions:[]}
+    //         }
+    //     ]
+    // },
 ];
 
 /**
