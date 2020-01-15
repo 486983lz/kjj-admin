@@ -1,7 +1,7 @@
 <template>
     <div class="nav_left_part" style="padding: 0 15px;" @click="toggleClick">
         <img class="nav_logo" src="../../assets/nav_logo/u5.png" alt="">
-        <span class="logo-btn">申报端</span>
+        <span class="logo-btn">管理端</span>
         <span class="logo-text">包头市科技局科技创新项目管理信息系统</span>
 
     </div>

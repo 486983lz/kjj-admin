@@ -80,12 +80,6 @@ export const constantRoutes = [
             }
         ]
     },
-    // 首页
-    {
-        path: '/home-page',
-        component: () => import('@/views/home-page/index'),
-        name: 'home_page',
-    },
     // 登录
     {
         path: '/login',
