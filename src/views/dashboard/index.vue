@@ -2,100 +2,77 @@
     <div class="dashboard-container">
         <el-row :gutter="20">
             <el-col :span="6">
-                <el-button class='btn_right' type="primary">待审核项目</el-button>
+                <el-button class='btn_right btn_right_jb1' type="primary">待审核项目</el-button>
             </el-col>
             <el-col :span="6">
-                <el-button class='btn_right' type="primary">待立项项目</el-button>
+                <el-button class='btn_right btn_right_jb2' type="primary">待立项项目</el-button>
             </el-col>
             <el-col :span="6">
-                <el-button class='btn_right' type="primary">待验收项目</el-button>
+                <el-button class='btn_right btn_right_jb3' type="primary">待验收项目</el-button>
             </el-col>
             <el-col :span="6">
-                <el-button class='btn_right' type="primary">项目电子档案库</el-button>
+                <el-button class='btn_right btn_right_jb4' type="primary">项目电子档案库</el-button>
             </el-col>
         </el-row>
         <div class="pending add-bg-box">
-           <p>待处理</p>
+           <p class="pending-p"> 待处理</p>
             <el-row :gutter="20" class="pending-content" type="flex" justify="center">
-                <el-col span="6"><div class="pending-content-item"><span>未审核注册企业<span class="pending-content-item-num pending-1 add-bg-box">20</span></span></div></el-col>
-                <el-col span="6"><div class="pending-content-item"><span>待处理项目初审<span class="pending-content-item-num pending-2 add-bg-box">20</span></span></div></el-col>
-                <el-col span="6"><div class="pending-content-item"><span>待填报项目评分<span class="pending-content-item-num pending-3 add-bg-box">20</span></span></div></el-col>
-                <el-col span="6"><div class="pending-content-item"><span>新发布难题<span class="pending-content-item-num pending-4 add-bg-box">20</span></span></div></el-col>
+                <el-col :span="6"><div class="pending-content-item"><span>未审核注册企业<span class="pending-content-item-num pending-1 add-bg-box">20</span></span></div></el-col>
+                <el-col :span="6"><div class="pending-content-item"><span>待处理项目初审<span class="pending-content-item-num pending-2 add-bg-box">20</span></span></div></el-col>
+                <el-col :span="6"><div class="pending-content-item"><span>待填报项目评分<span class="pending-content-item-num pending-3 add-bg-box">20</span></span></div></el-col>
+                <el-col :span="6"><div class="pending-content-item"><span>新发布难题<span class="pending-content-item-num pending-4 add-bg-box">20</span></span></div></el-col>
             </el-row>
         </div>
-        <el-row :gutter="20" style="margin-top: 10px;">
-            <el-col span="16" >
-                <el-row :gutter="10" class="add-bg-box project-pie">
+        <el-row :gutter="20" style="margin-top: 10px; margin-right: 0">
+            <el-col :span="12" >
+                <el-row class="add-bg-box project-pie">
                     <el-col :span="8">
-                        111
+                        <p class="pending-p">项目库统计</p>
+                        <div class="project-count">
+                            <span>上报项目库数量:  303</span>
+                            <span>项目储备库数量:  27</span>
+                            <span>立项项目库数量:  12</span>
+                            <span>电子档案库数量:  95</span>
+                        </div>
                     </el-col>
-                    <el-col :span="16" class="project-pie-box" ref="barEcharts">
-                        <div id="myChart" class="myChart"  :style="{width: '100%', height: '100%'}"></div>
+                    <el-col :span="16" class="project-pie-box" >
+                        <pieChart/>
                     </el-col>
                 </el-row>
             </el-col>
-            <el-col span="8" class="add-bg-box">
-                2222
+            <el-col :span="12" class="add-bg-box project-line-box" >
+                    <p class="pending-p">项目数年度统计</p>
+                    <lineChart/>
+                    <!--<div id="myChart-line" class="myChart"  :style="{width: '100%', height: '245px'}"></div>-->
             </el-col>
         </el-row>
+        <pigtabChart/>
     </div>
 </template>
 
 <script>
-    import homeDashboard from './home'
-    import echarts from 'echarts'
+    import pieChart from './components/PieChart'
+    import lineChart from './components/LineChart'
+    import pigtabChart from './components/PigtabChart'
     export default {
         name: 'Dashboard',
-        components: { homeDashboard },
+        components: { pieChart,lineChart,pigtabChart},
         data() {
             return {
-                pie :{
-                    tooltip: {
-                        trigger: 'item',
-                        formatter: '{a} <br/>{b}: {c} ({d}%)'
-                    },
-                    legend: {
-                        bottom: 10,
-                        data: ['档案库', '立项库', '储备库', '上报库']
-                    },
-                    series: [
-                        {
-                            name: '访问来源',
-                            type: 'pie',
-                            radius: ['50%', '70%'],
-                            data: [
-                                {value: 335, name: '档案库'},
-                                {value: 310, name: '立项库'},
-                                {value: 234, name: '储备库'},
-                                {value: 135, name: '上报库'}
-                            ]
-                        }
-                    ]
-                }
+
             }
         },
         computed: {
 
         },
         methods: {
-            drawLine () {
-                // 基于准备好的dom，初始化echarts实例
-                let me = this;
-                this.$nextTick(function () {
-                    document.getElementById('myChart').style.width = me.$refs.barEcharts.$el.clientWidth + 'px';
-                    myChart.resize();
-                })
-                let myChart = echarts.init(document.getElementById('myChart'))
 
-                myChart.setOption(this.pie)
-
-            },
         },
         created() {
 
         },
-        mounted () { // 注意，必须mounted后绘制
-            this.drawLine()
+        mounted () {
+
         },
     }
 </script>
@@ -107,17 +84,30 @@
 
     .btn_right {
         width: 100%;
-        background-color: #709fe1;
+        /*background-color: #709fe1;*/
         border: 0;
         height: 50px;
+    }
+    .btn_right_jb1 {
+        background: linear-gradient(263.105548923687deg, rgba(114, 160, 223, 1) 5%, rgba(255, 255, 255, 1) 143%);
+    }
+    .btn_right_jb2 {
+        background: linear-gradient(251.621611651808deg, rgba(2, 167, 240, 1) 0%, rgba(255, 255, 255, 1) 144%);
+    }
+    .btn_right_jb3 {
+        background: linear-gradient(251.710841649997deg, rgba(2, 125, 180, 1) 0%, rgba(255, 255, 255, 1) 168%);
+    }
+    .btn_right_jb4 {
+        background: linear-gradient(251.875314098429deg, rgba(132, 0, 255, 1) 0%, rgba(255, 255, 255, 1) 158%);
     }
     .pending {
         background-color: #fff;
         margin-top: 20px;
     }
-    .pending p{
+    .pending-p{
         padding-top: 5px;
         margin-left: 5px;
+        background-color: #fff;
     }
     .pending-content {
         text-align: center;
@@ -159,8 +149,22 @@
         background-color: #fff;
     }
     .project-pie-box {
-        width: 60%;
         height: 100%;
     }
+    .project-count {
+        margin-left: 50px;
+    }
+    .project-count span{
+        display: block;
+        height :30px;
+        line-height: 30px;
+    }
+    .project-line-box {
+        height: 300px;
+        background-color: #fff;
+    }
+
+
+
 
 </style>

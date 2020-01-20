@@ -200,22 +200,76 @@ export const constantRoutes = [
         },
         children: [
             {
-                path: 'project-wait',
-                name: 'project_wait',
-                component: () => import('@/views/project/wait'),
-                meta: {title: '待申报项目',permissions:[]}
+                path: 'project-admin-examine',
+                name: 'project_admin_examine',
+                component: () => import('@/views/project-admin/examine'),
+                meta: {title: '待审核项目',permissions:[]}
             },
             {
-                path: 'project-approval',
-                name: 'project_approval',
-                component: () => import('@/views/project/approval'),
-                meta: {title: '已立项项目',permissions:[]}
+                path: 'project-admin-approval',
+                name: 'project_admin_approval',
+                component: () => import('@/views/project-admin/approval'),
+                meta: {title: '待立项项目',permissions:[]}
             },
             {
-                path: 'project-implementation',
-                name: 'project_implementation',
-                component: () => import('@/views/project/implementation'),
-                meta: {title: '已实施项目',permissions:[]}
+                path: 'project-admin-acceptance',
+                name: 'project_admin_acceptance',
+                component: () => import('@/views/project-admin/acceptance'),
+                meta: {title: '已验收项目',permissions:[]}
+            },
+            {
+                path: 'project-admin-archives',
+                name: 'project_admin_archives',
+                component: () => import('@/views/project-admin/archives'),
+                meta: {title: '项目档案',permissions:[]}
+            }
+        ]
+    },
+    {
+        path: '/count',
+        component: Layout,
+        name: 'count',
+        meta: {
+            icon: 'count',
+        },
+        children: [
+            {
+                path: 'contact-index',
+                name: 'contact_index',
+                component: () => import('@/views/count/index'),
+                meta: {title: '项目统计',permissions:[]}
+            }
+        ]
+    },
+    {
+        path: '/roster',
+        component: Layout,
+        name: 'roster',
+        meta: {
+            icon: 'roster',
+        },
+        children: [
+            {
+                path: 'roster-index',
+                name: 'roster_index',
+                component: () => import('@/views/roster/index'),
+                meta: {title: '专家名册',permissions:[]}
+            }
+        ]
+    },
+    {
+        path: '/security',
+        component: Layout,
+        name: 'security',
+        meta: {
+            icon: 'security',
+        },
+        children: [
+            {
+                path: 'security-index',
+                name: 'security_index',
+                component: () => import('@/views/security/index'),
+                meta: {title: '安全检测',permissions:[]}
             }
         ]
     },
@@ -231,7 +285,7 @@ export const constantRoutes = [
                 path: 'problem-index',
                 name: 'problem_index',
                 component: () => import('@/views/problem/index'),
-                meta: {title: '难题管理',permissions:[]}
+                meta: {title: '难题列表',permissions:[]}
             }
         ]
     },
@@ -247,7 +301,87 @@ export const constantRoutes = [
                 path: 'notice-index',
                 name: 'notice_index',
                 component: () => import('@/views/notice/index'),
-                meta: {title: '公告',permissions:[]}
+                meta: {title: '公告管理',permissions:[]}
+            }
+        ]
+    },
+    {
+        path: '/user',
+        component: Layout,
+        name: 'user',
+        meta: {
+            title: '用户管理',
+            icon: 'users',
+        },
+        children: [
+            {
+                path: 'user-index-company',
+                name: 'user_index_company',
+                component: () => import('@/views/user/index'),
+                meta: {title: '二级单位账号',permissions:[]}
+            },
+            {
+                path: 'user-index-department',
+                name: 'user_index_department',
+                component: () => import('@/views/user/index'),
+                meta: {title: '市局账号',permissions:[]}
+            },
+            {
+                path: 'user-index-expert',
+                name: 'user_index_expert',
+                component: () => import('@/views/user/index'),
+                meta: {title: '专家',permissions:[]}
+            },
+            {
+                path: 'user-index-admin',
+                name: 'user_index_admin',
+                component: () => import('@/views/user/index'),
+                meta: {title: '管理员',permissions:[]}
+            }
+        ]
+    },
+    {
+        path: '/data',
+        component: Layout,
+        name: 'data',
+        meta: {
+            title: '数据管理',
+            icon: 'data',
+        },
+        children: [
+            {
+                path: 'data-index-industry',
+                name: 'data_index_industry',
+                component: () => import('@/views/data/index'),
+                meta: {title: '行业领域',permissions:[]}
+            },
+            {
+                path: 'data-index-company',
+                name: 'data_index_company',
+                component: () => import('@/views/data/index'),
+                meta: {title: '二级单位',permissions:[]}
+            },
+            {
+                path: 'data-index-department',
+                name: 'data_index_department',
+                component: () => import('@/views/data/index'),
+                meta: {title: '归口科室',permissions:[]}
+            }
+        ]
+    },
+    {
+        path: '/configure',
+        component: Layout,
+        name: 'configure',
+        meta: {
+            icon: 'configure',
+        },
+        children: [
+            {
+                path: 'configure-index',
+                name: 'configure_index',
+                component: () => import('@/views/configure/index'),
+                meta: {title: '功能配置',permissions:[]}
             }
         ]
     },
@@ -256,14 +390,14 @@ export const constantRoutes = [
         component: Layout,
         name: 'contact',
         meta: {
-            icon: 'phone',
+            icon: 'phone1',
         },
         children: [
             {
                 path: 'contact-index',
                 name: 'contact_index',
                 component: () => import('@/views/contact/index'),
-                meta: {title: '联系我们',permissions:[]}
+                meta: {title: '技术支持',permissions:[]}
             }
         ]
     },
