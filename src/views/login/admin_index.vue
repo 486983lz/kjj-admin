@@ -5,71 +5,49 @@
                 <home-page id="home-page" :is-active="false" class="hamburger-container"/>
             </div>
             <div class="login_input">
-                <el-form ref="loginForm" :model="loginForm" :rules="loginRules" autocomplete="on" label-position="left" label-width="80px">
+                <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" autocomplete="on" label-position="left">
+                    <!--帐号-->
                     <el-form-item prop="account">
-                    <span class="svg-container"><svg-icon icon-class="user"/></span><el-input  ref="account" v-model="loginForm.account" placeholder="请输入手机号" name="account" type="text" tabindex="1"  autocomplete="on"></el-input>
+                        <span class="svg-container">
+                            <svg-icon icon-class="user"/>
+                        </span><el-input ref="account" v-model="loginForm.account" placeholder="请输入手机号" name="account" type="text" tabindex="1"  autocomplete="on" />
                     </el-form-item>
-
-                    <el-form-item prop="password">
-                    <span class="svg-container"><svg-icon icon-class="password"/></span><el-input  ref="password" v-model="loginForm.password" placeholder="请输入密码" name="password" type="text" tabindex="1"  autocomplete="on"></el-input>
-                    </el-form-item>
-
+                    <!--密码-->
+                    <el-tooltip v-model="capsTooltip" content="Caps lock is On" placement="right" manual>
+                        <el-form-item prop="password">
+                            <span class="svg-container">
+                                <svg-icon icon-class="password"/>
+                            </span><el-input
+                                    :key="passwordType"
+                                    ref="password"
+                                    v-model="loginForm.password"
+                                    :type="passwordType"
+                                    placeholder="请输入密码"
+                                    name="password"
+                                    tabindex="2"
+                                    autocomplete="on"
+                                    @keyup.native="checkCapslock"
+                                    @blur="capsTooltip = false"
+                                    @keyup.enter.native="handleLogin"/>
+                            <!--显示密码-->
+                            <!--<span class="show-pwd" @click="showPwd">
+                                <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'"/>
+                            </span>-->
+                        </el-form-item>
+                    </el-tooltip>
+                    <!--登录-->
                     <el-form-item>
                         <el-button :loading="loading" type="primary" @click.native.prevent="handleLogin">立即登录</el-button>
                     </el-form-item>
 
                     <el-form-item>
                         <div class="tishi">
-                            <span style="color: rgb(170, 170, 170);">回到</span><span class="tishi_1" @click="home_page">首页</span>
+                            <!--<span style="color: rgb(170, 170, 170);">回到</span><span class="tishi_1" @click="home_page">首页</span>-->
                             <span class="tishi_2" >忘记密码?</span>
                         </div>
                     </el-form-item>
                 </el-form>
-
             </div>
-
-
-
-            <!--<el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" autocomplete="on" label-position="left">
-                <el-form-item prop="account">
-                    <span class="svg-container">
-                      <svg-icon icon-class="user"/>
-                    </span>
-                    <el-input
-                            ref="account"
-                            v-model="loginForm.account"
-                            placeholder="Username"
-                            name="account"
-                            type="text"
-                            tabindex="1"
-                            autocomplete="on"/>
-                </el-form-item>
-
-                <el-tooltip v-model="capsTooltip" content="Caps lock is On" placement="right" manual>
-                    <el-form-item prop="password">
-                        <span class="svg-container">
-                          <svg-icon icon-class="password"/>
-                        </span>
-                        <el-input
-                                :key="passwordType"
-                                ref="password"
-                                v-model="loginForm.password"
-                                :type="passwordType"
-                                placeholder="Password"
-                                name="password"
-                                tabindex="2"
-                                autocomplete="on"
-                                @keyup.native="checkCapslock"
-                                @blur="capsTooltip = false"
-                                @keyup.enter.native="handleLogin"/>
-                        <span class="show-pwd" @click="showPwd">
-                            <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'"/>
-                        </span>
-                    </el-form-item>
-                </el-tooltip>
-
-                <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">立即登录</el-button>
-            </el-form>-->
 
             <div class="navbar-bottom">
                 <home-bottom id="home-bottom" :is-active="false" class="hamburger-container"/>
@@ -115,11 +93,11 @@
             };
             return {
                 loginForm: {
-                    account: 'example@example.com',
+                    account: '18447078393',
                     password: 'sysmaster109'
                 },
                 loginRules: {
-                    //username: [{required: true, trigger: 'blur', validator: validateUsername}],
+                    username: [{required: true, trigger: 'blur', validator: validateUsername}],
                     account: [
                         {required: true, trigger: 'change', validator: validatedSignInUsername},
                     ],
@@ -171,7 +149,8 @@
                     this.capsTooltip = false
                 }
             },
-            showPwd() {
+            //显示密码
+            /*showPwd() {
                 if (this.passwordType === 'password') {
                     this.passwordType = ''
                 } else {
@@ -180,13 +159,15 @@
                 this.$nextTick(() => {
                     this.$refs.password.focus()
                 })
-            },
+            },*/
+
             handleLogin() {
                 this.$refs.loginForm.validate(valid => {
                     if (valid) {
                         this.loading = true;
                         this.$store.dispatch('user/signin', this.loginForm)
                             .then((response) => {
+                                // console.log(response);
                                 this.$router.push({path: this.redirect || '/', query: this.otherQuery});
                                 this.loading = false;
                             })
@@ -199,6 +180,7 @@
                     }
                 })
             },
+
             getOtherQuery(query) {
                 return Object.keys(query).reduce((acc, cur) => {
                     if (cur !== 'redirect') {
@@ -281,11 +263,12 @@
         .tishi{
 
             .tishi_1{
-                margin-right: 170px;
+
                 cursor: pointer;
                 color: rgb(112, 159, 225);
             }
             .tishi_2{
+                margin-left: 220px;
                 cursor: pointer;
                 color: rgb(170, 170, 170);
             }
