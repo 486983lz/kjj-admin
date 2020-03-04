@@ -401,6 +401,22 @@ export const constantRoutes = [
             }
         ]
     },
+    {
+        path: '/recommend',
+        component: Layout,
+        name: 'recommend',
+        meta: {
+            icon: 'phone1',
+        },
+        children: [
+            {
+                path: 'recommend-index',
+                name: 'recommend_index',
+                component: () => import('@/views/recommend/index'),
+                meta: {title: '推荐端首页',permissions:[]}
+            }
+        ]
+    },
 
 
     // {
