@@ -2,9 +2,11 @@
     <div class="app-container add-bg-box">
         <el-tabs v-model="activeTab" type="border-card" @tab-click="" stretch>
             <el-tab-pane label="项目统计" name="activity" lazy>
-                <projectCount/>
-                <div class="border-bottom"></div>
-                <projectProportion/>
+                <div class="region-box">
+                    <projectCount/>
+                    <div class="border-bottom"></div>
+                    <projectProportion/>
+                </div>
             </el-tab-pane>
             <el-tab-pane label="年度统计" name="second" lazy>
                 <div class="region-box">
