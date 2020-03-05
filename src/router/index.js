@@ -350,6 +350,12 @@ export const constantRoutes = [
         },
         children: [
             {
+                path: 'data-index-tab',
+                name: 'data_index_tab',
+                component: () => import('@/views/tab/index'),
+                meta: {title: '标签管理',permissions:[]}
+            },
+            {
                 path: 'data-index-industry',
                 name: 'data_index_industry',
                 component: () => import('@/views/data/index'),
