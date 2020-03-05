@@ -29,7 +29,7 @@ const mutations = {
 };
 
 const actions = {
-    // user login
+    /*// user login
     login({commit}, userInfo) {
         const {username, password} = userInfo;
         return new Promise((resolve, reject) => {
@@ -41,25 +41,20 @@ const actions = {
             }).catch(error => {
                 reject(error)
             });
-
-            // signin({username: username.trim(), password: password}).then(response => {
-            //     const {data} = response;
-            //     console.log(data);
-            //     resolve();
-            // }).catch(error => {
-            //     reject(error);
-            // });
         })
-    },
+    },*/
 
+    //登录
     signin({commit}, userInfo) {
         const {account, password} = userInfo;
         return new Promise((resolve, reject) => {
             signin({account: account.trim(), password: password}).then(response => {
                 const {data} = response;
+                console.log(data);
+                sessionStorage.setItem('userId',data.id);
+                sessionStorage.setItem('role',data.role);
                 commit('SET_TOKEN', data.token);
                 setToken(data.token);
-                //console.log(data.token);
                 resolve();
             }).catch(error => {
                 console.log(error);
@@ -68,26 +63,22 @@ const actions = {
         })
     },
 
-    // get user info
+
+    /*// get user info
     getInfo({commit, state}) {
         return new Promise((resolve, reject) => {
             getInfo(state.token).then(response => {
                 const {data} = response;
-
                 if (!data) {
                     reject('Verification failed, please Login again.')
                 }
-
                 const {roles, name, avatar, introduction} = data;
-
                 // roles must be a non-empty array
                 if (!roles || roles.length <= 0) {
                     reject('getInfo: roles must be a non-null array!')
                 }
-
                 // console.log(roles);
                 // console.log('fa');
-
                 commit('SET_ROLES', roles);
                 commit('SET_NAME', name);
                 commit('SET_AVATAR', avatar);
@@ -97,7 +88,7 @@ const actions = {
                 reject(error)
             })
         })
-    },
+    },*/
 
     getAdminInfo({commit, state}) {
         return new Promise((resolve, reject) => {
@@ -106,7 +97,7 @@ const actions = {
                 // console.log(roles);
                 // return false;
                 commit('SET_ROLES', roles);
-                //tconsole.log(data);
+                //console.log(data);
                 resolve(info);
             }).catch(error => {
                 reject(error)
@@ -114,7 +105,7 @@ const actions = {
         });
     },
 
-    // user logout
+    /*// user logout
     logout({commit, state}) {
         return new Promise((resolve, reject) => {
             logout(state.token).then(() => {
@@ -127,7 +118,7 @@ const actions = {
                 reject(error)
             })
         })
-    },
+    },*/
 
     // 登出
     signout({commit, state}) {
@@ -158,23 +149,16 @@ const actions = {
     changeRoles({commit, dispatch}, role) {
         return new Promise(async resolve => {
             const token = role + '-token';
-
             commit('SET_TOKEN', token);
             setToken(token);
-
             const {roles} = await dispatch('getInfo');
-
             resetRouter();
-
             // generate accessible routes map based on roles
             const accessRoutes = await dispatch('permission/generateRoutes', roles, {root: true});
-
             // dynamically add accessible routes
             router.addRoutes(accessRoutes);
-
             // reset visited views and cached views
             dispatch('tagsView/delAllViews', null, {root: true});
-
             resolve()
         })
     }
