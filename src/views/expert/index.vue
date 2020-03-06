@@ -4,15 +4,15 @@
         <el-button class='btn_right' @click='showCreate' type="primary">添加专家</el-button>
         <div class="app-container" ref="appContainer">
             <div class="header"  ref="header">
-                <el-form ref="form" :model="search" label-width="120px" :rules="codeRules" style="display: flex;">
+                <el-form ref="form" :model="where" label-width="120px" style="display: flex;">
                     <el-form-item label="姓名:" label-width="100px" style="margin: 0;width: 30%;">
-                        <el-input v-model="search.where.name" placeholder="请输入专家姓名" ></el-input>
+                        <el-input v-model="where.name" placeholder="请输入专家姓名" ></el-input>
                     </el-form-item>
                     <el-form-item label="手机号码:" label-width="100px" style="margin: 0;width: 30%;">
-                        <el-input v-model="search.where.phone" placeholder="请输入手机号码"></el-input>
+                        <el-input v-model="where.phone" placeholder="请输入手机号码"></el-input>
                     </el-form-item>
                     <el-form-item label="所属领域" label-width="100px" style="margin: 0;width: 30%;">
-                        <el-select v-model="search.where.industry_id" placeholder="所属领域">
+                        <el-select v-model="where.industry_id" placeholder="所属领域">
                             <el-option
                                     v-for="item in List"
                                     :key="item.id"
@@ -21,7 +21,7 @@
                             </el-option>
                         </el-select>
                     </el-form-item>
-                    <el-button type="info" @click="" style="margin-left: 1%;">查询</el-button>
+                    <el-button type="info" @click="searchInfo" style="margin-left: 1%;">查询</el-button>
                 </el-form>
             </div>
 
@@ -51,6 +51,12 @@
                         </el-table-column>
                         <el-table-column
                                 align="center"
+                                prop="industry_name"
+                                label="所属领域"
+                        >
+                        </el-table-column>
+                        <el-table-column
+                                align="center"
                                 prop="created_at"
                                 label="创建时间"
                         >
@@ -59,25 +65,14 @@
                                 label="操作"
                                 align="center">
                             <template slot-scope="scope">
-
+                                <el-button @click="updateList(scope.row)" type="text" size="small">编辑</el-button>
+                                <el-button @click="deleteList(scope.row.id)" type="text" size="small">删除</el-button>
                             </template>
                         </el-table-column>
-                        <!--<el-table-column-->
-                                <!--align="center"-->
-                                <!--label="操作"-->
-                                <!--width="200">-->
-                            <!--<template slot-scope="scope">-->
-                                <!--<router-link :to="{path: 'project-show',query:{projectNum:scope.row.project_num, type:'show'}}"><el-button type="text" size="small">预览</el-button></router-link>-->
-                                <!--<router-link :to="{path: 'project-show',query:{projectNum:scope.row.project_num, type:'update'}}"><el-button type="text" size="small">编辑</el-button></router-link>-->
-
-                                <!--<el-button @click="handleClick(scope.row)" type="text" size="small">删除</el-button>-->
-                                <!--<el-button type="text" size="small">申报</el-button>-->
-                            <!--</template>-->
-                        <!--</el-table-column>-->
                     </el-table>
                 </el-col>
             </el-row>
-            <el-dialog title="新增专家" :visible.sync="dialogFormCreate" width='650px'>
+            <el-dialog :title="dialogTile" :visible.sync="dialogFormCreate" width='650px'>
                 <el-form :model="createFrom">
                     <el-row>
                         <el-col :span="16" :offset="3">
@@ -129,7 +124,8 @@
                 </el-form>
                 <div slot="footer" class="dialog-footer">
                     <el-button @click="dialogFormCreate = false">取 消</el-button>
-                    <el-button type="primary" @click="doCreate">确 定</el-button>
+                    <el-button v-if="dialogTile =='新增专家'" type="primary" @click="doCreate">确 定</el-button>
+                    <el-button v-if="dialogTile =='修改专家'" type="primary" @click="doUpdate">修 改</el-button>
                 </div>
             </el-dialog>
 
@@ -157,14 +153,14 @@
                     page: 1,
                     total: 0,
                     pageSize:10,
-                    where:{}
                 },
+                where:{},
                 loading: false,
                 tableData: [],
                 dialogFormCreate:false,
+                dialogTile:'新增专家',
                 createFrom:{},
                 List:{},
-                maxHeight:''
             }
         },
         mounted(){
@@ -180,11 +176,16 @@
             this.getIndustry();
         },
         methods: {
+
+            searchInfo(){
+                this.search.page = 1;
+                this.search.where = { ...this.where }
+                this.getList();
+            },
             getMaxHeight(){
                 let appContainer= this.$refs.appContainer.scrollHeight;
                 let header= this.$refs.header.scrollHeight;
                 let page= this.$refs.page.scrollHeight;
-
                 this.maxHeight = appContainer-header-page-40;
             },
             getList(){
@@ -213,12 +214,29 @@
                     });
             },
             showCreate(){
+                this.dialogTile = '新增专家';
+                this.createFrom = {};
                 this.dialogFormCreate = true;
-
+            },
+            updateList(row){
+                this.dialogTile = '修改专家';
+                this.createFrom = row;
+                this.dialogFormCreate = true;
             },
             doCreate(){
                 let that = this
                 this.$store.dispatch('expert/createExpert',this.createFrom)
+                    .then((response) => {
+                        this.getList();
+                        this.dialogFormCreate = false;
+                    })
+                    .catch(() => {
+
+                    });
+            },
+            doUpdate(){
+                let that = this
+                this.$store.dispatch('expert/updateExpert',this.createFrom)
                     .then((response) => {
                         this.getList();
                         this.dialogFormCreate = false;
