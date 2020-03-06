@@ -318,7 +318,7 @@ export const constantRoutes = [
                 path: 'user-index-company',
                 name: 'user_index_company',
                 component: () => import('@/views/user/index'),
-                meta: {title: '单位账号',permissions:[]}
+                meta: {title: '二级单位账号',permissions:[]}
             },
             {
                 path: 'user-index-department',

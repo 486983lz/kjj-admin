@@ -1,14 +1,35 @@
 <template>
     <div class="app-top">
         <el-button type="primary" class='btn_right' @click="TowCompany">添加二级单位</el-button>
-        <div class="app-container">
-
+        <div class="app-container" ref="appContainer">
+            <!--搜索框-->
+            <div class="header" ref="header">
+                <!--<el-form ref="form" :model="search" label-width="120px" :rules="codeRules" style="display: flex;">
+                    <el-form-item label="姓名：" style="margin: 0;width: 30%;">
+                        <el-input v-model="search.name" autocomplete="off"></el-input>
+                    </el-form-item>
+                    <el-form-item label="手机号码：" style="margin: 0;width: 30%;">
+                        <el-input v-model="search.phone" autocomplete="off"></el-input>
+                    </el-form-item>
+                    <el-form-item label="所属单位：" style="margin: 0;width: 30%;">
+                        <el-select v-model="search.company_id" filterable clearable placeholder="请选择二级单位">
+                            <el-option
+                                    v-for="item in tableForm"
+                                    :key="item.level_company_name"
+                                    :label="item.level_company_name"
+                                    :value="item.id">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-button type="info" @click="searchAll" style="margin-left: 1%;">查询</el-button>
+                </el-form>-->
+            </div>
         <!--二级单位帐号列表-->
         <el-table
                 :header-cell-style="tableHeaderColor"
                 :data="tableData"
                 border
-                max-height="600"
+                :max-height="maxHeight"
                 v-loading="loading"
                 element-loading-text="拼命加载中"
                 element-loading-spinner="el-icon-loading"
@@ -49,7 +70,7 @@
             </el-table-column>
         </el-table>
         <!--分页-->
-        <div class="page-block">
+        <div class="page-block" ref="page">
             <el-pagination
                     @current-change="handleCurrentChange"
                     :current-page="search.page"
@@ -132,6 +153,7 @@
                     total: 0,
                     pageSize:10,
                 },
+                maxHeight:'',
                 activeTab: 'activity',
                 loading: false,
                 dialogFormVisible: false,
@@ -151,19 +173,27 @@
                 },
             }
         },
-        computed: {
-
+        mounted(){
+            this.getMaxHeight()
         },
         created() {
             this.getAllTwoCompany();
             this.getArea();
         },
         methods: {
+            //获取计算表格高度
+            getMaxHeight(){
+                let appContainer= this.$refs.appContainer.scrollHeight;
+                let header= this.$refs.header.scrollHeight;
+                let page= this.$refs.page.scrollHeight;
+
+                this.maxHeight = appContainer-header-page-40;
+            },
+
             //添加二级单位弹窗
             TowCompany(){
                 this.dialogFormVisible = true;
             },
-
             //获取地区
             getArea() {
                 let that = this;
@@ -299,6 +329,9 @@
     }
     .el-form-item{
         margin: 0 10% 4% 10%;
+    }
+    .header {
+        padding-bottom: 30px;
     }
     .el-select{
         width: 100%;
