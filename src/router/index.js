@@ -329,7 +329,7 @@ export const constantRoutes = [
             {
                 path: 'user-index-expert',
                 name: 'user_index_expert',
-                component: () => import('@/views/user/index'),
+                component: () => import('@/views/expert/index'),
                 meta: {title: '专家',permissions:[]}
             },
             {
@@ -350,9 +350,15 @@ export const constantRoutes = [
         },
         children: [
             {
+                path: 'data-index-tab',
+                name: 'data_index_tab',
+                component: () => import('@/views/tab/index'),
+                meta: {title: '标签管理',permissions:[]}
+            },
+            {
                 path: 'data-index-industry',
                 name: 'data_index_industry',
-                component: () => import('@/views/data/index'),
+                component: () => import('@/views/industry/index'),
                 meta: {title: '行业领域',permissions:[]}
             },
             {
@@ -398,6 +404,22 @@ export const constantRoutes = [
                 name: 'contact_index',
                 component: () => import('@/views/contact/index'),
                 meta: {title: '技术支持',permissions:[]}
+            }
+        ]
+    },
+    {
+        path: '/recommend',
+        component: Layout,
+        name: 'recommend',
+        meta: {
+            icon: 'phone1',
+        },
+        children: [
+            {
+                path: 'recommend-index',
+                name: 'recommend_index',
+                component: () => import('@/views/recommend/index'),
+                meta: {title: '推荐端首页',permissions:[]}
             }
         ]
     },

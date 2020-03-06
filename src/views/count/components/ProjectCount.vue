@@ -26,6 +26,7 @@
       </div>
     </el-col>
     <el-col :span="18">
+      <el-button class="text-btn" type="text" @click="exportImg">导出图片</el-button>
       <div id="projectCountChart" :style="{width: '100%', height: '400px'}"></div>
     </el-col>
   </el-row>
@@ -59,7 +60,7 @@ export default {
             series: [
                 {
                     type: 'pie',
-                    radius: ['50%', '70%'],
+                    radius: ['40%', '70%'],
                     // center:['30%', '50%'],
                     data: [
                         {value: 335, name: '上报库', itemStyle: { normal: { color: '#fbdb5a' } }},
@@ -85,7 +86,23 @@ export default {
     initChart() {
         let projectCountChart = echarts.init(document.getElementById('projectCountChart'))
         projectCountChart.setOption(this.projectCountChart)
-    }
+    },
+    exportImg() {
+        let regionChart = echarts.init(document.getElementById('projectCountChart'))
+        let picInfo = regionChart.getDataURL({
+            type: 'png',
+            pixelRatio: 1.5,
+            backgroundColor: '#fff'
+        });
+        const elink = document.createElement('a');
+        elink.download = '统计图';
+        elink.style.display = 'none';
+        elink.href = picInfo;
+        document.body.appendChild(elink);
+        elink.click();
+        URL.revokeObjectURL(elink.href); // 释放URL 对象
+        document.body.removeChild(elink)
+    },
   }
 }
 </script>
@@ -103,5 +120,15 @@ export default {
   }
   .project-left-num {
     text-align: center;
+  }
+  .text-btn {
+    position: absolute;
+    margin-right: 50px;
+    height: 40px;
+    width: 150px;
+    color: rgb(51, 51, 51);
+    background-color: rgba(242, 242, 242, 1);
+    right: 20px;
+    z-index: 99999;
   }
 </style>
