@@ -1,5 +1,5 @@
 import {
-    createExpert,getExpertList}
+    createExpert,getExpertList,updateExpert}
     from '@/api/expert';
 
 
@@ -12,6 +12,16 @@ const actions = {
     createExpert({commit, state},data) {
         return new Promise((resolve, reject) => {
             createExpert(data).then(response => {
+                const {data} = response;
+                resolve(data);
+            }).catch(error => {
+                reject(error);
+            });
+        });
+    },
+    updateExpert({commit, state},data) {
+        return new Promise((resolve, reject) => {
+            updateExpert(data).then(response => {
                 const {data} = response;
                 resolve(data);
             }).catch(error => {

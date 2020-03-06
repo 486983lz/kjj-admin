@@ -3,12 +3,18 @@
 
         <el-button class='btn_right' @click='showCreate' type="primary">创建行业领域</el-button>
 
-        <div class="app-container">
+        <div class="app-container"  ref="appContainer">
             <el-row>
                 <el-col>
                     <el-table
+                            :header-cell-style="tableHeaderColor"
                             :data="tableData"
-                            stripe
+                            border
+                            :max-height="maxHeight"
+                            v-loading="loading"
+                            element-loading-text="拼命加载中"
+                            element-loading-spinner="el-icon-loading"
+                            element-loading-background="rgba(0, 0, 0, 0.8)"
                             style="width: 100%">
                         <el-table-column
                                 align="center"
@@ -110,7 +116,7 @@
                 </div>
             </el-dialog>
 
-            <div class="page-block">
+            <div class="page-block" ref="page">
                 <el-pagination
                         @current-change="handleCurrentChanges"
                         :current-page="search.page"
@@ -139,6 +145,7 @@
                 dialogFormCreate:false,
                 createFrom:{},
                 industryList:{},
+                loading:false,
             }
         },
         computed: {
@@ -147,14 +154,24 @@
         created() {
             this.getList();
         },
+        mounted(){
+            this.getMaxHeight()
+        },
         methods: {
+            getMaxHeight(){
+                let appContainer= this.$refs.appContainer.scrollHeight;
+                let page= this.$refs.page.scrollHeight;
+                this.maxHeight = appContainer-page-40;
+            },
             getList(){
+                this.loading=true;
                 let that = this
                 this.$store.dispatch('projectIndustry/getIndustryList',this.search)
                     .then((response) => {
                         that.tableData = response.data;
                         that.search.total = response.total;
                         that.search.pageSize = response.per_page;
+                        this.loading=false;
                     })
                     .catch(() => {
 
@@ -207,7 +224,12 @@
             handleCurrentChanges(val){
                 this.search.page = val;
                 this.getList();
-
+            },
+            //设置表格表头样式
+            tableHeaderColor ({ row, column, rowIndex, columnIndex }) {
+                if (rowIndex === 0) {
+                    return 'background-color: #ecf5ff;color: black;font-weight: 700;'
+                }
             },
         }
     }
