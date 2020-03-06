@@ -2,43 +2,40 @@
     <div class="app-top">
 
         <el-button class='btn_right' @click='showCreate' type="primary">添加专家</el-button>
-        <div class="app-container">
-
-            <el-row  justify="center">
-                <el-form :inline="true" :model="search.where" style="text-align: center">
-                    <el-col :span="5" :offset="3">
-                        <el-form-item label="姓名:" label-width="100px">
-                            <el-input v-model="search.where.name" placeholder="请输入专家姓名" ></el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="5">
-                        <el-form-item label="手机号码:" label-width="100px">
-                            <el-input v-model="search.where.phone" placeholder="请输入手机号码"></el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="5">
-                        <el-form-item label="所属领域" label-width="100px">
-                            <el-select v-model="search.where.industry_id" placeholder="所属领域">
-                                <el-option
-                                        v-for="item in List"
-                                        :key="item.id"
-                                        :label="item.name"
-                                        :value="item.id">
-                                </el-option>
-                            </el-select>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="3" style="text-align: left">
-                        <el-button type="info">查询</el-button>
-                    </el-col>
+        <div class="app-container" ref="appContainer">
+            <div class="header"  ref="header">
+                <el-form ref="form" :model="search" label-width="120px" :rules="codeRules" style="display: flex;">
+                    <el-form-item label="姓名:" label-width="100px" style="margin: 0;width: 30%;">
+                        <el-input v-model="search.where.name" placeholder="请输入专家姓名" ></el-input>
+                    </el-form-item>
+                    <el-form-item label="手机号码:" label-width="100px" style="margin: 0;width: 30%;">
+                        <el-input v-model="search.where.phone" placeholder="请输入手机号码"></el-input>
+                    </el-form-item>
+                    <el-form-item label="所属领域" label-width="100px" style="margin: 0;width: 30%;">
+                        <el-select v-model="search.where.industry_id" placeholder="所属领域">
+                            <el-option
+                                    v-for="item in List"
+                                    :key="item.id"
+                                    :label="item.name"
+                                    :value="item.id">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-button type="info" @click="" style="margin-left: 1%;">查询</el-button>
                 </el-form>
-            </el-row>
+            </div>
 
             <el-row>
                 <el-col>
                     <el-table
+                            :header-cell-style="tableHeaderColor"
                             :data="tableData"
-                            stripe
+                            border
+                            :max-height="maxHeight"
+                            v-loading="loading"
+                            element-loading-text="拼命加载中"
+                            element-loading-spinner="el-icon-loading"
+                            element-loading-background="rgba(0, 0, 0, 0.8)"
                             style="width: 100%">
                         <el-table-column
                                 align="center"
@@ -136,7 +133,7 @@
                 </div>
             </el-dialog>
 
-            <div class="page-block">
+            <div class="page-block" ref="page">
                 <el-pagination
                         @current-change="handleCurrentChanges"
                         :current-page="search.page"
@@ -162,13 +159,20 @@
                     pageSize:10,
                     where:{}
                 },
+                loading: false,
                 tableData: [],
                 dialogFormCreate:false,
                 createFrom:{},
                 List:{},
+                maxHeight:''
             }
         },
+        mounted(){
+            this.getMaxHeight()
+        },
+
         computed: {
+
 
         },
         created() {
@@ -176,13 +180,22 @@
             this.getIndustry();
         },
         methods: {
+            getMaxHeight(){
+                let appContainer= this.$refs.appContainer.scrollHeight;
+                let header= this.$refs.header.scrollHeight;
+                let page= this.$refs.page.scrollHeight;
+
+                this.maxHeight = appContainer-header-page-40;
+            },
             getList(){
+                this.loading = true;
                 let that = this
                 this.$store.dispatch('expert/getExpertList',this.search)
                     .then((response) => {
                         that.tableData = response.data;
                         that.search.total = response.total;
                         that.search.pageSize = response.per_page;
+                        that.loading = false;
                     })
                     .catch(() => {
 
@@ -220,7 +233,14 @@
                 this.getList();
 
             },
-        }
+            //设置表格表头样式
+            tableHeaderColor ({ row, column, rowIndex, columnIndex }) {
+                if (rowIndex === 0) {
+                    return 'background-color: #ecf5ff;color: black;font-weight: 700;'
+                }
+            },
+        },
+
     }
 </script>
 <style scoped>
@@ -233,5 +253,11 @@
         border: 0;
         height: 40px;
         margin: 20px 0 0px 20px;
+    }
+    .header {
+        padding-bottom: 30px;
+    }
+    .el-select{
+        width: 100%;
     }
 </style>
