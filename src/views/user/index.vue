@@ -77,15 +77,14 @@
                 </el-table-column>
             </el-table>
             <!--分页-->
-            <div class="block" style="position: absolute;bottom: 5%;right: 5%;">
+            <div class="page-block">
                 <el-pagination
-                        @size-change="handleSizeChange"
                         @current-change="handleCurrentChange"
                         :current-page="search.page"
-                        :page-sizes="[10, 20, 30, 40]"
+                        layout="total, prev, pager, next"
+                        :total="search.total"
                         :page-size="search.pageSize"
-                        layout="total , prev, pager, next, jumper"
-                        :total="search.total">
+                        background>
                 </el-pagination>
             </div>
 
@@ -107,10 +106,14 @@
                     <el-form-item label="确认密码：" prop="repassword">
                         <el-input type="password" v-model="form.repassword" autocomplete="off"></el-input>
                     </el-form-item>
-                    <el-form-item label="二级单位：" porp="role">
-                        <el-select v-model="form.role" placeholder="请选择二级单位">
-                            <el-option label="单位一" value="2"></el-option>
-                            <el-option label="单位二" value="3"></el-option>
+                    <el-form-item label="二级单位：" porp="company_id">
+                        <el-select v-model="form.company_id" filterable clearable placeholder="请选择二级单位">
+                            <el-option
+                                    v-for="item in tableForm"
+                                    :key="item.level_company_name"
+                                    :label="item.level_company_name"
+                                    :value="item.id">
+                            </el-option>
                         </el-select>
                     </el-form-item>
                 </el-form>
@@ -215,11 +218,13 @@
                     phone: '18447078393',
                     password: '123456',
                     repassword: '123456',
-                    role: '',
+                    role: '2',
+                    company_id: '',
                 },
                 editForm:{},
                 passwordForm:{},
                 tableData: [],
+                tableForm: [],
                 search: {
                     page: 1,
                     total: 0,
@@ -269,11 +274,25 @@
         },
         created() {
             this.getRecommendAccounts();
+            this.getAllTwoCompany();
         },
         methods: {
             //添加二级单位弹窗
             RecommendAccounts(){
                 this.dialogFormVisible = true;
+            },
+
+            //查看所有二级单位
+            getAllTwoCompany() {
+                let that = this;
+                this.$store.dispatch('twoLevelCompany/getAllTwoCompany',this.search)
+                    .then((response) => {
+                        that.tableForm = response.data;
+                        console.log(that.tableForm);
+                        that.search.total = response.total;
+                    })
+                    .catch(() => {
+                    });
             },
 
             //添加管理员帐号---二级单位帐号

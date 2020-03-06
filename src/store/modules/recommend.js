@@ -11,7 +11,7 @@ const actions = {
         return new Promise((resolve, reject) => {
             saveAccounts(data).then(response => {
                 const {data} = response;
-                resolve(data);
+                resolve(response);
             }).catch(error => {
                 reject(error);
             });

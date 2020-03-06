@@ -2,31 +2,13 @@
     <div class="app-top">
         <el-button type="primary" class='btn_right' @click="TowCompany">添加二级单位</el-button>
         <div class="app-container">
-        <div class="header">
-            <!--<el-form ref="form" :model="search" label-width="120px" style="display: flex;">
-                <el-button type="primary" @click="RecommendAccounts">新增帐号</el-button>
-                <el-form-item label="姓名：" style="margin: 0;width: 30%;">
-                    <el-input v-model="search.name" autocomplete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="手机号码：" style="margin: 0;width: 30%;">
-                    <el-input v-model="search.phone" autocomplete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="所属单位：" style="margin: 0;width: 30%;">
-                    <el-select v-model="search.role" placeholder="请选择二级单位">
-                        <el-option label="单位一" value="2"></el-option>
-                        <el-option label="单位二" value="3"></el-option>
-                    </el-select>
-                </el-form-item>
-                <el-button type="info" @click="searchAll" style="margin-left: 1%;">查询</el-button>
-            </el-form>-->
-        </div>
 
         <!--二级单位帐号列表-->
         <el-table
                 :header-cell-style="tableHeaderColor"
                 :data="tableData"
                 border
-                max-height="615"
+                max-height="600"
                 v-loading="loading"
                 element-loading-text="拼命加载中"
                 element-loading-spinner="el-icon-loading"
@@ -67,15 +49,14 @@
             </el-table-column>
         </el-table>
         <!--分页-->
-        <div class="block" style="position: absolute;bottom: 5%;right: 5%;">
+        <div class="page-block">
             <el-pagination
-                    @size-change="handleSizeChange"
                     @current-change="handleCurrentChange"
                     :current-page="search.page"
-                    :page-sizes="[10, 20, 30, 40]"
+                    layout="total, prev, pager, next"
+                    :total="search.total"
                     :page-size="search.pageSize"
-                    layout="total , prev, pager, next, jumper"
-                    :total="search.total">
+                    background>
             </el-pagination>
         </div>
 
@@ -198,7 +179,6 @@
             //添加二级单位
             saveTowCompany() {
                 let that = this;
-                console.log(this.form);
                 this.$store.dispatch('common/resetObj', this.errorMsg);
                 this.$refs.form.validate(valid => {
                     if (valid) {
@@ -228,12 +208,11 @@
             //查看所有二级单位
             getAllTwoCompany() {
                 let that = this;
-                this.loading = true;
                 this.$store.dispatch('twoLevelCompany/getAllTwoCompany',this.search)
                     .then((response) => {
                         that.tableData = response.data;
+                        console.log(that.tableData);
                         that.search.total = response.total;
-                        that.loading = false;
                     })
                     .catch(() => {
                     });
@@ -247,10 +226,8 @@
                     type: 'warning'
                 }).then(() => {
                     let that = this;
-                    this.loading = true;
                     this.$store.dispatch('twoLevelCompany/deleteTwoCompany',{id : row.id})
                         .then((response) => {
-                            that.loading = false;
                             that.getAllTwoCompany();
                         }).catch(() => {
 
@@ -278,22 +255,14 @@
             },
             updateTwoCompany() {
                 let that = this;
-                this.loading = true;
-                this.$refs.form.validate(valid => {
-                    if (valid) {
-                        this.$store.dispatch('twoLevelCompany/updateTwoCompany', this.editForm)
-                            .then((response) => {
-                                this.loading = false;
-                                this.editDialogFormVisible = false;
-                                that.getAllTwoCompany();
-                            })
-                            .catch(() => {
+                this.$store.dispatch('twoLevelCompany/updateTwoCompany', this.editForm)
+                    .then((response) => {
+                        this.editDialogFormVisible = false;
+                        that.getAllTwoCompany();
+                    })
+                    .catch(() => {
 
-                            });
-                    } else {
-                        return false;
-                    }
-                });
+                    });
             },
 
 
@@ -327,9 +296,6 @@
         border: 0;
         height: 40px;
         margin: 20px 0 0px 20px;
-    }
-    .header{
-        margin-bottom: 30px;
     }
     .el-form-item{
         margin: 0 10% 4% 10%;
