@@ -2,64 +2,64 @@
     <div class="app-top">
 
         <el-button class='btn_right' @click='showCreate' type="primary">添加专家</el-button>
+        <div class="app-container" ref="appContainer">
+            <div class="header"  ref="header">
+                <el-form ref="form" :model="search" label-width="120px" :rules="codeRules" style="display: flex;">
+                    <el-form-item label="姓名:" label-width="100px" style="margin: 0;width: 30%;">
+                        <el-input v-model="search.where.name" placeholder="请输入专家姓名" ></el-input>
+                    </el-form-item>
+                    <el-form-item label="手机号码:" label-width="100px" style="margin: 0;width: 30%;">
+                        <el-input v-model="search.where.phone" placeholder="请输入手机号码"></el-input>
+                    </el-form-item>
+                    <el-form-item label="所属领域" label-width="100px" style="margin: 0;width: 30%;">
+                        <el-select v-model="search.where.industry_id" placeholder="所属领域">
+                            <el-option
+                                    v-for="item in List"
+                                    :key="item.id"
+                                    :label="item.name"
+                                    :value="item.id">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-button type="info" @click="" style="margin-left: 1%;">查询</el-button>
+                </el-form>
+            </div>
 
-        <div class="app-container">
             <el-row>
                 <el-col>
                     <el-table
+                            :header-cell-style="tableHeaderColor"
                             :data="tableData"
-                            stripe
+                            border
+                            :max-height="maxHeight"
+                            v-loading="loading"
+                            element-loading-text="拼命加载中"
+                            element-loading-spinner="el-icon-loading"
+                            element-loading-background="rgba(0, 0, 0, 0.8)"
                             style="width: 100%">
                         <el-table-column
                                 align="center"
-                                prop="id"
-                                label="id"
-                        >
-                        </el-table-column>
-                        <el-table-column
-                                align="center"
                                 prop="name"
-                                label="标签名称"
+                                label="姓名"
                         >
                         </el-table-column>
                         <el-table-column
                                 align="center"
-                                prop="fName"
-                                label="父级名称"
+                                prop="phone"
+                                label="电话"
                         >
                         </el-table-column>
-
                         <el-table-column
-                                label="申报选择"
-                                align="center">
-                            <template slot-scope="scope">
-                                <el-tooltip content="是否设为申报选择项" placement="top">
-                                    <el-switch
-                                            v-model="scope.row.is_show"
-                                            active-color="#13ce66"
-                                            inactive-color="#ff4949"
-                                            :active-value="1"
-                                            @change="createShow(scope.row)"
-                                            :inactive-value="0">
-                                    </el-switch>
-                                </el-tooltip>
-                            </template>
+                                align="center"
+                                prop="created_at"
+                                label="创建时间"
+                        >
                         </el-table-column>
-
                         <el-table-column
-                                label="搜索项"
+                                label="操作"
                                 align="center">
                             <template slot-scope="scope">
-                                <el-tooltip content="是否设为搜索项" placement="top">
-                                    <el-switch
-                                            v-model="scope.row.is_search"
-                                            active-color="#13ce66"
-                                            inactive-color="#ff4949"
-                                            :active-value="1"
-                                            @change="createSearch(scope.row)"
-                                            :inactive-value="0">
-                                    </el-switch>
-                                </el-tooltip>
+
                             </template>
                         </el-table-column>
                         <!--<el-table-column-->
@@ -77,21 +77,44 @@
                     </el-table>
                 </el-col>
             </el-row>
-            <el-dialog title="创建标签" :visible.sync="dialogFormCreate" width='650px'>
+            <el-dialog title="新增专家" :visible.sync="dialogFormCreate" width='650px'>
                 <el-form :model="createFrom">
                     <el-row>
                         <el-col :span="16" :offset="3">
-                            <el-form-item label="标签名称" label-width="100px">
+                            <el-form-item label="专家姓名" label-width="100px">
                                 <el-input v-model="createFrom.name" auto-complete="off"></el-input>
                             </el-form-item>
                         </el-col>
                     </el-row>
 
+                    <el-row>
+                        <el-col :span="16" :offset="3">
+                            <el-form-item label="手机号码" label-width="100px">
+                                <el-input v-model="createFrom.phone" auto-complete="off"></el-input>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
 
                     <el-row>
                         <el-col :span="16" :offset="3">
-                            <el-form-item label="父级标签" label-width="100px">
-                                <el-select v-model="createFrom.fid" placeholder="请选择父级标签">
+                            <el-form-item label="性别" label-width="100px">
+                                <el-input v-model="createFrom.sex" auto-complete="off"></el-input>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+
+                    <el-row>
+                        <el-col :span="16" :offset="3">
+                            <el-form-item label="备注" label-width="100px">
+                                <el-input v-model="createFrom.bz" auto-complete="off"></el-input>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+
+                    <el-row>
+                        <el-col :span="16" :offset="3">
+                            <el-form-item label="行业领域" label-width="100px">
+                                <el-select v-model="createFrom.industry_id" placeholder="行业领域">
                                     <el-option
                                             v-for="item in List"
                                             :key="item.id"
@@ -110,7 +133,7 @@
                 </div>
             </el-dialog>
 
-            <div class="page-block">
+            <div class="page-block" ref="page">
                 <el-pagination
                         @current-change="handleCurrentChanges"
                         :current-page="search.page"
@@ -134,27 +157,56 @@
                     page: 1,
                     total: 0,
                     pageSize:10,
+                    where:{}
                 },
+                loading: false,
                 tableData: [],
                 dialogFormCreate:false,
                 createFrom:{},
                 List:{},
+                maxHeight:''
             }
         },
+        mounted(){
+            this.getMaxHeight()
+        },
+
         computed: {
+
 
         },
         created() {
             this.getList();
+            this.getIndustry();
         },
         methods: {
+            getMaxHeight(){
+                let appContainer= this.$refs.appContainer.scrollHeight;
+                let header= this.$refs.header.scrollHeight;
+                let page= this.$refs.page.scrollHeight;
+
+                this.maxHeight = appContainer-header-page-40;
+            },
             getList(){
+                this.loading = true;
                 let that = this
-                this.$store.dispatch('projectTab/getTabList',this.search)
+                this.$store.dispatch('expert/getExpertList',this.search)
                     .then((response) => {
                         that.tableData = response.data;
                         that.search.total = response.total;
                         that.search.pageSize = response.per_page;
+                        that.loading = false;
+                    })
+                    .catch(() => {
+
+                    });
+            },
+            getIndustry(){
+                let that = this
+                this.$store.dispatch('projectIndustry/getAll')
+                    .then((response) => {
+                        response.shift()
+                        that.List = response;
                     })
                     .catch(() => {
 
@@ -162,18 +214,11 @@
             },
             showCreate(){
                 this.dialogFormCreate = true;
-                let that = this
-                this.$store.dispatch('projectTab/getAll')
-                    .then((response) => {
-                        that.List = response;
-                    })
-                    .catch(() => {
 
-                    });
             },
             doCreate(){
                 let that = this
-                this.$store.dispatch('projectTab/createTab',this.createFrom)
+                this.$store.dispatch('expert/createExpert',this.createFrom)
                     .then((response) => {
                         this.getList();
                         this.dialogFormCreate = false;
@@ -182,34 +227,20 @@
 
                     });
             },
-            createShow(row){
-                let that = this;
-                this.$store.dispatch('projectTab/createShow',{id:row.id,is_show:row.is_show})
-                    .then((response) => {
 
-                    })
-                    .catch(() => {
-
-                    });
-
-            },
-            createSearch(row){
-                let that = this;
-                this.$store.dispatch('projectTab/createSearch',{id:row.id,is_search:row.is_search})
-                    .then((response) => {
-                        that.getlogo()
-                    })
-                    .catch(() => {
-
-                    });
-
-            },
             handleCurrentChanges(val){
                 this.search.page = val;
                 this.getList();
 
             },
-        }
+            //设置表格表头样式
+            tableHeaderColor ({ row, column, rowIndex, columnIndex }) {
+                if (rowIndex === 0) {
+                    return 'background-color: #ecf5ff;color: black;font-weight: 700;'
+                }
+            },
+        },
+
     }
 </script>
 <style scoped>
@@ -222,5 +253,11 @@
         border: 0;
         height: 40px;
         margin: 20px 0 0px 20px;
+    }
+    .header {
+        padding-bottom: 30px;
+    }
+    .el-select{
+        width: 100%;
     }
 </style>
