@@ -307,6 +307,7 @@
             //添加管理员帐号---二级单位帐号
             saveRecommendAccounts() {
                 let that = this;
+                this.loading = true;
                 this.$store.dispatch('common/resetObj', this.errorMsg);
                 this.$refs.form.validate(valid => {
                     if (valid) {
@@ -318,6 +319,8 @@
                                     }
                                 } else {
                                     this.dialogFormVisible = false;
+                                    this.loading = true;
+                                    that.getRecommendAccounts();
                                 }
                             })
                             .catch(() => {
@@ -347,7 +350,7 @@
 
             //删除二级单位帐号
             deleteRecommend(row) {
-                this.$confirm('此操作将永久删除该人员, 是否继续?', '提示', {
+                this.$confirm('此操作将永久删除该帐号, 是否继续?', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                     type: 'warning'
@@ -375,8 +378,8 @@
                 let that = this;
                 this.$store.dispatch('recommend/editRecommend',{id : row.id})
                     .then((response) => {
-                        this.editForm = response;
-                        this.editDialogFormVisible = true;
+                        that.editForm = response;
+                        that.editDialogFormVisible = true;
                     })
                     .catch(() => {
 
@@ -384,12 +387,15 @@
             },
             updateRecommend() {
                 let that = this;
+                this.loading = true;
                 this.$refs.form.validate(valid => {
                     if (valid) {
                         this.$store.dispatch('recommend/updateRecommend', this.editForm)
                             .then((response) => {
                                 that.getRecommendAccounts();
                                 this.editDialogFormVisible = false;
+                                this.loading = false;
+                                that.getRecommendAccounts();
                             })
                             .catch(() => {
 
@@ -405,8 +411,8 @@
                 let that = this;
                 this.$store.dispatch('recommend/editPassword',{id : row.id})
                     .then((response) => {
-                        this.passwordForm = response;
-                        this.passworDialogFormVisible = true;
+                        that.passwordForm = response;
+                        that.passworDialogFormVisible = true;
                     })
                     .catch(() => {
 

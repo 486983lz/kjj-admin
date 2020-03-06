@@ -6,7 +6,7 @@
 
         <div class="header">
             <el-button type="primary" @click="TowCompany">添加二级单位</el-button>
-            <!--<el-form ref="form" :model="search" label-width="120px" :rules="codeRules" style="display: flex;">
+            <!--<el-form ref="form" :model="search" label-width="120px" style="display: flex;">
                 <el-button type="primary" @click="RecommendAccounts">新增帐号</el-button>
                 <el-form-item label="姓名：" style="margin: 0;width: 30%;">
                     <el-input v-model="search.name" autocomplete="off"></el-input>
@@ -44,28 +44,19 @@
             </el-table-column>
             <el-table-column
                     align="center"
-                    prop="username"
-                    label="用户名">
+                    prop="level_company_name"
+                    label="部门名称">
             </el-table-column>
             <el-table-column
                     align="center"
-                    prop="name"
-                    label="姓名">
-            </el-table-column>
-            <el-table-column
-                    align="center"
-                    prop="role"
-                    label="归属部门">
-            </el-table-column>
-            <el-table-column
-                    align="center"
-                    prop="phone"
-                    label="手机号码">
+                    prop="area"
+                    label="所属地区">
             </el-table-column>
             <el-table-column
                     align="center"
                     prop="created_at"
-                    label="创建时间">
+                    label="创建时间"
+                    width="300">
             </el-table-column>
             <el-table-column
                     align="center"
@@ -73,8 +64,8 @@
                     label="操作"
                     width="200">
                 <template slot-scope="scope">
-                    <el-button type="text" size="medium " @click="editRecommend(scope.row)">编辑</el-button>
-                    <el-button type="text" size="medium " @click="deleteRecommend(scope.row)">删除</el-button>
+                    <el-button type="text" size="medium " @click="editTwoCompany(scope.row)">编辑</el-button>
+                    <el-button type="text" size="medium " @click="deleteTwoCompany(scope.row)">删除</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -92,12 +83,16 @@
         </div>
 
         <!--添加帐号弹框-->
-        <el-dialog title="" :visible.sync="dialogFormVisible" width="38%">
+        <el-dialog title="添加二级单位" :visible.sync="dialogFormVisible" width="38%">
             <el-form ref="form" :model="form" label-width="120px" :rules="codeRules">
-                <el-form-item label="单位所属地区：" porp="role">
-                    <el-select v-model="form.area" placeholder="请选择二级单位">
-                        <el-option label="单位一" value="2"></el-option>
-                        <el-option label="单位二" value="3"></el-option>
+                <el-form-item label="单位所属地区：" porp="area">
+                    <el-select v-model="form.area" filterable clearable placeholder="请选择所属地区">
+                        <el-option
+                                v-for="item in tableArea"
+                                :key="item.area"
+                                :label="item.area"
+                                :value="item.id">
+                        </el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="单位名称：" :error="errorMsg.level_company_name" prop="level_company_name">
@@ -111,27 +106,25 @@
         </el-dialog>
 
         <!--修改帐号信息弹框-->
-        <el-dialog title="" :visible.sync="editDialogFormVisible" width="38%">
-            <el-form ref="form" :model="editForm" label-width="120px" :rules="codeRules">
-                <el-form-item label="用户名：" :error="errorMsg.username" prop="username">
-                    <el-input v-model="editForm.username" autocomplete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="姓名：" prop="name">
-                    <el-input v-model="editForm.name" autocomplete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="手机号：" prop="phone">
-                    <el-input v-model="editForm.phone" autocomplete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="二级单位：" porp="role">
-                    <el-select v-model="editForm.role" placeholder="请选择二级单位">
-                        <el-option label="单位一" value="2"></el-option>
-                        <el-option label="单位二" value="3"></el-option>
+        <el-dialog title="编辑二级单位" :visible.sync="editDialogFormVisible" width="38%">
+            <el-form ref="editForm" :model="editForm" label-width="120px" :rules="Rules">
+                <el-form-item label="单位所属地区：" porp="area">
+                    <el-select v-model="editForm.area" filterable clearable placeholder="请选择所属地区">
+                        <el-option
+                                v-for="item in tableArea"
+                                :key="item.area"
+                                :label="item.area"
+                                :value="item.id">
+                        </el-option>
                     </el-select>
+                </el-form-item>
+                <el-form-item label="单位名称：" :error="errorMsg.level_company_name" prop="level_company_name">
+                    <el-input v-model="editForm.level_company_name" autocomplete="off"></el-input>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="editDialogFormVisible = false">取 消</el-button>
-                <el-button type="primary" @click="updateRecommend">修 改</el-button>
+                <el-button type="primary" @click="updateTwoCompany">修 改</el-button>
             </div>
         </el-dialog>
     </div>
@@ -145,15 +138,17 @@
         data() {
 
             return {
-                form: {},
+                form: {
+                    level_company_name: '',
+                },
                 editForm:{},
                 passwordForm:{},
                 tableData: [],
+                tableArea: {},
                 search: {
                     page: 1,
                     total: 0,
                     pageSize:10,
-                    role: '',
                 },
                 activeTab: 'activity',
                 loading: false,
@@ -161,11 +156,11 @@
                 editDialogFormVisible: false,
                 // 前端验证
                 codeRules: {
+                    area: [
+                        { required: true, message: '请选择二级单位', trigger: 'change' }
+                    ],
                     level_company_name: [
                         { required: true, message: '请输入单位名称', trigger: 'blur' }
-                    ],
-                    role: [
-                        { required: true, message: '请选择二级单位', trigger: 'change' }
                     ],
                 },
                 // 后端验证提示
@@ -178,13 +173,27 @@
 
         },
         created() {
-            this.getRecommendAccounts();
+            this.getAllTwoCompany();
+            this.getArea();
         },
         methods: {
             //添加二级单位弹窗
             TowCompany(){
                 this.dialogFormVisible = true;
             },
+
+            //获取地区
+            getArea() {
+                let that = this;
+                this.$store.dispatch('twoLevelCompany/getArea')
+                    .then((response) => {
+                        that.tableArea = response;
+                        // console.log(that.tableArea);
+                    })
+                    .catch(() => {
+                    });
+            },
+
             //添加二级单位
             saveTowCompany() {
                 let that = this;
@@ -193,12 +202,14 @@
                     if (valid) {
                         this.$store.dispatch('twoLevelCompany/saveTowCompany', this.form)
                             .then((response) => {
+                                // console.log(response);
                                 if (response.errors) {
                                     for (const [key, val] of Object.entries(response.errors)) {
                                         that.errorMsg[key] = val[0];
                                     }
                                 } else {
                                     this.dialogFormVisible = false;
+                                    this.getAllTwoCompany();
                                 }
                             })
                             .catch(() => {
@@ -212,11 +223,11 @@
                 // this.dialogFormVisible = true;
             },
 
-            //查看所有二级单位账号
-            getRecommendAccounts() {
+            //查看所有二级单位
+            getAllTwoCompany() {
                 let that = this;
                 this.loading = true;
-                this.$store.dispatch('recommend/allRecommendAccounts',this.search)
+                this.$store.dispatch('twoLevelCompany/getAllTwoCompany',this.search)
                     .then((response) => {
                         that.tableData = response.data;
                         that.search.total = response.total;
@@ -226,19 +237,19 @@
                     });
             },
 
-            //删除二级单位帐号
-            deleteRecommend(row) {
-                this.$confirm('此操作将永久删除该人员, 是否继续?', '提示', {
+            //删除二级单位
+            deleteTwoCompany(row) {
+                this.$confirm('此操作将永久删除改, 是否继续?', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
                     let that = this;
                     this.loading = true;
-                    this.$store.dispatch('recommend/deleteRecommend',{id : row.id})
+                    this.$store.dispatch('twoLevelCompany/deleteTwoCompany',{id : row.id})
                         .then((response) => {
                             that.loading = false;
-                            that.getRecommendAccounts();
+                            that.getAllTwoCompany();
                         }).catch(() => {
 
                     });
@@ -252,9 +263,9 @@
             },
 
             //编辑二级单位帐号
-            editRecommend(row) {
+            editTwoCompany(row) {
                 let that = this;
-                this.$store.dispatch('recommend/editRecommend',{id : row.id})
+                this.$store.dispatch('twoLevelCompany/editTwoCompany',{id : row.id})
                     .then((response) => {
                         this.editForm = response;
                         this.editDialogFormVisible = true;
@@ -263,14 +274,16 @@
 
                     });
             },
-            updateRecommend() {
+            updateTwoCompany() {
                 let that = this;
+                this.loading = true;
                 this.$refs.form.validate(valid => {
                     if (valid) {
-                        this.$store.dispatch('recommend/updateRecommend', this.editForm)
+                        this.$store.dispatch('twoLevelCompany/updateTwoCompany', this.editForm)
                             .then((response) => {
-                                that.getRecommendAccounts();
+                                this.loading = false;
                                 this.editDialogFormVisible = false;
+                                that.getAllTwoCompany();
                             })
                             .catch(() => {
 
@@ -281,40 +294,6 @@
                 });
             },
 
-            //修改账号密码
-            editPassword(row) {
-                let that = this;
-                this.$store.dispatch('recommend/editPassword',{id : row.id})
-                    .then((response) => {
-                        this.passwordForm = response;
-                        this.passworDialogFormVisible = true;
-                    })
-                    .catch(() => {
-
-                    });
-            },
-            updatePassword() {
-                let that = this;
-                this.$refs.passwordForm.validate(valid => {
-                    if (valid) {
-                        this.$store.dispatch('recommend/updatePassword', this.passwordForm)
-                            .then((response) => {
-                                that.getRecommendAccounts();
-                                this.passworDialogFormVisible = false;
-                            })
-                            .catch(() => {
-
-                            });
-                    } else {
-                        return false;
-                    }
-                });
-            },
-
-            searchAll() {
-                this.search.page = 1;
-                this.getRecommendAccounts();
-            },
 
             //设置表格表头样式
             tableHeaderColor ({ row, column, rowIndex, columnIndex }) {
@@ -325,13 +304,11 @@
             //分页
             handleSizeChange(val) {
                 this.search.pageSize = val;
-                this.getRecommendAccounts();
-                // console.log(`每页 ${val} 条`);
+                this.getAllTwoCompany();
             },
             handleCurrentChange(val) {
                 this.search.page = val;
-                this.getRecommendAccounts();
-                // console.log(`当前页: ${val}`);
+                this.getAllTwoCompany();
             },
 
         }

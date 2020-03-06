@@ -1,5 +1,14 @@
 import request from '@/utils/request'
 
+//获取地区
+export function getArea(data) {
+  return request({
+    url: '/twoLevel/get-arae',
+    method: 'post',
+    data
+  })
+}
+
 //添加二级单位
 export function saveTowCompany(data) {
   return request({
@@ -8,54 +17,37 @@ export function saveTowCompany(data) {
     data
   })
 }
-
-/*//查看管理员账号
-export function allRecommendAccounts(data) {
+//查看所有二级单位
+export function getAllTwoCompany(data) {
   return request({
-    url: '/recommend/all-recommend-accounts',
+    url: '/twoLevel/get-all-two-company',
     method: 'post',
     data
   })
 }
 
-//删除管理员账号
-export function deleteRecommend(data) {
+//删除二级单位
+export function deleteTwoCompany(data) {
   return request({
-    url: '/recommend/delete-recommend',
+    url: '/twoLevel/delete-two-company',
     method: 'post',
     data
   })
 }
 
-//编辑二级单位帐号
-export function editRecommend(data) {
+//编辑二级单位
+export function editTwoCompany(data) {
   return request({
-    url: '/recommend/edit-recommend',
+    url: '/twoLevel/edit-two-company',
     method: 'post',
     data
   })
 }
-export function updateRecommend(data) {
+export function updateTwoCompany(data) {
   return request({
-    url: '/recommend/update-recommend',
+    url: '/twoLevel/update-two-company',
     method: 'post',
     data
   })
 }
-
-//修改帐号密码
-export function editPassword(data) {
-  return request({
-    url: '/recommend/edit-password',
-    method: 'post',
-    data
-  })
-}
-export function updatePassword(data) {
-  return request({
-    url: '/recommend/update-password',
-    method: 'post',
-    data
-  })
-}*/
 

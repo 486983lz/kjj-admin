@@ -1,11 +1,22 @@
-import {saveTowCompany,allRecommendAccounts,deleteRecommend,editRecommend,updateRecommend,
-        editPassword,updatePassword} from '@/api/twoLevelCompany';
+import {getArea,saveTowCompany,getAllTwoCompany,deleteTwoCompany,editTwoCompany,updateTwoCompany} from '@/api/twoLevelCompany';
 
 const state = {
     roles: []
 };
 
 const actions = {
+    //获取地区
+    getArea({commit, state},data) {
+        return new Promise((resolve, reject) => {
+            getArea(data).then(response => {
+                const {data} = response;
+                resolve(data);
+            }).catch(error => {
+                reject(error);
+            });
+        });
+    },
+
     //添加二级单位
     saveTowCompany({commit, state},data) {
         return new Promise((resolve, reject) => {
@@ -18,10 +29,10 @@ const actions = {
         });
     },
 
-/*    //查看管理员账号
-    allRecommendAccounts({commit, state},data) {
+    //查看所有二级单位
+    getAllTwoCompany({commit, state},data) {
         return new Promise((resolve, reject) => {
-            allRecommendAccounts(data).then(response => {
+            getAllTwoCompany(data).then(response => {
                 const {data} = response;
                 resolve(data);
             }).catch(error => {
@@ -30,10 +41,10 @@ const actions = {
         });
     },
 
-    //删除管理员账号
-    deleteRecommend({commit, state},data) {
+    //删除二级单位
+    deleteTwoCompany({commit, state},data) {
         return new Promise((resolve, reject) => {
-            deleteRecommend(data).then(response => {
+            deleteTwoCompany(data).then(response => {
                 const {data} = response;
                 resolve(data);
             }).catch(error => {
@@ -42,10 +53,10 @@ const actions = {
         });
     },
 
-    //编辑二级单位帐号
-    editRecommend({commit, state},data) {
+    //编辑二级单位
+    editTwoCompany({commit, state},data) {
         return new Promise((resolve, reject) => {
-            editRecommend(data).then(response => {
+            editTwoCompany(data).then(response => {
                 const {data} = response;
                 resolve(data);
             }).catch(error => {
@@ -53,9 +64,9 @@ const actions = {
             });
         });
     },
-    updateRecommend({commit, state},data) {
+    updateTwoCompany({commit, state},data) {
         return new Promise((resolve, reject) => {
-            updateRecommend(data).then(response => {
+            updateTwoCompany(data).then(response => {
                 const {data} = response;
                 resolve(data);
             }).catch(error => {
@@ -63,28 +74,6 @@ const actions = {
             });
         });
     },
-
-    //修改帐号密码
-    editPassword({commit, state},data) {
-        return new Promise((resolve, reject) => {
-            editPassword(data).then(response => {
-                const {data} = response;
-                resolve(data);
-            }).catch(error => {
-                reject(error);
-            });
-        });
-    },
-    updatePassword({commit, state},data) {
-        return new Promise((resolve, reject) => {
-            updatePassword(data).then(response => {
-                const {data} = response;
-                resolve(data);
-            }).catch(error => {
-                reject(error);
-            });
-        });
-    },*/
 
 };
 
