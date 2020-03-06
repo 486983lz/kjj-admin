@@ -1,11 +1,8 @@
 <template>
-    <div class="app-container">
-        <!--<div class="header">
-            二级单位数据字典配置
-        </div>-->
-
+    <div class="app-top">
+        <el-button type="primary" class='btn_right' @click="TowCompany">添加二级单位</el-button>
+        <div class="app-container">
         <div class="header">
-            <el-button type="primary" @click="TowCompany">添加二级单位</el-button>
             <!--<el-form ref="form" :model="search" label-width="120px" style="display: flex;">
                 <el-button type="primary" @click="RecommendAccounts">新增帐号</el-button>
                 <el-form-item label="姓名：" style="margin: 0;width: 30%;">
@@ -29,7 +26,7 @@
                 :header-cell-style="tableHeaderColor"
                 :data="tableData"
                 border
-                max-height="600"
+                max-height="615"
                 v-loading="loading"
                 element-loading-text="拼命加载中"
                 element-loading-spinner="el-icon-loading"
@@ -107,7 +104,7 @@
 
         <!--修改帐号信息弹框-->
         <el-dialog title="编辑二级单位" :visible.sync="editDialogFormVisible" width="38%">
-            <el-form ref="editForm" :model="editForm" label-width="120px" :rules="Rules">
+            <el-form ref="editForm" :model="editForm" label-width="120px" :rules="codeRules">
                 <el-form-item label="单位所属地区：" porp="area">
                     <el-select v-model="editForm.area" filterable clearable placeholder="请选择所属地区">
                         <el-option
@@ -128,6 +125,7 @@
             </div>
         </el-dialog>
     </div>
+    </div>
 </template>
 
 <script>
@@ -136,12 +134,15 @@
     export default {
         name: 'Profile',
         data() {
-
             return {
                 form: {
+                    area: '',
                     level_company_name: '',
                 },
-                editForm:{},
+                editForm:{
+                    area: '',
+                    level_company_name: '',
+                },
                 passwordForm:{},
                 tableData: [],
                 tableArea: {},
@@ -156,11 +157,11 @@
                 editDialogFormVisible: false,
                 // 前端验证
                 codeRules: {
-                    area: [
-                        { required: true, message: '请选择二级单位', trigger: 'change' }
-                    ],
                     level_company_name: [
                         { required: true, message: '请输入单位名称', trigger: 'blur' }
+                    ],
+                    area: [
+                        { required: true, message: '请选择二级单位', trigger: 'change' }
                     ],
                 },
                 // 后端验证提示
@@ -197,15 +198,16 @@
             //添加二级单位
             saveTowCompany() {
                 let that = this;
+                console.log(this.form);
                 this.$store.dispatch('common/resetObj', this.errorMsg);
                 this.$refs.form.validate(valid => {
                     if (valid) {
                         this.$store.dispatch('twoLevelCompany/saveTowCompany', this.form)
                             .then((response) => {
-                                // console.log(response);
                                 if (response.errors) {
                                     for (const [key, val] of Object.entries(response.errors)) {
                                         that.errorMsg[key] = val[0];
+                                        console.log(that.errorMsg)
                                     }
                                 } else {
                                     this.dialogFormVisible = false;
@@ -316,6 +318,16 @@
 </script>
 
 <style lang="scss" scoped>
+    .app-container {
+        height: calc(100vh - 215px);
+    }
+    .btn_right {
+        width: 190px;
+        background-color: #709fe1;
+        border: 0;
+        height: 40px;
+        margin: 20px 0 0px 20px;
+    }
     .header{
         margin-bottom: 30px;
     }

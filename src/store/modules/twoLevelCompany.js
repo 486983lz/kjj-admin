@@ -21,8 +21,7 @@ const actions = {
     saveTowCompany({commit, state},data) {
         return new Promise((resolve, reject) => {
             saveTowCompany(data).then(response => {
-                const {data} = response;
-                resolve(data);
+                resolve(response);
             }).catch(error => {
                 reject(error);
             });
