@@ -1,6 +1,6 @@
 import {
-    getAll,getTabList,createTab,createShow,createSearch}
-    from '@/api/projectTab';
+    getAll,getIndustryList,createIndustry,createSearch,createShow}
+    from '@/api/projectIndustry';
 
 
 const state = {
@@ -18,9 +18,9 @@ const actions = {
             });
         });
     },
-    getTabList({commit, state},data) {
+    getIndustryList({commit, state},data) {
         return new Promise((resolve, reject) => {
-            getTabList(data).then(response => {
+            getIndustryList(data).then(response => {
                 const {data} = response;
                 resolve(data);
             }).catch(error => {
@@ -28,9 +28,9 @@ const actions = {
             });
         });
     },
-    createTab({commit, state},data) {
+    createIndustry({commit, state},data) {
         return new Promise((resolve, reject) => {
-            createTab(data).then(response => {
+            createIndustry(data).then(response => {
                 const {data} = response;
                 resolve(data);
             }).catch(error => {

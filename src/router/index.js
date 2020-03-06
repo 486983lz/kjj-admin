@@ -329,7 +329,7 @@ export const constantRoutes = [
             {
                 path: 'user-index-expert',
                 name: 'user_index_expert',
-                component: () => import('@/views/user/index'),
+                component: () => import('@/views/expert/index'),
                 meta: {title: '专家',permissions:[]}
             },
             {
@@ -358,7 +358,7 @@ export const constantRoutes = [
             {
                 path: 'data-index-industry',
                 name: 'data_index_industry',
-                component: () => import('@/views/data/index'),
+                component: () => import('@/views/industry/index'),
                 meta: {title: '行业领域',permissions:[]}
             },
             {

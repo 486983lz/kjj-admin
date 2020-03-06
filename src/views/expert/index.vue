@@ -1,7 +1,7 @@
 <template>
     <div class="app-top">
 
-        <el-button class='btn_right' @click='showCreate' type="primary">创建标签</el-button>
+        <el-button class='btn_right' @click='showCreate' type="primary">添加专家</el-button>
 
         <div class="app-container">
             <el-row>

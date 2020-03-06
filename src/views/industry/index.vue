@@ -1,7 +1,7 @@
 <template>
     <div class="app-top">
 
-        <el-button class='btn_right' @click='showCreate' type="primary">创建标签</el-button>
+        <el-button class='btn_right' @click='showCreate' type="primary">创建行业领域</el-button>
 
         <div class="app-container">
             <el-row>
@@ -19,7 +19,7 @@
                         <el-table-column
                                 align="center"
                                 prop="name"
-                                label="标签名称"
+                                label="行业领域名称"
                         >
                         </el-table-column>
                         <el-table-column
@@ -93,7 +93,7 @@
                             <el-form-item label="父级标签" label-width="100px">
                                 <el-select v-model="createFrom.fid" placeholder="请选择父级标签">
                                     <el-option
-                                            v-for="item in List"
+                                            v-for="item in industryList"
                                             :key="item.id"
                                             :label="item.name"
                                             :value="item.id">
@@ -138,7 +138,7 @@
                 tableData: [],
                 dialogFormCreate:false,
                 createFrom:{},
-                List:{},
+                industryList:{},
             }
         },
         computed: {
@@ -150,7 +150,7 @@
         methods: {
             getList(){
                 let that = this
-                this.$store.dispatch('projectTab/getTabList',this.search)
+                this.$store.dispatch('projectIndustry/getIndustryList',this.search)
                     .then((response) => {
                         that.tableData = response.data;
                         that.search.total = response.total;
@@ -163,9 +163,9 @@
             showCreate(){
                 this.dialogFormCreate = true;
                 let that = this
-                this.$store.dispatch('projectTab/getAll')
+                this.$store.dispatch('projectIndustry/getAll')
                     .then((response) => {
-                        that.List = response;
+                        that.industryList = response;
                     })
                     .catch(() => {
 
@@ -173,7 +173,7 @@
             },
             doCreate(){
                 let that = this
-                this.$store.dispatch('projectTab/createTab',this.createFrom)
+                this.$store.dispatch('projectIndustry/createIndustry',this.createFrom)
                     .then((response) => {
                         this.getList();
                         this.dialogFormCreate = false;
@@ -184,7 +184,7 @@
             },
             createShow(row){
                 let that = this;
-                this.$store.dispatch('projectTab/createShow',{id:row.id,is_show:row.is_show})
+                this.$store.dispatch('projectIndustry/createShow',{id:row.id,is_show:row.is_show})
                     .then((response) => {
 
                     })
@@ -195,7 +195,7 @@
             },
             createSearch(row){
                 let that = this;
-                this.$store.dispatch('projectTab/createSearch',{id:row.id,is_search:row.is_search})
+                this.$store.dispatch('projectIndustry/createSearch',{id:row.id,is_search:row.is_search})
                     .then((response) => {
                         that.getlogo()
                     })
