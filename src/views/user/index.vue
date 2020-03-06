@@ -1,9 +1,9 @@
 <template>
     <div class="app-top">
         <el-button type="primary" class='btn_right' @click="RecommendAccounts">新增帐号</el-button>
-        <div class="app-container">
+        <div class="app-container" ref="appContainer">
             <!--搜索框-->
-            <div class="header">
+            <div class="header" ref="header">
                 <el-form ref="form" :model="search" label-width="120px" :rules="codeRules" style="display: flex;">
                     <el-form-item label="姓名：" style="margin: 0;width: 30%;">
                         <el-input v-model="search.name" autocomplete="off"></el-input>
@@ -12,9 +12,13 @@
                         <el-input v-model="search.phone" autocomplete="off"></el-input>
                     </el-form-item>
                     <el-form-item label="所属单位：" style="margin: 0;width: 30%;">
-                        <el-select v-model="search.role" placeholder="请选择二级单位">
-                            <el-option label="单位一" value="2"></el-option>
-                            <el-option label="单位二" value="3"></el-option>
+                        <el-select v-model="search.company_id" filterable clearable placeholder="请选择二级单位">
+                            <el-option
+                                    v-for="item in tableForm"
+                                    :key="item.level_company_name"
+                                    :label="item.level_company_name"
+                                    :value="item.id">
+                            </el-option>
                         </el-select>
                     </el-form-item>
                     <el-button type="info" @click="searchAll" style="margin-left: 1%;">查询</el-button>
@@ -26,7 +30,7 @@
                     :header-cell-style="tableHeaderColor"
                     :data="tableData"
                     border
-                    max-height="600"
+                    :max-height="maxHeight"
                     v-loading="loading"
                     element-loading-text="拼命加载中"
                     element-loading-spinner="el-icon-loading"
@@ -51,7 +55,7 @@
                 </el-table-column>
                 <el-table-column
                         align="center"
-                        prop="role"
+                        prop="level_company_name"
                         label="归属部门">
                 </el-table-column>
                 <el-table-column
@@ -77,40 +81,43 @@
                 </el-table-column>
             </el-table>
             <!--分页-->
-            <div class="block" style="position: absolute;bottom: 5%;right: 5%;">
+            <div class="page-block" ref="page">
                 <el-pagination
-                        @size-change="handleSizeChange"
                         @current-change="handleCurrentChange"
                         :current-page="search.page"
-                        :page-sizes="[10, 20, 30, 40]"
+                        layout="total, prev, pager, next"
+                        :total="search.total"
                         :page-size="search.pageSize"
-                        layout="total , prev, pager, next, jumper"
-                        :total="search.total">
+                        background>
                 </el-pagination>
             </div>
 
             <!--添加帐号弹框-->
-            <el-dialog title="" :visible.sync="dialogFormVisible" width="38%">
+            <el-dialog title="添加二级单位帐号" :visible.sync="dialogFormVisible" width="38%">
                 <el-form ref="form" :model="form" label-width="120px" :rules="codeRules">
                     <el-form-item label="用户名：" :error="errorMsg.username" prop="username">
-                        <el-input v-model="form.username" autocomplete="off"></el-input>
+                        <el-input v-model="form.username" autocomplete="off" placeholder="请输入用户名"></el-input>
                     </el-form-item>
                     <el-form-item label="姓名：" prop="name">
-                        <el-input v-model="form.name" autocomplete="off"></el-input>
+                        <el-input v-model="form.name" autocomplete="off" placeholder="请输入姓名"></el-input>
                     </el-form-item>
                     <el-form-item label="手机号：" prop="phone">
-                        <el-input v-model="form.phone" autocomplete="off"></el-input>
+                        <el-input v-model="form.phone" autocomplete="off" placeholder="请输入手机号"></el-input>
                     </el-form-item>
                     <el-form-item label="密码：" prop="password">
-                        <el-input type="password" v-model="form.password" autocomplete="off"></el-input>
+                        <el-input type="password" v-model="form.password" autocomplete="off" placeholder="请输入密码"></el-input>
                     </el-form-item>
                     <el-form-item label="确认密码：" prop="repassword">
-                        <el-input type="password" v-model="form.repassword" autocomplete="off"></el-input>
+                        <el-input type="password" v-model="form.repassword" autocomplete="off" placeholder="请再次输入密码"></el-input>
                     </el-form-item>
-                    <el-form-item label="二级单位：" porp="role">
-                        <el-select v-model="form.role" placeholder="请选择二级单位">
-                            <el-option label="单位一" value="2"></el-option>
-                            <el-option label="单位二" value="3"></el-option>
+                    <el-form-item label="二级单位：" porp="company_id">
+                        <el-select v-model="form.company_id" filterable clearable placeholder="请选择二级单位">
+                            <el-option
+                                    v-for="item in tableForm"
+                                    :key="item.level_company_name"
+                                    :label="item.level_company_name"
+                                    :value="item.id">
+                            </el-option>
                         </el-select>
                     </el-form-item>
                 </el-form>
@@ -133,9 +140,13 @@
                         <el-input v-model="editForm.phone" autocomplete="off"></el-input>
                     </el-form-item>
                     <el-form-item label="二级单位：" porp="role">
-                        <el-select v-model="editForm.role" placeholder="请选择二级单位">
-                            <el-option label="单位一" value="2"></el-option>
-                            <el-option label="单位二" value="3"></el-option>
+                        <el-select v-model="editForm.company_id" filterable clearable placeholder="请选择二级单位">
+                            <el-option
+                                    v-for="item in tableForm"
+                                    :key="item.level_company_name"
+                                    :label="item.level_company_name"
+                                    :value="item.id">
+                            </el-option>
                         </el-select>
                     </el-form-item>
                 </el-form>
@@ -210,16 +221,19 @@
             };
             return {
                 form: {
-                    username: 'lz',
-                    name: '李泽',
-                    phone: '18447078393',
-                    password: '123456',
-                    repassword: '123456',
-                    role: '',
+                    username: '',
+                    name: '',
+                    phone: '',
+                    password: '',
+                    repassword: '',
+                    role: '2',     //二级单位 角色id为2
+                    company_id: '',
                 },
+                maxHeight:'',
                 editForm:{},
                 passwordForm:{},
                 tableData: [],
+                tableForm: [],
                 search: {
                     page: 1,
                     total: 0,
@@ -264,16 +278,38 @@
                 },
             }
         },
-        computed: {
-
+        mounted(){
+            this.getMaxHeight()
         },
         created() {
             this.getRecommendAccounts();
+            this.getAllTwoCompany();
         },
         methods: {
+            //获取计算表格高度
+            getMaxHeight(){
+                let appContainer= this.$refs.appContainer.scrollHeight;
+                let header= this.$refs.header.scrollHeight;
+                let page= this.$refs.page.scrollHeight;
+
+                this.maxHeight = appContainer-header-page-40;
+            },
             //添加二级单位弹窗
             RecommendAccounts(){
                 this.dialogFormVisible = true;
+            },
+
+            //查看所有二级单位
+            getAllTwoCompany() {
+                let that = this;
+                this.$store.dispatch('twoLevelCompany/getAllTwoCompany',this.search)
+                    .then((response) => {
+                        that.tableForm = response.data;
+                        // console.log(that.tableForm);
+                        that.search.total = response.total;
+                    })
+                    .catch(() => {
+                    });
             },
 
             //添加管理员帐号---二级单位帐号
@@ -291,6 +327,7 @@
                                 } else {
                                     this.dialogFormVisible = false;
                                     that.getRecommendAccounts();
+                                    this.form = '';
                                 }
                             })
                             .catch(() => {
@@ -307,12 +344,10 @@
             //查看所有二级单位账号
             getRecommendAccounts() {
                 let that = this;
-                this.loading = true;
                 this.$store.dispatch('recommend/allRecommendAccounts',this.search)
                     .then((response) => {
                         that.tableData = response.data;
                         that.search.total = response.total;
-                        that.loading = false;
                     })
                     .catch(() => {
                     });
@@ -357,14 +392,12 @@
             },
             updateRecommend() {
                 let that = this;
-                this.loading = true;
                 this.$refs.form.validate(valid => {
                     if (valid) {
                         this.$store.dispatch('recommend/updateRecommend', this.editForm)
                             .then((response) => {
                                 that.getRecommendAccounts();
                                 this.editDialogFormVisible = false;
-                                this.loading = false;
                                 that.getRecommendAccounts();
                             })
                             .catch(() => {
@@ -444,8 +477,8 @@
         height: 40px;
         margin: 20px 0 0px 20px;
     }
-    .header{
-        margin-bottom: 30px;
+    .header {
+        padding-bottom: 30px;
     }
     .el-form-item{
         margin: 0 10% 4% 10%;
