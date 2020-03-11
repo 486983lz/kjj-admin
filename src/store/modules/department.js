@@ -1,16 +1,14 @@
-import {saveAccounts,allRecommendAccounts,deleteRecommend,editRecommend,updateRecommend,
-        editPassword,updatePassword} from '@/api/recommend';
+import {saveDepartment,getAllDepartment,editDepartment,updateDepartment,allDepartment,getAccounts} from '@/api/department';
 
 const state = {
     roles: []
 };
 
 const actions = {
-    //添加管理员账号
-    saveAccounts({commit, state},data) {
+    //添加归口科室
+    saveDepartment({commit, state},data) {
         return new Promise((resolve, reject) => {
-            saveAccounts(data).then(response => {
-                const {data} = response;
+            saveDepartment(data).then(response => {
                 resolve(response);
             }).catch(error => {
                 reject(error);
@@ -18,10 +16,10 @@ const actions = {
         });
     },
 
-    //查看管理员账号
-    allRecommendAccounts({commit, state},data) {
+    //查看归口科室
+    getAllDepartment({commit, state},data) {
         return new Promise((resolve, reject) => {
-            allRecommendAccounts(data).then(response => {
+            getAllDepartment(data).then(response => {
                 const {data} = response;
                 resolve(data);
             }).catch(error => {
@@ -30,10 +28,20 @@ const actions = {
         });
     },
 
-    //删除管理员账号
-    deleteRecommend({commit, state},data) {
+    //编辑归口科室
+    editDepartment({commit, state},data) {
         return new Promise((resolve, reject) => {
-            deleteRecommend(data).then(response => {
+            editDepartment(data).then(response => {
+                const {data} = response;
+                resolve(data);
+            }).catch(error => {
+                reject(error);
+            });
+        });
+    },
+    updateDepartment({commit, state},data) {
+        return new Promise((resolve, reject) => {
+            updateDepartment(data).then(response => {
                 const {data} = response;
                 resolve(data);
             }).catch(error => {
@@ -42,42 +50,10 @@ const actions = {
         });
     },
 
-    //编辑二级单位帐号
-    editRecommend({commit, state},data) {
+    //查看所有归口科室
+    allDepartment({commit, state},data) {
         return new Promise((resolve, reject) => {
-            editRecommend(data).then(response => {
-                const {data} = response;
-                resolve(data);
-            }).catch(error => {
-                reject(error);
-            });
-        });
-    },
-    updateRecommend({commit, state},data) {
-        return new Promise((resolve, reject) => {
-            updateRecommend(data).then(response => {
-                const {data} = response;
-                resolve(data);
-            }).catch(error => {
-                reject(error);
-            });
-        });
-    },
-
-    //修改帐号密码
-    editPassword({commit, state},data) {
-        return new Promise((resolve, reject) => {
-            editPassword(data).then(response => {
-                const {data} = response;
-                resolve(data);
-            }).catch(error => {
-                reject(error);
-            });
-        });
-    },
-    updatePassword({commit, state},data) {
-        return new Promise((resolve, reject) => {
-            updatePassword(data).then(response => {
+            allDepartment(data).then(response => {
                 const {data} = response;
                 resolve(data);
             }).catch(error => {

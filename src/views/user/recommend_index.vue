@@ -238,7 +238,6 @@
                     page: 1,
                     total: 0,
                     pageSize:10,
-                    role: '',
                 },
                 activeTab: 'activity',
                 loading: false,
@@ -305,8 +304,6 @@
                 this.$store.dispatch('twoLevelCompany/getAllTwoCompany',this.search)
                     .then((response) => {
                         that.tableForm = response.data;
-                        // console.log(that.tableForm);
-                        that.search.total = response.total;
                     })
                     .catch(() => {
                     });

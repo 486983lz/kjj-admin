@@ -95,7 +95,7 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="单位名称：" :error="errorMsg.level_company_name" prop="level_company_name">
-                    <el-input v-model="form.level_company_name" autocomplete="off"></el-input>
+                    <el-input v-model="form.level_company_name" autocomplete="off" placeholder="请填写单位名称"></el-input>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
@@ -151,7 +151,7 @@
                 search: {
                     page: 1,
                     total: 0,
-                    pageSize:10,
+                    pageSize:15,
                 },
                 maxHeight:'',
                 activeTab: 'activity',
@@ -186,7 +186,6 @@
                 let appContainer= this.$refs.appContainer.scrollHeight;
                 let header= this.$refs.header.scrollHeight;
                 let page= this.$refs.page.scrollHeight;
-
                 this.maxHeight = appContainer-header-page-40;
             },
 
@@ -217,11 +216,11 @@
                                 if (response.errors) {
                                     for (const [key, val] of Object.entries(response.errors)) {
                                         that.errorMsg[key] = val[0];
-                                        console.log(that.errorMsg)
                                     }
                                 } else {
                                     this.dialogFormVisible = false;
                                     this.getAllTwoCompany();
+                                    this.form = '';
                                 }
                             })
                             .catch(() => {

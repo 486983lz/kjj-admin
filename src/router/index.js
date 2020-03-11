@@ -317,14 +317,14 @@ export const constantRoutes = [
             {
                 path: 'user-index-company',
                 name: 'user_index_company',
-                component: () => import('@/views/user/index'),
+                component: () => import('@/views/user/recommend_index'),
                 meta: {title: '二级单位账号',permissions:[]}
             },
             {
                 path: 'user-index-department',
                 name: 'user_index_department',
-                component: () => import('@/views/user/index'),
-                meta: {title: '市局账号',permissions:[]}
+                component: () => import('@/views/user/department_index'),
+                meta: {title: '科室帐号',permissions:[]}
             },
             {
                 path: 'user-index-expert',
@@ -332,12 +332,6 @@ export const constantRoutes = [
                 component: () => import('@/views/expert/index'),
                 meta: {title: '专家',permissions:[]}
             },
-            {
-                path: 'user-index-admin',
-                name: 'user_index_admin',
-                component: () => import('@/views/user/index'),
-                meta: {title: '管理员',permissions:[]}
-            }
         ]
     },
     {
@@ -370,7 +364,7 @@ export const constantRoutes = [
             {
                 path: 'data-index-department',
                 name: 'data_index_department',
-                component: () => import('@/views/data/index'),
+                component: () => import('@/views/department/index'),
                 meta: {title: '归口科室',permissions:[]}
             }
         ]
