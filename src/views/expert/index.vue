@@ -12,7 +12,7 @@
                         <el-input v-model="where.phone" placeholder="请输入手机号码"></el-input>
                     </el-form-item>
                     <el-form-item label="所属领域" label-width="100px" style="margin: 0;width: 30%;">
-                        <el-select v-model="where.industry_id" placeholder="所属领域">
+                        <el-select v-model="where.industry_id" clearable placeholder="所属领域">
                             <el-option
                                     v-for="item in List"
                                     :key="item.id"
@@ -39,9 +39,22 @@
                             style="width: 100%">
                         <el-table-column
                                 align="center"
-                                prop="name"
                                 label="姓名"
                         >
+                            <template slot-scope="scope">
+                                <span>{{scope.row.name}}</span>
+                                <el-popover
+                                        v-if="scope.row.bz"
+                                        placement="top-start"
+                                        width="200"
+                                        trigger="hover"
+                                        :content="scope.row.bz">
+                                    <el-button slot="reference">
+                                        <svg-icon icon-class="shuoming1"  />
+                                    </el-button>
+                                </el-popover>
+                                <svg-icon v-if="!scope.row.bz" icon-class="shuoming2"  />
+                            </template>
                         </el-table-column>
                         <el-table-column
                                 align="center"
@@ -59,11 +72,13 @@
                                 align="center"
                                 prop="created_at"
                                 label="创建时间"
+                                width="300"
                         >
                         </el-table-column>
                         <el-table-column
                                 label="操作"
-                                align="center">
+                                align="center"
+                                width="200">
                             <template slot-scope="scope">
                                 <el-button @click="updateList(scope.row)" type="text" size="small">编辑</el-button>
                                 <el-button @click="deleteList(scope.row.id)" type="text" size="small">删除</el-button>
@@ -73,10 +88,10 @@
                 </el-col>
             </el-row>
             <el-dialog :title="dialogTile" :visible.sync="dialogFormCreate" width='650px'>
-                <el-form :model="createFrom">
+                <el-form ref="createFrom" :model="createFrom" :rules="createFromRules">
                     <el-row>
                         <el-col :span="16" :offset="3">
-                            <el-form-item label="专家姓名" label-width="100px">
+                            <el-form-item label="专家姓名" label-width="100px" prop="name">
                                 <el-input v-model="createFrom.name" auto-complete="off"></el-input>
                             </el-form-item>
                         </el-col>
@@ -84,7 +99,7 @@
 
                     <el-row>
                         <el-col :span="16" :offset="3">
-                            <el-form-item label="手机号码" label-width="100px">
+                            <el-form-item label="手机号码" label-width="100px" prop="phone">
                                 <el-input v-model="createFrom.phone" auto-complete="off"></el-input>
                             </el-form-item>
                         </el-col>
@@ -92,8 +107,11 @@
 
                     <el-row>
                         <el-col :span="16" :offset="3">
-                            <el-form-item label="性别" label-width="100px">
-                                <el-input v-model="createFrom.sex" auto-complete="off"></el-input>
+                            <el-form-item label="性别" label-width="100px" prop="sex">
+                                <el-radio-group v-model="createFrom.sex">
+                                    <el-radio label="男"></el-radio>
+                                    <el-radio label="女"></el-radio>
+                                </el-radio-group>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -108,7 +126,7 @@
 
                     <el-row>
                         <el-col :span="16" :offset="3">
-                            <el-form-item label="行业领域" label-width="100px">
+                            <el-form-item label="行业领域" label-width="100px" prop="industry_id">
                                 <el-select v-model="createFrom.industry_id" placeholder="行业领域">
                                     <el-option
                                             v-for="item in List"
@@ -161,6 +179,20 @@
                 dialogTile:'新增专家',
                 createFrom:{},
                 List:{},
+                createFromRules:{
+                    industry_id: [
+                        { required: true, message: '请选择行业领域', trigger: 'blur' }
+                    ],
+                    name: [
+                        { required: true, message: '请输入用户名', trigger: 'blur' }
+                    ],
+                    sex: [
+                        { required: true, message: '请选择性别', trigger: 'blur' }
+                    ],
+                    phone: [
+                        { required: true, message: '请输入手机号', trigger: 'blur' }
+                    ],
+                }
             }
         },
         mounted(){
@@ -220,30 +252,80 @@
             },
             updateList(row){
                 this.dialogTile = '修改专家';
-                this.createFrom = row;
+                this.createFrom = { ...row };
+                if(this.$refs['createFrom'] != undefined){
+                    this.$refs['createFrom'].clearValidate();
+                }
+
                 this.dialogFormCreate = true;
+            },
+            deleteList(id){
+                this.$confirm('此操作将永久删除该专家信息, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    this.$store.dispatch('expert/deleteExpert',{id:id})
+                        .then((response) => {
+                            if(response){
+                                this.$message({
+                                    type: 'success',
+                                    message: '删除成功!'
+                                });
+                                this.getList()
+                            }else{
+                                this.$message({
+                                    type: 'info',
+                                    message: '删除失败!'
+                                });
+                            }
+                        })
+                        .catch(() => {
+                            this.$message({
+                                type: 'info',
+                                message: '删除失败'
+                            });
+                        });
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消删除'
+                    });
+                });
             },
             doCreate(){
                 let that = this
-                this.$store.dispatch('expert/createExpert',this.createFrom)
-                    .then((response) => {
-                        this.getList();
-                        this.dialogFormCreate = false;
-                    })
-                    .catch(() => {
+                this.$refs.createFrom.validate(valid => {
+                    if (valid) {
+                        this.$store.dispatch('expert/createExpert',this.createFrom)
+                            .then((response) => {
+                                this.getList();
+                                this.dialogFormCreate = false;
+                            })
+                            .catch(() => {
 
-                    });
+                            });
+                    } else {
+                        return false;
+                    }
+                });
             },
             doUpdate(){
                 let that = this
-                this.$store.dispatch('expert/updateExpert',this.createFrom)
-                    .then((response) => {
-                        this.getList();
-                        this.dialogFormCreate = false;
-                    })
-                    .catch(() => {
+                this.$refs.createFrom.validate(valid => {
+                    if (valid) {
+                        this.$store.dispatch('expert/updateExpert',this.createFrom)
+                            .then((response) => {
+                                this.getList();
+                                this.dialogFormCreate = false;
+                            })
+                            .catch(() => {
 
-                    });
+                            });
+                        } else {
+                            return false;
+                        }
+                });
             },
 
             handleCurrentChanges(val){
@@ -277,5 +359,9 @@
     }
     .el-select{
         width: 100%;
+    }
+    .el-popover__reference {
+        border: 0;
+        padding: 0;
     }
 </style>

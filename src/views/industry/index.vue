@@ -19,7 +19,8 @@
                         <el-table-column
                                 align="center"
                                 prop="id"
-                                label="id"
+                                label="序号"
+                                width="50"
                         >
                         </el-table-column>
                         <el-table-column
@@ -68,26 +69,14 @@
                                 </el-tooltip>
                             </template>
                         </el-table-column>
-                        <!--<el-table-column-->
-                                <!--align="center"-->
-                                <!--label="操作"-->
-                                <!--width="200">-->
-                            <!--<template slot-scope="scope">-->
-                                <!--<router-link :to="{path: 'project-show',query:{projectNum:scope.row.project_num, type:'show'}}"><el-button type="text" size="small">预览</el-button></router-link>-->
-                                <!--<router-link :to="{path: 'project-show',query:{projectNum:scope.row.project_num, type:'update'}}"><el-button type="text" size="small">编辑</el-button></router-link>-->
-
-                                <!--<el-button @click="handleClick(scope.row)" type="text" size="small">删除</el-button>-->
-                                <!--<el-button type="text" size="small">申报</el-button>-->
-                            <!--</template>-->
-                        <!--</el-table-column>-->
                     </el-table>
                 </el-col>
             </el-row>
             <el-dialog title="创建标签" :visible.sync="dialogFormCreate" width='650px'>
-                <el-form :model="createFrom">
+                <el-form ref="createFrom" :model="createFrom" :rules="createFromRules">
                     <el-row>
                         <el-col :span="16" :offset="3">
-                            <el-form-item label="标签名称" label-width="100px">
+                            <el-form-item label="标签名称" label-width="100px" prop="name">
                                 <el-input v-model="createFrom.name" auto-complete="off"></el-input>
                             </el-form-item>
                         </el-col>
@@ -96,7 +85,7 @@
 
                     <el-row>
                         <el-col :span="16" :offset="3">
-                            <el-form-item label="父级标签" label-width="100px">
+                            <el-form-item label="父级标签" label-width="100px" prop="fid">
                                 <el-select v-model="createFrom.fid" placeholder="请选择父级标签">
                                     <el-option
                                             v-for="item in industryList"
@@ -146,6 +135,14 @@
                 createFrom:{},
                 industryList:{},
                 loading:false,
+                createFromRules:{
+                    name: [
+                        { required: true, message: '请填写行业名称', trigger: 'blur' }
+                    ],
+                    fid: [
+                        { required: true, message: '请选择父级行业', trigger: 'blur' }
+                    ],
+                }
             }
         },
         computed: {
@@ -178,6 +175,10 @@
                     });
             },
             showCreate(){
+                this.createFrom = {}
+                if(this.$refs['createFrom'] != undefined){
+                    this.$refs['createFrom'].clearValidate();
+                }
                 this.dialogFormCreate = true;
                 let that = this
                 this.$store.dispatch('projectIndustry/getAll')
@@ -190,14 +191,20 @@
             },
             doCreate(){
                 let that = this
-                this.$store.dispatch('projectIndustry/createIndustry',this.createFrom)
-                    .then((response) => {
-                        this.getList();
-                        this.dialogFormCreate = false;
-                    })
-                    .catch(() => {
+                this.$refs.createFrom.validate(valid => {
+                    if (valid) {
+                        this.$store.dispatch('projectIndustry/createIndustry',this.createFrom)
+                            .then((response) => {
+                                this.getList();
+                                this.dialogFormCreate = false;
+                            })
+                            .catch(() => {
 
-                    });
+                            });
+                    } else {
+                        return false;
+                    }
+                });
             },
             createShow(row){
                 let that = this;

@@ -22,3 +22,11 @@ export function getExpertList(data) {
     data
   })
 }
+
+export function deleteExpert(data) {
+  return request({
+    url: '/recommend/expert/deleteExpert',
+    method: 'post',
+    data
+  })
+}

@@ -1,6 +1,93 @@
 <template>
-    <div class="app-container">
-        公告管理
+    <div class="app-top">
+        <router-link :to="{path: 'notice-create'}"><el-button class='btn_right' type="primary">发布公告</el-button></router-link>
+        <div class="app-container" ref="appContainer">
+            <div class="header"  ref="header">
+                <el-form ref="form" :model="where" label-width="120px" style="display: flex;">
+                    <el-form-item label="姓名:" label-width="100px" style="margin: 0;width: 30%;">
+                        <el-input v-model="where.name" placeholder="请输入专家姓名" ></el-input>
+                    </el-form-item>
+                    <el-form-item label="手机号码:" label-width="100px" style="margin: 0;width: 30%;">
+                        <el-input v-model="where.phone" placeholder="请输入手机号码"></el-input>
+                    </el-form-item>
+                    <el-button type="info" @click="searchInfo" style="margin-left: 1%;">查询</el-button>
+                </el-form>
+            </div>
+
+            <el-row>
+                <el-col>
+                    <el-table
+                            :header-cell-style="tableHeaderColor"
+                            :data="tableData"
+                            border
+                            :max-height="maxHeight"
+                            v-loading="loading"
+                            element-loading-text="拼命加载中"
+                            element-loading-spinner="el-icon-loading"
+                            element-loading-background="rgba(0, 0, 0, 0.8)"
+                            style="width: 100%">
+                        <el-table-column
+                                align="center"
+                                label="序号"
+                                prop="id"
+                        >
+                        </el-table-column>
+                        <el-table-column
+                                align="center"
+                                prop="title"
+                                label="公告名称"
+                        >
+                        </el-table-column>
+                        <el-table-column
+                                align="center"
+                                prop="name"
+                                label="姓名"
+                        >
+                        </el-table-column>
+                        <el-table-column
+                                align="center"
+                                prop="source"
+                                label="来源部门"
+                        >
+                        </el-table-column>
+                        <el-table-column
+                                align="center"
+                                prop="created_at"
+                                label="发布时间"
+                                width="300"
+                        >
+                        </el-table-column>
+                        <el-table-column
+                                align="center"
+                                prop="status"
+                                label="公告状态"
+                        >
+                        </el-table-column>
+                        <el-table-column
+                                label="操作"
+                                align="center"
+                                width="200">
+                            <template slot-scope="scope">
+                                <el-button @click="updateList(scope.row)" type="text" size="small">编辑</el-button>
+                                <el-button @click="deleteList(scope.row.id)" type="text" size="small">删除</el-button>
+                                <el-button @click="deleteList(scope.row.id)" type="text" size="small">预览</el-button>
+                                <el-button @click="deleteList(scope.row.id)" type="text" size="small">发布</el-button>
+                            </template>
+                        </el-table-column>
+                    </el-table>
+                </el-col>
+            </el-row>
+            <div class="page-block" ref="page">
+                <el-pagination
+                        @current-change="handleCurrentChanges"
+                        :current-page="search.page"
+                        layout="total, prev, pager, next"
+                        :total="search.total"
+                        :page-size="search.pageSize"
+                        background>
+                </el-pagination>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -8,21 +95,127 @@
 
 
     export default {
-        name: 'Profile',
+        name: 'notice_index',
         data() {
             return {
-                user: {},
-                activeTab: 'activity'
+                search:{
+                    page: 1,
+                    total: 0,
+                    pageSize:10,
+                },
+                where:{},
+                loading: false,
+                tableData: [],
             }
         },
+        mounted(){
+            this.getMaxHeight()
+        },
+
         computed: {
+
 
         },
         created() {
-
+            this.getList();
         },
         methods: {
 
-        }
+            searchInfo(){
+                this.search.page = 1;
+                this.search.where = { ...this.where }
+                this.getList();
+            },
+            getMaxHeight(){
+                let appContainer= this.$refs.appContainer.scrollHeight;
+                let header= this.$refs.header.scrollHeight;
+                let page= this.$refs.page.scrollHeight;
+                this.maxHeight = appContainer-header-page-40;
+            },
+            getList(){
+                this.loading = true;
+                let that = this
+                this.$store.dispatch('expert/getExpertList',this.search)
+                    .then((response) => {
+                        that.tableData = response.data;
+                        that.search.total = response.total;
+                        that.search.pageSize = response.per_page;
+                        that.loading = false;
+                    })
+                    .catch(() => {
+
+                    });
+            },
+
+            deleteList(id){
+                this.$confirm('此操作将永久删除该专家信息, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    this.$store.dispatch('expert/deleteExpert',{id:id})
+                        .then((response) => {
+                            if(response){
+                                this.$message({
+                                    type: 'success',
+                                    message: '删除成功!'
+                                });
+                                this.getList()
+                            }else{
+                                this.$message({
+                                    type: 'info',
+                                    message: '删除失败!'
+                                });
+                            }
+                        })
+                        .catch(() => {
+                            this.$message({
+                                type: 'info',
+                                message: '删除失败'
+                            });
+                        });
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消删除'
+                    });
+                });
+            },
+
+            handleCurrentChanges(val){
+                this.search.page = val;
+                this.getList();
+
+            },
+            //设置表格表头样式
+            tableHeaderColor ({ row, column, rowIndex, columnIndex }) {
+                if (rowIndex === 0) {
+                    return 'background-color: #ecf5ff;color: black;font-weight: 700;'
+                }
+            },
+        },
+
     }
 </script>
+<style scoped>
+    .app-container {
+        height: calc(100vh - 215px);
+    }
+    .btn_right {
+        width: 190px;
+        background-color: #709fe1;
+        border: 0;
+        height: 40px;
+        margin: 20px 0 0px 20px;
+    }
+    .header {
+        padding-bottom: 30px;
+    }
+    .el-select{
+        width: 100%;
+    }
+    .el-popover__reference {
+        border: 0;
+        padding: 0;
+    }
+</style>
