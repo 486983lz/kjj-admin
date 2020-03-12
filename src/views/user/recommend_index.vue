@@ -237,7 +237,7 @@
                 search: {
                     page: 1,
                     total: 0,
-                    pageSize:10,
+                    pageSize:15,
                 },
                 activeTab: 'activity',
                 loading: false,
@@ -301,9 +301,9 @@
             //查看所有二级单位
             getAllTwoCompany() {
                 let that = this;
-                this.$store.dispatch('twoLevelCompany/getAllTwoCompany',this.search)
+                this.$store.dispatch('twoLevelCompany/getAllTwoCompanyOption',this.search)
                     .then((response) => {
-                        that.tableForm = response.data;
+                        that.tableForm = response;
                     })
                     .catch(() => {
                     });
@@ -324,7 +324,9 @@
                                 } else {
                                     this.dialogFormVisible = false;
                                     that.getRecommendAccounts();
-                                    this.form = '';
+                                    this.form = {
+                                        role: '2',
+                                    };
                                 }
                             })
                             .catch(() => {

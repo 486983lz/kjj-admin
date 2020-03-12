@@ -237,7 +237,7 @@
                 search: {
                     page: 1,
                     total: 0,
-                    pageSize:10,
+                    pageSize:15,
                 },
                 activeTab: 'activity',
                 loading: false,
@@ -324,7 +324,9 @@
                                 } else {
                                     this.dialogFormVisible = false;
                                     that.getAccounts();
-                                    this.form = '';
+                                    this.form = {
+                                        role: '3',
+                                    };
                                 }
                             })
                             .catch(() => {

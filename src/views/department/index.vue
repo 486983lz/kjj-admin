@@ -177,7 +177,7 @@
                                 } else {
                                     this.dialogFormVisible = false;
                                     this.getAllDepartment();
-                                    this.form = '';
+                                    this.form = {};
                                 }
                             })
                             .catch(() => {

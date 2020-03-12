@@ -220,7 +220,7 @@
                                 } else {
                                     this.dialogFormVisible = false;
                                     this.getAllTwoCompany();
-                                    this.form = '';
+                                    this.form = {};
                                 }
                             })
                             .catch(() => {
