@@ -1,5 +1,5 @@
 import {
-    createExpert,getExpertList,updateExpert}
+    createExpert,getExpertList,updateExpert,deleteExpert}
     from '@/api/expert';
 
 
@@ -32,6 +32,16 @@ const actions = {
     getExpertList({commit, state},data) {
         return new Promise((resolve, reject) => {
             getExpertList(data).then(response => {
+                const {data} = response;
+                resolve(data);
+            }).catch(error => {
+                reject(error);
+            });
+        });
+    },
+    deleteExpert({commit, state},data) {
+        return new Promise((resolve, reject) => {
+            deleteExpert(data).then(response => {
                 const {data} = response;
                 resolve(data);
             }).catch(error => {

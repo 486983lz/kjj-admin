@@ -234,8 +234,8 @@ export const constantRoutes = [
         },
         children: [
             {
-                path: 'contact-index',
-                name: 'contact_index',
+                path: 'contact-index1',
+                name: 'contact_index1',
                 component: () => import('@/views/count/index'),
                 meta: {title: '项目统计',permissions:[]}
             }
@@ -252,7 +252,7 @@ export const constantRoutes = [
             {
                 path: 'roster-index',
                 name: 'roster_index',
-                component: () => import('@/views/roster/index'),
+                component: () => import('@/views/expert/show'),
                 meta: {title: '专家名册',permissions:[]}
             }
         ]
@@ -295,6 +295,7 @@ export const constantRoutes = [
         name: 'notice',
         meta: {
             icon: 'notice',
+            title: '公告管理',
         },
         children: [
             {
@@ -302,7 +303,15 @@ export const constantRoutes = [
                 name: 'notice_index',
                 component: () => import('@/views/notice/index'),
                 meta: {title: '公告管理',permissions:[]}
-            }
+            },
+            {
+                hidden:true,
+                path: 'notice-create',
+                name: 'notice_create',
+                component: () => import('@/views/notice/create'),
+                meta: {title: '发布公告',permissions:[]}
+            },
+
         ]
     },
     {

@@ -240,7 +240,6 @@
                 this.$store.dispatch('twoLevelCompany/getAllTwoCompany',this.search)
                     .then((response) => {
                         that.tableData = response.data;
-                        console.log(that.tableData);
                         that.search.total = response.total;
                     })
                     .catch(() => {
