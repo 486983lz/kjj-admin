@@ -51,3 +51,22 @@ export function getAccounts(data) {
   })
 }
 
+//编辑归口科室账号
+export function editDepartmentAccounts(data) {
+  return request({
+    url: '/department/edit-department-accounts',
+    method: 'post',
+    data
+  })
+}
+export function updateDepartmentAccounts(data) {
+  return request({
+    url: '/department/update-department-accounts',
+    method: 'post',
+    data
+  })
+}
+
+
+
+

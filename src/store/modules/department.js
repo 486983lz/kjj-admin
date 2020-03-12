@@ -1,4 +1,5 @@
-import {saveDepartment,getAllDepartment,editDepartment,updateDepartment,allDepartment,getAccounts} from '@/api/department';
+import {saveDepartment,getAllDepartment,editDepartment,updateDepartment,allDepartment,getAccounts,
+    editDepartmentAccounts,updateDepartmentAccounts,editPassword,updatePassword} from '@/api/department';
 
 const state = {
     roles: []
@@ -66,6 +67,28 @@ const actions = {
     getAccounts({commit, state},data) {
         return new Promise((resolve, reject) => {
             getAccounts(data).then(response => {
+                const {data} = response;
+                resolve(data);
+            }).catch(error => {
+                reject(error);
+            });
+        });
+    },
+
+    //编辑归口科室帐号
+    editDepartmentAccounts({commit, state},data) {
+        return new Promise((resolve, reject) => {
+            editDepartmentAccounts(data).then(response => {
+                const {data} = response;
+                resolve(data);
+            }).catch(error => {
+                reject(error);
+            });
+        });
+    },
+    updateDepartmentAccounts({commit, state},data) {
+        return new Promise((resolve, reject) => {
+            updateDepartmentAccounts(data).then(response => {
                 const {data} = response;
                 resolve(data);
             }).catch(error => {

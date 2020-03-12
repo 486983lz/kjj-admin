@@ -25,7 +25,7 @@
                 </el-form>
             </div>
 
-            <!--二级单位帐号列表-->
+            <!--归口科室帐号列表-->
             <el-table
                     :header-cell-style="tableHeaderColor"
                     :data="tableData"
@@ -55,7 +55,7 @@
                 </el-table-column>
                 <el-table-column
                         align="center"
-                        prop="level_company_name"
+                        prop="department_name"
                         label="归属科室">
                 </el-table-column>
                 <el-table-column
@@ -74,9 +74,9 @@
                         label="操作"
                         width="200">
                     <template slot-scope="scope">
-                        <el-button type="text" size="medium " @click="editRecommend(scope.row)">编辑</el-button>
+                        <el-button type="text" size="medium " @click="editDepartmentAccounts(scope.row)">编辑</el-button>
                         <el-button type="text" size="medium " @click="editPassword(scope.row)">修改密码</el-button>
-                        <el-button type="text" size="medium " @click="deleteRecommend(scope.row)">删除</el-button>
+                        <el-button type="text" size="medium " @click="deleteDepartment(scope.row)">删除</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -93,7 +93,7 @@
             </div>
 
             <!--添加帐号弹框-->
-            <el-dialog title="添加二级单位帐号" :visible.sync="dialogFormVisible" width="38%">
+            <el-dialog title="添加归口科室帐号" :visible.sync="dialogFormVisible" width="38%">
                 <el-form ref="form" :model="form" label-width="120px" :rules="codeRules">
                     <el-form-item label="用户名：" :error="errorMsg.username" prop="username">
                         <el-input v-model="form.username" autocomplete="off" placeholder="请输入用户名"></el-input>
@@ -139,12 +139,12 @@
                     <el-form-item label="手机号：" prop="phone">
                         <el-input v-model="editForm.phone" autocomplete="off"></el-input>
                     </el-form-item>
-                    <el-form-item label="二级单位：" porp="role">
-                        <el-select v-model="editForm.company_id" filterable clearable placeholder="请选择二级单位">
+                    <el-form-item label="归口科室：" porp="role">
+                        <el-select v-model="editForm.department_id" filterable clearable placeholder="请选择归口科室">
                             <el-option
                                     v-for="item in tableForm"
-                                    :key="item.level_company_name"
-                                    :label="item.level_company_name"
+                                    :key="item.department_name"
+                                    :label="item.department_name"
                                     :value="item.id">
                             </el-option>
                         </el-select>
@@ -152,7 +152,7 @@
                 </el-form>
                 <div slot="footer" class="dialog-footer">
                     <el-button @click="editDialogFormVisible = false">取 消</el-button>
-                    <el-button type="primary" @click="updateRecommend">修 改</el-button>
+                    <el-button type="primary" @click="updateDepartmentAccounts">修 改</el-button>
                 </div>
             </el-dialog>
 
@@ -179,7 +179,7 @@
     import {validatePhone} from '@/utils/validate';
 
     export default {
-        name: 'Profile',
+        name: 'user_index_department',
         data() {
             var validatePass = (rule, value, callback) => {
                 if (value === '') {
@@ -351,7 +351,7 @@
             },
 
             //删除二级单位帐号
-            deleteRecommend(row) {
+            deleteDepartment(row) {
                 this.$confirm('此操作将永久删除该帐号, 是否继续?', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
@@ -362,7 +362,7 @@
                     this.$store.dispatch('recommend/deleteRecommend',{id : row.id})
                         .then((response) => {
                             that.loading = false;
-                            that.getRecommendAccounts();
+                            that.getAccounts();
                         }).catch(() => {
 
                     });
@@ -376,9 +376,9 @@
             },
 
             //编辑二级单位帐号
-            editRecommend(row) {
+            editDepartmentAccounts(row) {
                 let that = this;
-                this.$store.dispatch('recommend/editRecommend',{id : row.id})
+                this.$store.dispatch('department/editDepartmentAccounts',{id : row.id})
                     .then((response) => {
                         that.editForm = response;
                         that.editDialogFormVisible = true;
@@ -387,15 +387,14 @@
 
                     });
             },
-            updateRecommend() {
+            updateDepartmentAccounts() {
                 let that = this;
                 this.$refs.form.validate(valid => {
                     if (valid) {
-                        this.$store.dispatch('recommend/updateRecommend', this.editForm)
+                        this.$store.dispatch('department/updateDepartmentAccounts', this.editForm)
                             .then((response) => {
-                                that.getRecommendAccounts();
                                 this.editDialogFormVisible = false;
-                                that.getRecommendAccounts();
+                                that.getAccounts();
                             })
                             .catch(() => {
 
@@ -424,7 +423,7 @@
                     if (valid) {
                         this.$store.dispatch('recommend/updatePassword', this.passwordForm)
                             .then((response) => {
-                                that.getRecommendAccounts();
+                                that.getAccounts();
                                 this.passworDialogFormVisible = false;
                             })
                             .catch(() => {
@@ -436,6 +435,7 @@
                 });
             },
 
+            //搜索
             searchAll() {
                 this.search.page = 1;
                 this.getAccounts();

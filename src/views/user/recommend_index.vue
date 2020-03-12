@@ -179,7 +179,7 @@
     import {validatePhone} from '@/utils/validate';
 
     export default {
-        name: 'Profile',
+        name: 'user_index_company',
         data() {
             var validatePass = (rule, value, callback) => {
                 if (value === '') {
