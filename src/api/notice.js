@@ -15,4 +15,25 @@ export function postNoticeInfo(data) {
     data
   })
 }
+export function getNoticeList(data) {
+  return request({
+    url: '/admin/notice/getNoticeList',
+    method: 'post',
+    data
+  })
+}
+export function getNoticeInfo(data) {
+  return request({
+    url: '/admin/notice/getNoticeInfo',
+    method: 'post',
+    data
+  })
+}
+export function updateNoticeInfo(data) {
+  return request({
+    url: '/admin/notice/updateNoticeInfo',
+    method: 'post',
+    data
+  })
+}
 

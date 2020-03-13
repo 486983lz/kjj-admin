@@ -4,11 +4,8 @@
         <div class="app-container" ref="appContainer">
             <div class="header"  ref="header">
                 <el-form ref="form" :model="where" label-width="120px" style="display: flex;">
-                    <el-form-item label="姓名:" label-width="100px" style="margin: 0;width: 30%;">
-                        <el-input v-model="where.name" placeholder="请输入专家姓名" ></el-input>
-                    </el-form-item>
-                    <el-form-item label="手机号码:" label-width="100px" style="margin: 0;width: 30%;">
-                        <el-input v-model="where.phone" placeholder="请输入手机号码"></el-input>
+                    <el-form-item label="标题:" label-width="100px" style="margin: 0;width: 30%;">
+                        <el-input v-model="where.title" placeholder="请输入公告标题" ></el-input>
                     </el-form-item>
                     <el-button type="info" @click="searchInfo" style="margin-left: 1%;">查询</el-button>
                 </el-form>
@@ -28,20 +25,14 @@
                             style="width: 100%">
                         <el-table-column
                                 align="center"
-                                label="序号"
-                                prop="id"
-                        >
-                        </el-table-column>
-                        <el-table-column
-                                align="center"
                                 prop="title"
-                                label="公告名称"
+                                label="公告标题"
                         >
                         </el-table-column>
                         <el-table-column
                                 align="center"
                                 prop="name"
-                                label="姓名"
+                                label="发布人"
                         >
                         </el-table-column>
                         <el-table-column
@@ -59,18 +50,21 @@
                         </el-table-column>
                         <el-table-column
                                 align="center"
-                                prop="status"
                                 label="公告状态"
                         >
+                            <template slot-scope="scope">
+                                <span v-if="scope.row.status">已发布</span>
+                                <span v-if="!scope.row.status">已撤回</span>
+                            </template>
                         </el-table-column>
                         <el-table-column
                                 label="操作"
                                 align="center"
                                 width="200">
                             <template slot-scope="scope">
-                                <el-button @click="updateList(scope.row)" type="text" size="small">编辑</el-button>
+                                <el-button @click="updateList(scope.row.id)" type="text" size="small">编辑</el-button>
                                 <el-button @click="deleteList(scope.row.id)" type="text" size="small">删除</el-button>
-                                <el-button @click="deleteList(scope.row.id)" type="text" size="small">预览</el-button>
+                                <el-button @click="showList(scope.row.id)" type="text" size="small">预览</el-button>
                                 <el-button @click="deleteList(scope.row.id)" type="text" size="small">发布</el-button>
                             </template>
                         </el-table-column>
@@ -102,8 +96,11 @@
                     page: 1,
                     total: 0,
                     pageSize:10,
+                    where:{type:1},
                 },
-                where:{},
+                where:{
+                    type:1
+                },
                 loading: false,
                 tableData: [],
             }
@@ -135,7 +132,7 @@
             getList(){
                 this.loading = true;
                 let that = this
-                this.$store.dispatch('expert/getExpertList',this.search)
+                this.$store.dispatch('notice/getNoticeList',this.search)
                     .then((response) => {
                         that.tableData = response.data;
                         that.search.total = response.total;
@@ -145,6 +142,9 @@
                     .catch(() => {
 
                     });
+            },
+            updateList(id){
+                this.$router.push({name: 'notice_update',query:{id:id}});
             },
 
             deleteList(id){

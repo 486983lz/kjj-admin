@@ -107,6 +107,7 @@ export const constantRoutes = [
         name: 'register',
         hidden: true
     },
+
     {
         path: '/',
         component: Layout,
@@ -311,6 +312,70 @@ export const constantRoutes = [
                 component: () => import('@/views/notice/create'),
                 meta: {title: '发布公告',permissions:[]}
             },
+            {
+                hidden:true,
+                path: 'notice-update',
+                name: 'notice_update',
+                component: () => import('@/views/notice/update'),
+                meta: {title: '编辑公告',permissions:[]}
+            },
+            {
+                path: '/success',
+                component: () => import('@/views/success/index'),
+                name: 'success',
+                hidden: true
+            },
+
+        ]
+    },
+    {
+        path: '/Resource',
+        component: Layout,
+        name: 'resource',
+        meta: {
+            icon: 'ziliao',
+            title: '资料管理',
+        },
+        children: [
+            {
+                path: 'resource-index',
+                name: 'resource_index',
+                component: () => import('@/views/notice/index'),
+                meta: {title: '资料管理',permissions:[]}
+            },
+            {
+                hidden:true,
+                path: 'resource-create',
+                name: 'resource_create',
+                component: () => import('@/views/notice/create'),
+                meta: {title: '发布资料',permissions:[]}
+            }
+
+        ]
+    },
+    {
+        path: '/guide',
+        component: Layout,
+        name: 'guide',
+        meta: {
+            icon: 'zhinan',
+            title: '指南管理',
+        },
+        children: [
+            {
+                path: 'guide-index',
+                name: 'guide_index',
+                component: () => import('@/views/notice/index'),
+                meta: {title: '指南管理',permissions:[]}
+            },
+            {
+                hidden:true,
+                path: 'guide-create',
+                name: 'guide_create',
+                component: () => import('@/views/notice/create'),
+                meta: {title: '发布指南',permissions:[]}
+            },
+
 
         ]
     },
