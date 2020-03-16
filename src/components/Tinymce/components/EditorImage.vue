@@ -48,13 +48,12 @@ export default {
     }
   },
   methods: {
-      getFileMsg(data){
-          let that = this
-          that.handleSuccess(data,data.file);
-          this.getBase64(data.file).then(resBase64 => {
-              this.fileBase64 = resBase64.split(',')[1]　　//直接拿到base64信息
-              let response = {files:{file:resBase64}};
-              that.handleSuccess(response,data.file);
+       getFileMsg(data){
+            let that = this
+            this.getBase64(data.file).then(resBase64 => {
+            this.fileBase64 = resBase64.split(',')[1]　　//直接拿到base64信息
+            let response = {files:{file:resBase64}};
+            that.handleSuccess(response,data.file);
           })
       },
       getBase64(file) {
@@ -83,9 +82,9 @@ export default {
     handleSubmit() {
       const arr = Object.keys(this.listObj).map(v => this.listObj[v])
       if (!this.checkAllSuccess()) {
-        this.$message('请等待上传完成')
-        return
-      }
+            this.$message('请等待上传完成')
+            return
+        }
       this.$emit('successCBK', arr)
       this.listObj = {}
       this.fileList = []
@@ -96,11 +95,13 @@ export default {
       const objKeyArr = Object.keys(this.listObj)
       for (let i = 0, len = objKeyArr.length; i < len; i++) {
         if (this.listObj[objKeyArr[i]].uid === uid) {
+
           this.listObj[objKeyArr[i]].url = response.files.file
           this.listObj[objKeyArr[i]].hasSuccess = true
           return
         }
       }
+
     },
     handleRemove(file) {
       const uid = file.uid
@@ -120,11 +121,10 @@ export default {
       return new Promise((resolve, reject) => {
         const img = new Image()
         img.src = _URL.createObjectURL(file)
-        img.onload = function() {
           _self.listObj[fileName] = { hasSuccess: false, uid: file.uid, width: this.width, height: this.height }
-        }
         resolve(true)
       })
+
     }
   }
 }

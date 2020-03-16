@@ -2,7 +2,7 @@
     <div class="app-container">
         <el-row>
             <el-col :span="24">
-                <p class="notice-title">发布公告</p>
+                <p class="notice-title">编辑资料</p>
             </el-col>
         </el-row>
         <el-form :model="createFrom" ref="createFrom" :rules="createFromRules" label-width="150px" >
@@ -52,7 +52,7 @@
                 <el-col :span="18" :offset=2 >
                     <el-form-item label="" >
                         <div style="text-align: center">
-                            <el-button size="small" class="sub-btn" @click="subNotice" >发  布</el-button>
+                            <el-button size="small" class="sub-btn" @click="subNotice" >修  改</el-button>
                         </div>
                     </el-form-item>
                 </el-col>
@@ -93,7 +93,9 @@
             return {
                 user: {},
                 activeTab: 'activity',
-                createFrom:{},
+                createFrom:{
+                    id:''
+                },
                 form:{},
                 createFromRules:{
                     title: [
@@ -109,6 +111,8 @@
 
         },
         created() {
+            this.createFrom.id = this.$route.query.id
+            this.getNoticeInfo()
             this.uploadForm = new FormData();
         },
         methods: {
@@ -123,6 +127,9 @@
                 this.uploadForm.append("file[]", _file);
             },
             removeFile(item) {
+                if(typeof item.id !=='undefined'){
+                    this.uploadForm.append("delFile[]",item.id)
+                };
                 var index = this.fileList.indexOf(item)
                 if (index !== -1) {
                     this.fileList.splice(index, 1)
@@ -134,6 +141,18 @@
                         this.uploadForm.append("file[]", list[i]);
                     }
                 }
+            },
+            getNoticeInfo(){
+                this.$store.dispatch('notice/getNoticeInfo',{id:this.createFrom.id})
+                    .then((response) => {
+                        this.createFrom = response.list
+                        for(let i = 0 ; i<response.fileList.length;i++){
+                            this.fileList.push({name:response.fileList[i].file_name,url:response.fileList[i].puth,id:response.fileList[i].id});
+                        }
+                    })
+                    .catch(() => {
+
+                    });
             },
             subNotice(){
                 let that = this
@@ -149,11 +168,12 @@
                         if(this.createFrom.content != undefined){
                             this.uploadForm.set("content", this.createFrom.content);
                         }
-                        this.uploadForm.set("type", '1');
-                        this.$store.dispatch('notice/postNoticeInfo',this.uploadForm)
+                        this.uploadForm.set("id", this.createFrom.id);
+                        this.uploadForm.set("type", '2');
+                        this.$store.dispatch('notice/updateNoticeInfo',this.uploadForm)
                         .then((response) => {
                             if(response){
-                                that.$router.push({name: 'success',query:{router_name:'notice'}});
+                                that.$router.push({name: 'success',query:{router_name:'resource'}});
                             }
                         })
                         .catch(() => {

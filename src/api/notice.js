@@ -37,3 +37,11 @@ export function updateNoticeInfo(data) {
   })
 }
 
+export function updateStatusNotice(data) {
+  return request({
+    url: '/admin/notice/updateStatusNotice',
+    method: 'post',
+    data
+  })
+}
+

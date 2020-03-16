@@ -64,7 +64,7 @@
                     :http-request="doUpload"
                     :auto-upload="true"
                     drag
-                    accept='.jpg,.jpeg,.pdf,.doc,.docx,.xlsx,.gif,.xlx,.png'
+                    accept='.jpg,.jpeg,.pdf,.doc,.docx,.xlsx,.gif,.xls,.png'
                     :show-file-list="true"
                     :on-remove = 'removeFile'
                     :file-list="fileList">
@@ -172,9 +172,9 @@
                         this.uploadForm.set("type", '1');
                         this.$store.dispatch('notice/updateNoticeInfo',this.uploadForm)
                         .then((response) => {
-                            // if(response){
-                            //     that.$router.push({name: 'success',query:{router_name:'notice'}});
-                            // }
+                            if(response){
+                                that.$router.push({name: 'success',query:{router_name:'notice'}});
+                            }
                         })
                         .catch(() => {
 

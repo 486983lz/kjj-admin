@@ -8,15 +8,16 @@
                 <el-form-item label="手机号码:" label-width="100px" style="margin: 0;width: 30%;">
                     <el-input v-model="where.phone" placeholder="请输入手机号码"></el-input>
                 </el-form-item>
-                <el-form-item label="所属领域" label-width="100px" style="margin: 0;width: 30%;">
-                    <el-select v-model="where.industry_id" clearable placeholder="所属领域">
-                        <el-option
-                                v-for="item in List"
-                                :key="item.id"
-                                :label="item.name"
-                                :value="item.id">
-                        </el-option>
-                    </el-select>
+                <el-form-item label="专业领域" label-width="100px" style="margin: 0;width: 30%;">
+                    <!--<el-select v-model="where.industry_id" clearable placeholder="所属领域">-->
+                    <!--<el-option-->
+                    <!--v-for="item in List"-->
+                    <!--:key="item.id"-->
+                    <!--:label="item.name"-->
+                    <!--:value="item.id">-->
+                    <!--</el-option>-->
+                    <!--</el-select>-->
+                    <el-input v-model="where.major" placeholder="请输入专业领域"></el-input>
                 </el-form-item>
                 <el-button type="info" @click="searchInfo" style="margin-left: 1%;">查询</el-button>
             </el-form>
@@ -61,15 +62,20 @@
                     </el-table-column>
                     <el-table-column
                             align="center"
-                            prop="industry_name"
-                            label="所属领域"
+                            prop="company"
+                            label="单位"
                     >
                     </el-table-column>
                     <el-table-column
                             align="center"
-                            prop="created_at"
-                            label="创建时间"
-                            width="300"
+                            prop="major"
+                            label="专业领域"
+                    >
+                    </el-table-column>
+                    <el-table-column
+                            align="center"
+                            prop="title"
+                            label="职称、职务"
                     >
                     </el-table-column>
                 </el-table>

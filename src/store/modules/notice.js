@@ -1,5 +1,5 @@
 import {
-    uploadTinymceImg,postNoticeInfo,getNoticeList,getNoticeInfo,updateNoticeInfo}
+    uploadTinymceImg,postNoticeInfo,getNoticeList,getNoticeInfo,updateNoticeInfo,updateStatusNotice}
     from '@/api/notice';
 
 
@@ -52,6 +52,16 @@ const actions = {
     updateNoticeInfo({commit, state},data) {
         return new Promise((resolve, reject) => {
             updateNoticeInfo(data).then(response => {
+                const {data} = response;
+                resolve(data);
+            }).catch(error => {
+                reject(error);
+            });
+        });
+    },
+    updateStatusNotice({commit, state},data) {
+        return new Promise((resolve, reject) => {
+            updateStatusNotice(data).then(response => {
                 const {data} = response;
                 resolve(data);
             }).catch(error => {

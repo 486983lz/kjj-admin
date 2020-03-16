@@ -77,7 +77,13 @@ export const constantRoutes = [
             {
                 path: '/redirect/:path*',
                 component: () => import('@/views/redirect/index')
-            }
+            },
+            {
+                path: '/success',
+                component: () => import('@/views/success/index'),
+                name: 'success',
+                hidden: true
+            },
         ]
     },
     // 登录
@@ -121,6 +127,7 @@ export const constantRoutes = [
             }
         ]
     },
+
 
     // {
     //     path: '/rbac',
@@ -310,7 +317,7 @@ export const constantRoutes = [
                 path: 'notice-create',
                 name: 'notice_create',
                 component: () => import('@/views/notice/create'),
-                meta: {title: '发布公告',permissions:[]}
+                meta: {title: '发布公告',permissions:[],activeMenu:'/notice/notice-index'}
             },
             {
                 hidden:true,
@@ -320,16 +327,17 @@ export const constantRoutes = [
                 meta: {title: '编辑公告',permissions:[]}
             },
             {
-                path: '/success',
-                component: () => import('@/views/success/index'),
-                name: 'success',
-                hidden: true
+                hidden:true,
+                path: 'notice-show',
+                name: 'notice_show',
+                component: () => import('@/views/notice/show'),
+                meta: {title: '预览',permissions:[]}
             },
 
         ]
     },
     {
-        path: '/Resource',
+        path: '/resource',
         component: Layout,
         name: 'resource',
         meta: {
@@ -340,16 +348,30 @@ export const constantRoutes = [
             {
                 path: 'resource-index',
                 name: 'resource_index',
-                component: () => import('@/views/notice/index'),
+                component: () => import('@/views/resource/index'),
                 meta: {title: '资料管理',permissions:[]}
             },
             {
                 hidden:true,
                 path: 'resource-create',
                 name: 'resource_create',
-                component: () => import('@/views/notice/create'),
-                meta: {title: '发布资料',permissions:[]}
-            }
+                component: () => import('@/views/resource/create'),
+                meta: {title: '发布资料',permissions:[],activeMenu:'/resource/resource-index'}
+            },
+            {
+                hidden:true,
+                path: 'resource-update',
+                name: 'resource_update',
+                component: () => import('@/views/resource/update'),
+                meta: {title: '编辑资料',permissions:[]}
+            },
+            {
+                hidden:true,
+                path: 'resource-show',
+                name: 'resource_show',
+                component: () => import('@/views/resource/show'),
+                meta: {title: '预览',permissions:[]}
+            },
 
         ]
     },
@@ -365,15 +387,29 @@ export const constantRoutes = [
             {
                 path: 'guide-index',
                 name: 'guide_index',
-                component: () => import('@/views/notice/index'),
+                component: () => import('@/views/guide/index'),
                 meta: {title: '指南管理',permissions:[]}
             },
             {
                 hidden:true,
                 path: 'guide-create',
                 name: 'guide_create',
-                component: () => import('@/views/notice/create'),
-                meta: {title: '发布指南',permissions:[]}
+                component: () => import('@/views/guide/create'),
+                meta: {title: '发布指南',permissions:[],activeMenu:'/guide/guide-index'}
+            },
+            {
+                hidden:true,
+                path: 'guide-update',
+                name: 'guide_update',
+                component: () => import('@/views/guide/update'),
+                meta: {title: '编辑指南',permissions:[]}
+            },
+            {
+                hidden:true,
+                path: 'guide-show',
+                name: 'guide_show',
+                component: () => import('@/views/guide/show'),
+                meta: {title: '预览',permissions:[]}
             },
 
 
