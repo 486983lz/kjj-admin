@@ -383,6 +383,7 @@ export const constantRoutes = [
         component: Layout,
         name: 'configure',
         meta: {
+            title: '功能配置',
             icon: 'configure',
         },
         children: [
@@ -391,6 +392,12 @@ export const constantRoutes = [
                 name: 'configure_index',
                 component: () => import('@/views/configure/index'),
                 meta: {title: '功能配置',permissions:[]}
+            },
+            {
+                path: 'configure-index-distribution',
+                name: 'configure_index_distribution',
+                component: () => import('@/views/configure/area_distribution'),
+                meta: {title: '地区配置',permissions:[]}
             }
         ]
     },
