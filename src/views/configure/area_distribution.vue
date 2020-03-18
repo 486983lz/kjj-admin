@@ -10,7 +10,7 @@
                     border
                     style="width: 100%"
                     :header-cell-style="tableHeaderColor"
-                    :data="tableData"
+                    :data="tableArea"
                     :max-height="maxHeight">
                 <el-table-column
                         fixed
@@ -21,28 +21,29 @@
                 </el-table-column>
                 <el-table-column
                         align="center"
-                        prop="level_company_name"
-                        label="部门名称">
+                        prop="area"
+                        label="地区">
                 </el-table-column>
                 <el-table-column
                         align="center"
                         fixed="right"
-                        label="地区"
+                        label="推荐部门"
                         width="500">
                     <template slot-scope="scope">
-                        <el-select
-                                v-model="form.area"
+                       <el-select
+                                v-model="scope.row.two_company_id"
+                                value-key="id"
                                 filterable
                                 clearable
-                                placeholder="请选择所属地区"
+                                placeholder="请选择推荐部门"
                                 @change="distributionArea($event,scope.row.id)">
                             <el-option
-                                    v-for="item in tableArea"
-                                    :key="item.area"
-                                    :label="item.area"
+                                    v-for="item in tableData"
+                                    :key="item.level_company_name"
+                                    :label="item.level_company_name"
                                     :value="item.id">
                             </el-option>
-                        </el-select>
+                       </el-select>
                     </template>
                 </el-table-column>
             </el-table>
@@ -71,7 +72,7 @@
             return {
                 form: {},
                 tableData: [],
-                tableArea: {},
+                tableArea: [],
                 search: {
                     page: 1,
                     total: 0,
@@ -102,7 +103,6 @@
                 this.$store.dispatch('twoLevelCompany/getArea')
                     .then((response) => {
                         that.tableArea = response;
-                        // console.log(that.tableArea);
                     })
                     .catch(() => {
                     });
@@ -111,26 +111,26 @@
             //查看所有二级单位
             getAllTwoCompany() {
                 let that = this;
-                this.$store.dispatch('twoLevelCompany/getAllTwoCompany',this.search)
+                this.$store.dispatch('twoLevelCompany/getAllTwoCompanyOption')
                     .then((response) => {
-                        that.tableData = response.data;
-                        that.search.total = response.total;
+                        that.tableData = response;
                     })
                     .catch(() => {
                     });
             },
 
             //分配二级单位地区
-            distributionArea(row,two_company_id) {
+            distributionArea(row,area_id) {
+                console.log(row,area_id);
                 let that = this;
-                this.$store.dispatch('distributionArea/distributionArea', {area_id:row,two_company_id:two_company_id})
+                this.$store.dispatch('distributionArea/distributionArea', {two_company_id:row,area_id:area_id})
                     .then((response) => {
                         if (response.errors) {
                             for (const [key, val] of Object.entries(response.errors)) {
                                 that.errorMsg[key] = val[0];
                             }
                         } else {
-                            // this.getAllTwoCompany();
+
                         }
                     })
                     .catch(() => {
