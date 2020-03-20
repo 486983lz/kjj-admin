@@ -30,10 +30,11 @@ export function editRole(data) {
     })
 }
 
-export function deleteRole() {
+export function deleteRole(data) {
     return request({
         url: '/rbac/delete-role',
-        method: 'post'
+        method: 'post',
+        data
     })
 }
 

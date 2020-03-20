@@ -401,6 +401,91 @@ export const constantRoutes = [
             }
         ]
     },
+
+    {
+        path: '/system-management',
+        component: Layout,
+        name: 'system-management',
+        meta: {
+            title: '系统管理',
+            icon: 'phone1',
+            // permissions:['logo','device-manage','nvr','camera','video-manage','subject','role','assignation-role','permission','assignation-permission']
+        },
+        // redirect: '/dashboard',
+        // alwaysShow: false,
+        children:[
+            {
+                hidden: true,
+                path: 'role-administration',
+                name: 'role-administration',
+                meta: {title: '角色管理', icon: 'right'},
+                component: () => import('@/views/role/index'),
+            },
+           {
+                path: 'user',
+                name: 'user',
+                meta: {title: '用户管理', icon: 'dashboard'},
+               component: () => import('@/views/role/index'),
+                redirect: '/rbac/user/',
+                children: [
+                    {
+                        path: 'user-index',
+                        name: 'user.index',
+                    }
+                ]
+            },
+           {
+                path: 'role',
+                name: 'role',
+                component: () => import('@/views/role/index'),
+                meta: {title: '角色管理', icon: 'right',permissions:['role','assignation-role']},
+                redirect: '/rbac/role/',
+                children: [
+                    {
+                        path: 'role-index',
+                        name: 'role.index',
+                        component: () => import('@/views/role/index'),
+                        meta: {title: '角色管理', icon: 'right',permissions:['role']}
+                    },
+                    {
+
+                        path: 'assignation-role-to-user',
+                        name: 'role.assign.user',
+                        component: () => import('@/views/role/index'),
+                        meta: {title: '分配角色', icon: 'right',permissions:['assignation-role']}
+                    }
+                ]
+           },
+            /*  {
+                 path: 'permission',
+                 name: 'permission',
+                 meta: {title: '权限管理', icon: 'right',permissions:['permission','assignation-permission']},
+                 component: () => import('@/views/nested/common'),
+                 redirect: '/rbac/permission/',
+                 children: [
+                     // {
+                     //     path: 'permission-index',
+                     //     name: 'permission.index',
+                     //     component: () => import('@/views/rbac/permission/index'),
+                     //     meta: {title: '超级管理员权限', icon: 'right',permissions:['permission']}
+                     // },
+                     {
+                         path: 'permission-admin-index',
+                         name: 'permission_admin_index',
+                         component: () => import('@/views/rbac/permission/admin_index'),
+                         meta: {title: '权限管理', icon: 'right'}
+                     },
+                     {
+                         path: 'assignation-permission-to-role',
+                         name: 'permission.assign.role',
+                         component: () => import('@/views/rbac/permission/assignation_to_role'),
+                         meta: {title: '分配权限', icon: 'right',permissions:['assignation-permission']}
+                     },
+                 ]
+             },*/
+        ]
+    },
+
     {
         path: '/contact',
         component: Layout,

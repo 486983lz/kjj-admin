@@ -24,7 +24,7 @@
                     <el-button type="info" @click="searchAll" style="margin-left: 1%;">查询</el-button>
                 </el-form>-->
             </div>
-        <!--二级单位帐号列表-->
+        <!--二级单位列表-->
         <el-table
                 :header-cell-style="tableHeaderColor"
                 :data="tableData"

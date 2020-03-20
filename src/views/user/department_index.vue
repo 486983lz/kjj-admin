@@ -227,6 +227,7 @@
                     password: '',
                     repassword: '',
                     role: '3',     //归口科室 角色id为3
+                    type: '3',     //权限区分id为3
                     department_id: '',
                 },
                 maxHeight:'',

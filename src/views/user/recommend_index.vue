@@ -227,6 +227,7 @@
                     password: '',
                     repassword: '',
                     role: '2',     //二级单位 角色id为2
+                    type: '2',     //权限区分id
                     company_id: '',
                 },
                 maxHeight:'',

@@ -1,5 +1,5 @@
 import {
-    getAllRoles, editRole, createRole, getAllPermissions,
+    getAllRoles,deleteRole, editRole, createRole, getAllPermissions,
     createPermission, getPermissionByRoleName, assignPermissionsToRole,
     editPermission, cancelPermissionsOfRole}
     from '@/api/rbac';
@@ -12,6 +12,17 @@ const actions = {
     getAllRoles({commit, state}) {
         return new Promise((resolve, reject) => {
             getAllRoles().then(response => {
+                const {data} = response;
+                resolve(data);
+            }).catch(error => {
+                reject(error);
+            });
+        });
+    },
+
+    deleteRole({commit, state}, data) {
+        return new Promise((resolve, reject) => {
+            deleteRole(data).then(response => {
                 const {data} = response;
                 resolve(data);
             }).catch(error => {

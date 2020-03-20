@@ -5,7 +5,7 @@
             <div class="header" ref="header">
 
             </div>
-            <!--二级单位帐号列表-->
+            <!--分配列表-->
             <el-table
                     border
                     style="width: 100%"
