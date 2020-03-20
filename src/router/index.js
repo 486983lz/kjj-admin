@@ -492,14 +492,22 @@ export const constantRoutes = [
         name: 'configure',
         meta: {
             icon: 'configure',
+            title: '功能配置',
         },
         children: [
             {
                 path: 'configure-index',
                 name: 'configure_index',
-                component: () => import('@/views/configure/index'),
-                meta: {title: '功能配置',permissions:[]}
+                component: () => import('@/views/flow/panel'),
+                meta: {title: '审批配置',permissions:[]}
+            },
+            {
+                path: 'configure-index',
+                name: 'configure_index',
+                component: () => import('@/views/flow/panel'),
+                meta: {title: '状态管理',permissions:[]}
             }
+
         ]
     },
     {
