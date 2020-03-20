@@ -293,8 +293,15 @@ export const constantRoutes = [
                 path: 'problem-index',
                 name: 'problem_index',
                 component: () => import('@/views/problem/index'),
-                meta: {title: '难题列表',permissions:[]}
-            }
+                meta: {title: '科技创新需求征集列表',permissions:[]}
+            },
+            {
+                hidden:true,
+                path: 'problem-show',
+                name: 'problem_show',
+                component: () => import('@/views/problem/show'),
+                meta: {title: '预览',permissions:[]}
+            },
         ]
     },
     {
