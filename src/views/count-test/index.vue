@@ -21,15 +21,15 @@
             </el-tab-pane>
             <el-tab-pane label="行业统计" name="third" lazy>
                 <div class="region-box">
-                    <p>项目涉及行业领域统计图</p>
-                    <p>(行业领域分为: 稀土及新材料、冶金（钢铁、铝业等）、装备制造、化工、电子信息、新能源、节能环保、农牧业、生物技术、医药卫生、社会发展、其他)</p>
+                    <!--<p>项目涉及行业领域统计图</p>-->
+                    <!--<p>(行业领域分为: 稀土及新材料、冶金（钢铁、铝业等）、装备制造、化工、电子信息、新能源、节能环保、农牧业、生物技术、医药卫生、社会发展、其他)</p>-->
                     <industryChart/>
                     <div class="border-bottom"></div>
                 </div>
             </el-tab-pane>
             <el-tab-pane label="资金统计" name="activity" lazy>
                 <div class="region-box">
-                    <p>行业领域资金分布统计图 (统计单位: 万元)</p>
+                    <!--<p>行业领域资金分布统计图 (统计单位: 万元)</p>-->
                     <industryCapitalChart/>
                 </div>
             </el-tab-pane>
@@ -54,7 +54,7 @@
         data() {
             return {
                 user: {},
-                activeTab: 'activity'
+                activeTab: 'third'
             }
         },
         computed: {

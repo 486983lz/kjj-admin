@@ -6,32 +6,22 @@
 <script>
     import echarts from 'echarts'
     import mapJson from '../../../assets/map/150200.geo.Json'
+    // geoCoordMap2: [
+    //     {'name': '昆都仑区', 'value': [109.822932,40.661, 900]},
+    //     {'name': '达尔罕茂明安联合旗', 'value': [110.438452, 41.702836, 200]},
+    //     {'name': '白云鄂博矿区', 'value': [109.97016, 41.769246, 1200]},
+    //     {'name': '青山区', 'value': [109.880049, 40.668558, 200]},
+    //     {'name': '东河区', 'value': [110.026895, 40.587056, 200]},
+    //     {'name': '九原区', 'value': [109.968122, 40.600581, 200]},
+    //     {'name': '石拐区', 'value': [110.272565, 40.672094, 200]},
+    //     {'name': '固阳县', 'value': [110.063421, 41.030004, 200]},
+    //     {'name': '土默特右旗', 'value': [110.526766, 40.566434, 200]},
+    //
+    // ],
     export default {
         data() {
             return {
-                geoCoordMap2: [
-                    {'name': '昆都仑区', 'value': [109.822932,40.661, 900]},
-                    {'name': '达尔罕茂明安联合旗', 'value': [110.438452, 41.702836, 200]},
-                    {'name': '白云鄂博矿区', 'value': [109.97016, 41.769246, 1200]},
-                    {'name': '青山区', 'value': [109.880049, 40.668558, 200]},
-                    {'name': '东河区', 'value': [110.026895, 40.587056, 200]},
-                    {'name': '九原区', 'value': [109.968122, 40.600581, 200]},
-                    {'name': '石拐区', 'value': [110.272565, 40.672094, 200]},
-                    {'name': '固阳县', 'value': [110.063421, 41.030004, 200]},
-                    {'name': '土默特右旗', 'value': [110.526766, 40.566434, 200]},
-
-                ]
-            }
-        },
-        mounted() {
-            this.$nextTick(() => {
-                this.initChart()
-            })
-        },
-
-        methods: {
-            initChart() {
-                let option ={
+                option :{
                     tooltip: {
                         trigger: 'item',
                         formatter: function (item) {
@@ -82,7 +72,20 @@
                             name: 'light',
                             type: 'scatter',
                             coordinateSystem: 'geo',
-                            data: this.geoCoordMap2,
+                            data: [
+                                {'name': '昆都仑区', 'value': [109.822932,40.661, 900]},
+                                {'name': '达尔罕茂明安联合旗', 'value': [110.438452, 41.702836, 200]},
+                                {'name': '白云鄂博矿区', 'value': [109.97016, 41.769246, 1200]},
+                                {'name': '青山区', 'value': [109.880049, 40.668558, 200]},
+                                {'name': '东河区', 'value': [110.026895, 40.587056, 200]},
+                                {'name': '九原区', 'value': [109.968122, 40.600581, 200]},
+                                {'name': '石拐区', 'value': [110.272565, 40.672094, 200]},
+                                {'name': '固阳县', 'value': [110.063421, 41.030004, 200]},
+                                {'name': '土默特右旗', 'value': [110.526766, 40.566434, 200]},
+                                {'name': '稀土高新区', 'value': [109.870614, 40.635391, 200]},
+                                {'name': '市本级', 'value': [109.745013, 40.672173, 200]},
+
+                            ],
                             symbol: 'pin', //气泡
                             symbolSize: function(val) {
                                 return 40;
@@ -109,7 +112,20 @@
                         {
                             type: 'effectScatter',
                             coordinateSystem: 'geo',
-                            data: this.geoCoordMap2,
+                            data: [
+                                {'name': '昆都仑区', 'value': [109.822932,40.661, 900]},
+                                {'name': '达尔罕茂明安联合旗', 'value': [110.438452, 41.702836, 200]},
+                                {'name': '白云鄂博矿区', 'value': [109.97016, 41.769246, 1200]},
+                                {'name': '青山区', 'value': [109.880049, 40.668558, 200]},
+                                {'name': '东河区', 'value': [110.026895, 40.587056, 200]},
+                                {'name': '九原区', 'value': [109.968122, 40.600581, 200]},
+                                {'name': '石拐区', 'value': [110.272565, 40.672094, 200]},
+                                {'name': '固阳县', 'value': [110.063421, 41.030004, 200]},
+                                {'name': '土默特右旗', 'value': [110.526766, 40.566434, 200]},
+                                {'name': '稀土高新区', 'value': [109.870614, 40.635391, 200]},
+                                {'name': '市本级', 'value': [109.745013, 40.672173, 200]},
+
+                            ],
                             symbolSize: function(val) {
                                 return val[2] / 50;
                             },
@@ -133,12 +149,21 @@
 
 
                 }
+            }
+        },
+        mounted() {
+            this.$nextTick(() => {
+                this.initChart()
+            })
+        },
 
+        methods: {
+            initChart() {
                 let myChart = echarts.init(document.getElementById('myChart-map'))
                 myChart.hideLoading();
 
                 echarts.registerMap('baotou', mapJson);
-                myChart.setOption(option)
+                myChart.setOption(this.option)
                 // let me = this;
 
                 // mylineChart.setOption(this.map)
