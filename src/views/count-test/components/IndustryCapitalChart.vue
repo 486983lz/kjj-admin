@@ -1,7 +1,36 @@
 <template>
   <div class="position">
-    <el-button class="text-btn" type="text" @click="exportImg">导出图片</el-button>
-    <div id="myChart-industry-capital"  :style="{width: '100%', height: '650px'}"></div>
+    <!--<div id="myChart-industry-capital"  :style="{width: '100%', height: '650px'}"></div>-->
+    <el-row  class="tab-chart">
+      <el-col :span="24" >
+        <el-row  class="tab-chart">
+          <el-col :span="14" >
+            <span class="title-chart">行业领域资金分布统计图 (统计单位: 万元)</span>
+            <!--<el-button class="text-btn" type="text" @click="exportImg">导出图片</el-button>-->
+            <div id="myChart-industry-capital" :style="{width: '100%', height: '650px'}"></div>
+          </el-col>
+          <el-col :span="10">
+            <el-table
+                    :data="tableData"
+                    stripe
+                    style="width: 100%">
+              <el-table-column
+                      prop="region"
+                      label="行业"
+                      align="center"
+              >
+              </el-table-column>
+              <el-table-column
+                      prop="pz"
+                      label="获批资金"
+                      align="center"
+              >
+              </el-table-column>
+            </el-table>
+          </el-col>
+        </el-row>
+      </el-col>
+    </el-row>
   </div>
 </template>
 
@@ -10,71 +39,71 @@
     export default {
         data() {
             return {
-                industry: {
-                    color: ['#3aa1ff', '#4ecb73', '#fbd437', '#435188'],
+                pie: {
                     tooltip: {
-                        trigger: 'axis',
-                        axisPointer: {
-                            type: 'shadow'
+                        trigger: 'item',
+                        formatter: function (item) {
+                            return item.marker + item.name+':'+item.value+'('+item.percent+'%'+')';
                         }
                     },
                     legend: {
                         bottom: 0,
-                        // data: ['申请资金总数', '获批资金总数']
-                        data: ['获批资金总数']
-                    },
-                    grid: {
-                        top: '10px',
-                        left: '0',
-                        right: '30px',
-                        containLabel: true
-
-                    },
-                    xAxis: {
-                        type: 'value',
-                    },
-                    yAxis: {
-                        type: 'category',
-                        data: ['稀土及新材料1', '冶金（钢铁、铝业等）', '装备制造', '化工', '电子信息','新能源','节能环保','农牧业','生物技术','医药卫生','社会发展','其他'],
-                        nameTextStyle:{
-                            fontStyle:'oblique'
-                        }
+                        data: []
                     },
                     series: [
                         {
-                            name: '申请资金总数',
-                            type: 'bar',
-                            barMaxWidth: '25%',
-                            data: [18203, 23489, 29034, 104970, 131744, 630230,18203, 23489, 29034, 104970, 131744, 630230]
-                        },
-                        // {
-                        //     name: '获批资金总数',
-                        //     type: 'bar',
-                        //     barMaxWidth: '25%',
-                        //     data: [19325, 23438, 31000, 121594, 134141, 681807,18203, 23489, 29034, 104970, 131744, 630230]
-                        // }
+                            name: '访问来源',
+                            type: 'pie',
+                            radius: ['50%', '70%'],
+                            data: [
+
+                            ],
+                            label:{
+                                formatter: ' {b}：{c} ({d}%)',
+                            }
+                        }
                     ]
                 },
+                color:[
+                    'rgb(58, 161, 255)',
+                    'rgb(136, 209, 234)',
+                    'rgb(54, 203, 203)',
+                    'rgb(130, 223, 190)',
+                    'rgb(78, 203, 115)',
+                    'rgb(242, 199, 168)',
+                    'rgb(172, 223, 130)',
+                    'rgb(251, 212, 55)',
+                    'rgb(242, 99, 123)',
+                    '#8e7fea',
+                    '#d465ac',
+                ],
+                tableData: [
+
+                ]
+
             }
         },
         mounted() {
             this.getIndustryCapitalCount();
-            // this.$nextTick(function () {
-            //     this.initChart()
-            // })
         },
         methods: {
             getIndustryCapitalCount(){
                 this.$store.dispatch('count/getIndustryCapitalCount')
                     .then((response) => {
-                        let xAxisData = [];
+                        let yAxisData = [];
                         let seriesData = [];
                         for(let i=0;i<response.length; i++){
-                            xAxisData.push(response[i].industry_name);
-                            seriesData.push(response[i].count);
+                            yAxisData.push(response[i].industry_name);
+                            seriesData.push( {value: response[i].count_num, name: response[i].industry_name, itemStyle: { normal: { color: this.color[i] } }});
+                            this.tableData.push({
+                                region: response[i].industry_name,
+                                pz: response[i].count_num+'(万)'
+                            });
                         }
-                        this.industry.xAxis[0].data = xAxisData
-                        this.industry.series[0].data = seriesData
+
+                        this.pie.legend.data = yAxisData
+                        this.pie.series[0].data = seriesData
+                        console.log(this.pie);
                         this.$nextTick(function () {
                             this.initChart()
                         })
@@ -85,7 +114,7 @@
             },
             initChart() {
                 let regionChart = echarts.init(document.getElementById('myChart-industry-capital'))
-                regionChart.setOption(this.industry)
+                regionChart.setOption(this.pie)
             },
             exportImg() {
                 let regionChart = echarts.init(document.getElementById('myChart-industry-capital'))
@@ -117,7 +146,7 @@
     background-color: #409eff;
     display: inline-block;
     height: 35px;
-    width: 200px;
+    width: 350px;
     line-height: 35px;
     text-align: center;
     border-radius: 25px;
