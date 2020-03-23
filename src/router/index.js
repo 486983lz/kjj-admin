@@ -77,7 +77,13 @@ export const constantRoutes = [
             {
                 path: '/redirect/:path*',
                 component: () => import('@/views/redirect/index')
-            }
+            },
+            {
+                path: '/success',
+                component: () => import('@/views/success/index'),
+                name: 'success',
+                hidden: true
+            },
         ]
     },
     // 登录
@@ -107,6 +113,7 @@ export const constantRoutes = [
         name: 'register',
         hidden: true
     },
+
     {
         path: '/',
         component: Layout,
@@ -120,6 +127,7 @@ export const constantRoutes = [
             }
         ]
     },
+
 
     // {
     //     path: '/rbac',
@@ -231,6 +239,22 @@ export const constantRoutes = [
             },
         ]
     },
+    // {
+    //     path: '/count',
+    //     component: Layout,
+    //     name: 'count',
+    //     meta: {
+    //         icon: 'count',
+    //     },
+    //     children: [
+    //         {
+    //             path: 'contact-index1',
+    //             name: 'contact_index1',
+    //             component: () => import('@/views/count/index'),
+    //             meta: {title: '项目统计',permissions:[]}
+    //         }
+    //     ]
+    // },
     {
         path: '/count',
         component: Layout,
@@ -242,7 +266,7 @@ export const constantRoutes = [
             {
                 path: 'contact-index1',
                 name: 'contact_index1',
-                component: () => import('@/views/count/index'),
+                component: () => import('@/views/count-test/index'),
                 meta: {title: '项目统计',permissions:[]}
             }
         ]
@@ -291,8 +315,15 @@ export const constantRoutes = [
                 path: 'problem-index',
                 name: 'problem_index',
                 component: () => import('@/views/problem/index'),
-                meta: {title: '难题列表',permissions:[]}
-            }
+                meta: {title: '科技创新需求征集列表',permissions:[]}
+            },
+            {
+                hidden:true,
+                path: 'problem-show',
+                name: 'problem_show',
+                component: () => import('@/views/problem/show'),
+                meta: {title: '预览',permissions:[]}
+            },
         ]
     },
     {
@@ -315,8 +346,101 @@ export const constantRoutes = [
                 path: 'notice-create',
                 name: 'notice_create',
                 component: () => import('@/views/notice/create'),
-                meta: {title: '发布公告',permissions:[]}
+                meta: {title: '发布公告',permissions:[],activeMenu:'/notice/notice-index'}
             },
+            {
+                hidden:true,
+                path: 'notice-update',
+                name: 'notice_update',
+                component: () => import('@/views/notice/update'),
+                meta: {title: '编辑公告',permissions:[]}
+            },
+            {
+                hidden:true,
+                path: 'notice-show',
+                name: 'notice_show',
+                component: () => import('@/views/notice/show'),
+                meta: {title: '预览',permissions:[]}
+            },
+
+        ]
+    },
+    {
+        path: '/resource',
+        component: Layout,
+        name: 'resource',
+        meta: {
+            icon: 'ziliao',
+            title: '资料管理',
+        },
+        children: [
+            {
+                path: 'resource-index',
+                name: 'resource_index',
+                component: () => import('@/views/resource/index'),
+                meta: {title: '资料管理',permissions:[]}
+            },
+            {
+                hidden:true,
+                path: 'resource-create',
+                name: 'resource_create',
+                component: () => import('@/views/resource/create'),
+                meta: {title: '发布资料',permissions:[],activeMenu:'/resource/resource-index'}
+            },
+            {
+                hidden:true,
+                path: 'resource-update',
+                name: 'resource_update',
+                component: () => import('@/views/resource/update'),
+                meta: {title: '编辑资料',permissions:[]}
+            },
+            {
+                hidden:true,
+                path: 'resource-show',
+                name: 'resource_show',
+                component: () => import('@/views/resource/show'),
+                meta: {title: '预览',permissions:[]}
+            },
+
+        ]
+    },
+    {
+        path: '/guide',
+        component: Layout,
+        name: 'guide',
+        meta: {
+            icon: 'zhinan',
+            title: '指南管理',
+        },
+        children: [
+            {
+                path: 'guide-index',
+                name: 'guide_index',
+                component: () => import('@/views/guide/index'),
+                meta: {title: '指南管理',permissions:[]}
+            },
+            {
+                hidden:true,
+                path: 'guide-create',
+                name: 'guide_create',
+                component: () => import('@/views/guide/create'),
+                meta: {title: '发布指南',permissions:[],activeMenu:'/guide/guide-index'}
+            },
+            {
+                hidden:true,
+                path: 'guide-update',
+                name: 'guide_update',
+                component: () => import('@/views/guide/update'),
+                meta: {title: '编辑指南',permissions:[]}
+            },
+            {
+                hidden:true,
+                path: 'guide-show',
+                name: 'guide_show',
+                component: () => import('@/views/guide/show'),
+                meta: {title: '预览',permissions:[]}
+            },
+
 
         ]
     },
@@ -396,8 +520,14 @@ export const constantRoutes = [
             {
                 path: 'configure-index',
                 name: 'configure_index',
-                component: () => import('@/views/configure/index'),
-                meta: {title: '功能配置',permissions:[]}
+                component: () => import('@/views/flow/panel'),
+                meta: {title: '审批配置',permissions:[]}
+            },
+            {
+                path: 'configure-index',
+                name: 'configure_index',
+                component: () => import('@/views/flow/panel'),
+                meta: {title: '状态管理',permissions:[]}
             },
             {
                 path: 'configure-index-distribution',
@@ -405,6 +535,7 @@ export const constantRoutes = [
                 component: () => import('@/views/configure/area_distribution'),
                 meta: {title: '地区配置',permissions:[]}
             }
+
         ]
     },
 

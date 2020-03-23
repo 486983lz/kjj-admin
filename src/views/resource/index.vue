@@ -1,11 +1,11 @@
 <template>
     <div class="app-top">
-        <router-link :to="{path: 'notice-create'}"><el-button class='btn_right' type="primary">发布公告</el-button></router-link>
+        <router-link :to="{path: 'resource-create'}"><el-button class='btn_right' type="primary">发布资料</el-button></router-link>
         <div class="app-container" ref="appContainer">
             <div class="header"  ref="header">
                 <el-form ref="form" :model="where" label-width="120px" style="display: flex;">
                     <el-form-item label="标题:" label-width="100px" style="margin: 0;width: 30%;">
-                        <el-input v-model="where.title" placeholder="请输入公告标题" ></el-input>
+                        <el-input v-model="where.title" placeholder="请输入资料标题" ></el-input>
                     </el-form-item>
                     <el-button type="info" @click="searchInfo" style="margin-left: 1%;">查询</el-button>
                 </el-form>
@@ -26,7 +26,7 @@
                         <el-table-column
                                 align="center"
                                 prop="title"
-                                label="公告标题"
+                                label="资料标题"
                         >
                         </el-table-column>
                         <el-table-column
@@ -50,7 +50,7 @@
                         </el-table-column>
                         <el-table-column
                                 align="center"
-                                label="公告状态"
+                                label="资料状态"
                         >
                             <template slot-scope="scope">
                                 <span v-if="scope.row.status">已发布</span>
@@ -97,10 +97,10 @@
                     page: 1,
                     total: 0,
                     pageSize:10,
-                    where:{type:1},
+                    where:{type:2},
                 },
                 where:{
-                    type:1
+                    type:2
                 },
                 loading: false,
                 tableData: [],
@@ -145,10 +145,10 @@
                     });
             },
             updateList(id){
-                this.$router.push({name: 'notice_update',query:{id:id}});
+                this.$router.push({name: 'resource_update',query:{id:id}});
             },
             showList(id){
-                this.$router.push({name: 'notice_show',query:{id:id}});
+                this.$router.push({name: 'resource_show',query:{id:id}});
             },
             releaseList(id){
                 this.$store.dispatch('notice/updateStatusNotice',{id:id,status:1})
@@ -197,7 +197,7 @@
                     });
             },
             deleteList(id){
-                this.$confirm('此操作将永久删除该公告信息, 是否继续?', '提示', {
+                this.$confirm('此操作将永久删除该资料信息, 是否继续?', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                     type: 'warning'

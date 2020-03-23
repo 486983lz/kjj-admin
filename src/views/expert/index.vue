@@ -11,15 +11,16 @@
                     <el-form-item label="手机号码:" label-width="100px" style="margin: 0;width: 30%;">
                         <el-input v-model="where.phone" placeholder="请输入手机号码"></el-input>
                     </el-form-item>
-                    <el-form-item label="所属领域" label-width="100px" style="margin: 0;width: 30%;">
-                        <el-select v-model="where.industry_id" clearable placeholder="所属领域">
-                            <el-option
-                                    v-for="item in List"
-                                    :key="item.id"
-                                    :label="item.name"
-                                    :value="item.id">
-                            </el-option>
-                        </el-select>
+                    <el-form-item label="专业领域" label-width="100px" style="margin: 0;width: 30%;">
+                        <!--<el-select v-model="where.industry_id" clearable placeholder="所属领域">-->
+                            <!--<el-option-->
+                                    <!--v-for="item in List"-->
+                                    <!--:key="item.id"-->
+                                    <!--:label="item.name"-->
+                                    <!--:value="item.id">-->
+                            <!--</el-option>-->
+                        <!--</el-select>-->
+                        <el-input v-model="where.major" placeholder="请输入专业领域"></el-input>
                     </el-form-item>
                     <el-button type="info" @click="searchInfo" style="margin-left: 1%;">查询</el-button>
                 </el-form>
@@ -64,17 +65,29 @@
                         </el-table-column>
                         <el-table-column
                                 align="center"
-                                prop="industry_name"
-                                label="所属领域"
+                                prop="company"
+                                label="单位"
                         >
                         </el-table-column>
                         <el-table-column
                                 align="center"
-                                prop="created_at"
-                                label="创建时间"
-                                width="300"
+                                prop="major"
+                                label="专业领域"
                         >
                         </el-table-column>
+                        <el-table-column
+                                align="center"
+                                prop="title"
+                                label="职称、职务"
+                        >
+                        </el-table-column>
+                        <!--<el-table-column-->
+                                <!--align="center"-->
+                                <!--prop="created_at"-->
+                                <!--label="创建时间"-->
+                                <!--width="300"-->
+                        <!--&gt;-->
+                        <!--</el-table-column>-->
                         <el-table-column
                                 label="操作"
                                 align="center"
@@ -118,26 +131,59 @@
 
                     <el-row>
                         <el-col :span="16" :offset="3">
-                            <el-form-item label="备注" label-width="100px">
-                                <el-input v-model="createFrom.bz" auto-complete="off"></el-input>
+                            <el-form-item label="单位" label-width="100px">
+                                <el-input v-model="createFrom.company" auto-complete="off"></el-input>
                             </el-form-item>
                         </el-col>
                     </el-row>
 
                     <el-row>
                         <el-col :span="16" :offset="3">
-                            <el-form-item label="行业领域" label-width="100px" prop="industry_id">
-                                <el-select v-model="createFrom.industry_id" placeholder="行业领域">
-                                    <el-option
-                                            v-for="item in List"
-                                            :key="item.id"
-                                            :label="item.name"
-                                            :value="item.id">
-                                    </el-option>
-                                </el-select>
+                            <el-form-item label="职称" label-width="100px">
+                                <el-input v-model="createFrom.title" auto-complete="off"></el-input>
                             </el-form-item>
                         </el-col>
                     </el-row>
+
+                    <el-row>
+                        <el-col :span="16" :offset="3">
+                            <el-form-item label="学历" label-width="100px">
+                                <el-input v-model="createFrom.education" auto-complete="off"></el-input>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+
+                    <el-row>
+                        <el-col :span="16" :offset="3">
+                            <el-form-item label="专业" label-width="100px">
+                                <el-input v-model="createFrom.major" auto-complete="off"></el-input>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+
+                    <el-row>
+                        <el-col :span="16" :offset="3">
+                            <el-form-item label="备注" label-width="100px">
+                                <el-input v-model="createFrom.bz" auto-complete="off"></el-input>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+
+
+                    <!--<el-row>-->
+                        <!--<el-col :span="16" :offset="3">-->
+                            <!--<el-form-item label="行业领域" label-width="100px" prop="industry_id">-->
+                                <!--<el-select v-model="createFrom.industry_id" placeholder="行业领域">-->
+                                    <!--<el-option-->
+                                            <!--v-for="item in List"-->
+                                            <!--:key="item.id"-->
+                                            <!--:label="item.name"-->
+                                            <!--:value="item.id">-->
+                                    <!--</el-option>-->
+                                <!--</el-select>-->
+                            <!--</el-form-item>-->
+                        <!--</el-col>-->
+                    <!--</el-row>-->
 
                 </el-form>
                 <div slot="footer" class="dialog-footer">

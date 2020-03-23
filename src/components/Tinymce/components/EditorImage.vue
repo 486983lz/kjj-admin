@@ -1,29 +1,29 @@
 <template>
   <div class="upload-container">
     <el-button :style="{background:color,borderColor:color}" icon="el-icon-upload" size="mini" type="primary" @click=" dialogVisible=true">
-      upload
+      插入图片
     </el-button>
     <el-dialog :visible.sync="dialogVisible">
       <el-upload
-        :multiple="true"
+        action=""
         :file-list="fileList"
         :show-file-list="true"
         :on-remove="handleRemove"
         :on-success="handleSuccess"
         :before-upload="beforeUpload"
         class="editor-slide-upload"
-        action="https://httpbin.org/post"
+        :http-request="getFileMsg"
         list-type="picture-card"
       >
         <el-button size="small" type="primary">
-          Click upload
+         上传
         </el-button>
       </el-upload>
       <el-button @click="dialogVisible = false">
-        Cancel
+        取消
       </el-button>
       <el-button type="primary" @click="handleSubmit">
-        Confirm
+        确定
       </el-button>
     </el-dialog>
   </div>
@@ -48,15 +48,43 @@ export default {
     }
   },
   methods: {
+       getFileMsg(data){
+            let that = this
+            this.getBase64(data.file).then(resBase64 => {
+            this.fileBase64 = resBase64.split(',')[1]　　//直接拿到base64信息
+            let response = {files:{file:resBase64}};
+            that.handleSuccess(response,data.file);
+          })
+      },
+      getBase64(file) {
+          return new Promise((resolve, reject) => {
+              let reader = new FileReader();
+              let fileResult = "";
+              reader.readAsDataURL(file);
+              //开始转
+              reader.onload = function() {
+                  fileResult = reader.result;
+              };
+              //转 失败
+              reader.onerror = function(error) {
+                  reject(error);
+              };
+              //转 结束  咱就 resolve 出去
+              reader.onloadend = function() {
+                  resolve(fileResult);
+              };
+          });
+      },
+
     checkAllSuccess() {
       return Object.keys(this.listObj).every(item => this.listObj[item].hasSuccess)
     },
     handleSubmit() {
       const arr = Object.keys(this.listObj).map(v => this.listObj[v])
       if (!this.checkAllSuccess()) {
-        this.$message('Please wait for all images to be uploaded successfully. If there is a network problem, please refresh the page and upload again!')
-        return
-      }
+            this.$message('请等待上传完成')
+            return
+        }
       this.$emit('successCBK', arr)
       this.listObj = {}
       this.fileList = []
@@ -67,11 +95,13 @@ export default {
       const objKeyArr = Object.keys(this.listObj)
       for (let i = 0, len = objKeyArr.length; i < len; i++) {
         if (this.listObj[objKeyArr[i]].uid === uid) {
+
           this.listObj[objKeyArr[i]].url = response.files.file
           this.listObj[objKeyArr[i]].hasSuccess = true
           return
         }
       }
+
     },
     handleRemove(file) {
       const uid = file.uid
@@ -91,11 +121,10 @@ export default {
       return new Promise((resolve, reject) => {
         const img = new Image()
         img.src = _URL.createObjectURL(file)
-        img.onload = function() {
           _self.listObj[fileName] = { hasSuccess: false, uid: file.uid, width: this.width, height: this.height }
-        }
         resolve(true)
       })
+
     }
   }
 }

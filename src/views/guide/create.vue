@@ -2,7 +2,7 @@
     <div class="app-container">
         <el-row>
             <el-col :span="24">
-                <p class="notice-title">发布公告</p>
+                <p class="notice-title">发布指南</p>
             </el-col>
         </el-row>
         <el-form :model="createFrom" ref="createFrom" :rules="createFromRules" label-width="150px" >
@@ -149,11 +149,11 @@
                         if(this.createFrom.content != undefined){
                             this.uploadForm.set("content", this.createFrom.content);
                         }
-                        this.uploadForm.set("type", '1');
+                        this.uploadForm.set("type", '3');
                         this.$store.dispatch('notice/postNoticeInfo',this.uploadForm)
                         .then((response) => {
                             if(response){
-                                that.$router.push({name: 'success',query:{router_name:'notice'}});
+                                that.$router.push({name: 'success',query:{router_name:'guide'}});
                             }
                         })
                         .catch(() => {

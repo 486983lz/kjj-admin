@@ -48,45 +48,52 @@
                         }
                     ],
                     series: [
-                        {
-                            name: '申报数量',
-                            type: 'bar',
-                            barMaxWidth: '10%',
-                            data: [320, 332, 301, 334, 390,320,390, 322, 332, 334, 390,320]
-                        },
+                        // {
+                        //     name: '申报数量',
+                        //     type: 'bar',
+                        //     barMaxWidth: '10%',
+                        //     data: [320, 332, 301, 334, 390,320,390, 322, 332, 334, 390,320]
+                        // },
                         {
                             name: '立项数量',
                             type: 'bar',
                             barMaxWidth: '10%',
                             data: [220, 182, 191, 234, 290,330,320, 132, 301, 434, 360,340]
                         },
-                        {
-                            name: '结题验收数量',
-                            type: 'bar',
-                            barMaxWidth: '10%',
-                            data: [150, 232, 201, 154, 190,350,370, 332, 361, 374, 340,350]
-                        },
-                        {
-                            name: '项目终止数量',
-                            type: 'bar',
-                            barMaxWidth: '10%',
-                            data: [98, 77, 101, 99, 40,390,300, 332, 331, 334, 290,310]
-                        }
+                        // {
+                        //     name: '结题验收数量',
+                        //     type: 'bar',
+                        //     barMaxWidth: '10%',
+                        //     data: [150, 232, 201, 154, 190,350,370, 332, 361, 374, 340,350]
+                        // },
+                        // {
+                        //     name: '项目终止数量',
+                        //     type: 'bar',
+                        //     barMaxWidth: '10%',
+                        //     data: [98, 77, 101, 99, 40,390,300, 332, 331, 334, 290,310]
+                        // }
                     ]
                 },
             }
         },
         mounted() {
             this.getIndustryCount();
-            this.$nextTick(function () {
-                this.initChart()
-            })
         },
         methods: {
             getIndustryCount(){
                 this.$store.dispatch('count/getIndustryCount')
                     .then((response) => {
-                        console.log(response)
+                        let xAxisData = [];
+                        let seriesData = [];
+                        for(let i=0;i<response.length; i++){
+                            xAxisData.push(response[i].industry_name);
+                            seriesData.push(response[i].count);
+                        }
+                        this.industry.xAxis[0].data = xAxisData
+                        this.industry.series[0].data = seriesData
+                        this.$nextTick(function () {
+                            this.initChart()
+                        })
                     })
                     .catch(() => {
 
