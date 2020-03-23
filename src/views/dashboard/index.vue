@@ -2,25 +2,26 @@
     <div class="dashboard-container">
         <el-row :gutter="20">
             <el-col :span="6">
-                <el-button class='btn_right btn_right_jb1' type="primary">待审核项目</el-button>
+                <el-button class='btn_right btn_right_jb1' type="primary">项目申报库</el-button>
             </el-col>
             <el-col :span="6">
-                <el-button class='btn_right btn_right_jb2' type="primary">待立项项目</el-button>
+                <el-button class='btn_right btn_right_jb2' type="primary">项目储备库</el-button>
             </el-col>
             <el-col :span="6">
-                <el-button class='btn_right btn_right_jb3' type="primary">待验收项目</el-button>
+                <el-button class='btn_right btn_right_jb3' type="primary">立项项目库</el-button>
             </el-col>
             <el-col :span="6">
                 <el-button class='btn_right btn_right_jb4' type="primary">项目电子档案库</el-button>
             </el-col>
         </el-row>
         <div class="pending add-bg-box">
-           <p class="pending-p"> 待处理</p>
+           <p class="pending-p">待处理任务</p>
             <el-row :gutter="20" class="pending-content" type="flex" justify="center">
-                <el-col :span="6"><div class="pending-content-item"><span>未审核注册企业<span class="pending-content-item-num pending-1 add-bg-box">20</span></span></div></el-col>
-                <el-col :span="6"><div class="pending-content-item"><span>待处理项目初审<span class="pending-content-item-num pending-2 add-bg-box">20</span></span></div></el-col>
-                <el-col :span="6"><div class="pending-content-item"><span>待填报项目评分<span class="pending-content-item-num pending-3 add-bg-box">20</span></span></div></el-col>
-                <el-col :span="6"><div class="pending-content-item"><span>新发布难题<span class="pending-content-item-num pending-4 add-bg-box">20</span></span></div></el-col>
+                <el-col :span="6"><div class="pending-content-item"><span>企业注册审核监督<span class="pending-content-item-num pending-1 add-bg-box">20</span></span></div></el-col>
+                <el-col :span="6"><div class="pending-content-item"><span>项目申报待处理<span class="pending-content-item-num pending-2 add-bg-box">16</span></span></div></el-col>
+                <el-col :span="6"><div class="pending-content-item"><span>待填报评审评分<span class="pending-content-item-num pending-4 add-bg-box">8</span></span></div></el-col>
+                <el-col :span="6"><div class="pending-content-item"><span>待处理任务书审核<span class="pending-content-item-num pending-3 add-bg-box">7</span></span></div></el-col>
+                <el-col :span="6"><div class="pending-content-item"><span>科技创新需求征集<span class="pending-content-item-num pending-4 add-bg-box">11</span></span></div></el-col>
             </el-row>
         </div>
         <el-row :gutter="20" style="margin-top: 10px; margin-right: 0">
@@ -105,7 +106,7 @@
         margin-top: 20px;
     }
     .pending-p{
-        padding-top: 5px;
+        padding-top: 10px;
         margin-left: 5px;
         background-color: #fff;
     }
