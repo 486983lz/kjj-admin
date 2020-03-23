@@ -4,7 +4,7 @@
       <el-row  class="tab-chart">
         <el-col :span="14" >
           <span class="title-chart">年度立项项目</span>
-          <div id="yearStageChart" :style="{width: '100%', height: '420px'}"></div>
+          <div id="yearStageChart" :style="{width: '100%', height: '650px'}"></div>
         </el-col>
         <el-col :span="10">
           <el-table

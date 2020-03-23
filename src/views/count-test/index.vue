@@ -34,18 +34,20 @@
                 <!--</div>-->
             <!--</el-tab-pane>-->
         <!--</el-tabs>-->
-            <el-row>
-                <el-col :span="24">
-                    <mapChart />
-                </el-col>
-            </el-row>
-            <!--<capitalChart/>-->
-            <regionChart/>
-            <industryChart/>
-            <div class="border-bottom"></div>
-            <industryCapitalChart/>
-            <yearStageChart/>
-        </div>
+        <el-row>
+            <el-col :span="24">
+                <mapChart />
+            </el-col>
+        </el-row>
+        <!--<capitalChart/>-->
+        <regionChart/>
+        <div class="border-bottom"></div>
+        <industryChart/>
+        <div class="border-bottom"></div>
+        <industryCapitalChart/>
+        <div class="border-bottom"></div>
+        <yearStageChart/>
+    </div>
 </template>
 
 <script>
