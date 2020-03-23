@@ -24,7 +24,7 @@
             <el-dropdown class="avatar-container right-menu-item hover-effect" trigger="click">
                 <div class="avatar-wrapper">
                     <!--<img :src="avatar+'?imageView2/1/w/80/h/80'" class="user-avatar">-->
-                    XXXXXXXXXX公司
+                    战略规划科
                     <i class="el-icon-arrow-down"/>
                 </div>
                 <el-dropdown-menu slot="dropdown">

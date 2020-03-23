@@ -165,16 +165,16 @@
                 editDialogFormVisible: false,
                 // 前端验证
                 codeRules: {
-                    level_company_name: [
-                        { required: true, message: '请输入单位名称', trigger: 'blur' }
+                    name: [
+                        { required: true, message: '请输入角色标识', trigger: 'change' }
                     ],
-                    area: [
-                        { required: true, message: '请选择二级单位', trigger: 'change' }
+                    attribute: [
+                        { required: true, message: '请输入角色名称', trigger: 'change' }
                     ],
                 },
                 // 后端验证提示
                 errorMsg: {
-                    level_company_name: '',
+                    name: '',
                 },
             }
         },

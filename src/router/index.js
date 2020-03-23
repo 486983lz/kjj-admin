@@ -203,26 +203,32 @@ export const constantRoutes = [
                 path: 'project-admin-examine',
                 name: 'project_admin_examine',
                 component: () => import('@/views/project-admin/examine'),
-                meta: {title: '待审核项目',permissions:[]}
+                meta: {title: '项目申报库',permissions:[]}
             },
             {
                 path: 'project-admin-approval',
                 name: 'project_admin_approval',
                 component: () => import('@/views/project-admin/approval'),
-                meta: {title: '待立项项目',permissions:[]}
+                meta: {title: '项目储备库',permissions:[]}
             },
             {
                 path: 'project-admin-acceptance',
                 name: 'project_admin_acceptance',
                 component: () => import('@/views/project-admin/acceptance'),
-                meta: {title: '已验收项目',permissions:[]}
+                meta: {title: '立项项目库',permissions:[]}
+            },
+            {
+                path: 'project-admin-task',
+                name: 'project_admin_task',
+                component: () => import('@/views/project-admin/archives'),
+                meta: {title: '立项任务书审核',permissions:[]}
             },
             {
                 path: 'project-admin-archives',
                 name: 'project_admin_archives',
                 component: () => import('@/views/project-admin/archives'),
-                meta: {title: '项目档案',permissions:[]}
-            }
+                meta: {title: '项目电子档案库',permissions:[]}
+            },
         ]
     },
     {
