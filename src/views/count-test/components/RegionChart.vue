@@ -4,7 +4,7 @@
       <el-row  class="tab-chart">
         <el-col :span="14" >
           <span class="title-chart">项目数量地区分布</span>
-          <div id="regionChart" :style="{width: '100%', height: '420px'}"></div>
+          <div id="regionChart" :style="{width: '100%', height: '650px'}"></div>
         </el-col>
         <el-col :span="10">
           <el-table
