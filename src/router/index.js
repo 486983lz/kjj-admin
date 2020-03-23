@@ -267,7 +267,7 @@ export const constantRoutes = [
                 path: 'contact-index1',
                 name: 'contact_index1',
                 component: () => import('@/views/count-test/index'),
-                meta: {title: '项目统计',permissions:[]}
+                meta: {title: '历史项目统计',permissions:[]}
             }
         ]
     },
