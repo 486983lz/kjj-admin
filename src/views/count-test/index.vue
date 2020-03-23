@@ -83,7 +83,8 @@
 </script>
 <style lang="scss" scoped>
     .app-container {
-        padding: 50px;
+        /*padding: 50px;*/
+        padding: 30px;
     }
     .app-container /deep/ .el-tabs--border-card {
         background: #fff;
