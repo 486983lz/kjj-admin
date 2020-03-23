@@ -16,5 +16,14 @@ export function getIndustryCapitalCount(data) {
   })
 }
 
+//获取年度立项项目统计
+export function getYearCount(data) {
+  return request({
+    url: '/admin/count/getYearCount',
+    method: 'post',
+    data
+  })
+}
+
 
 
