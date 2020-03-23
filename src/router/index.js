@@ -233,6 +233,22 @@ export const constantRoutes = [
             }
         ]
     },
+    // {
+    //     path: '/count',
+    //     component: Layout,
+    //     name: 'count',
+    //     meta: {
+    //         icon: 'count',
+    //     },
+    //     children: [
+    //         {
+    //             path: 'contact-index1',
+    //             name: 'contact_index1',
+    //             component: () => import('@/views/count/index'),
+    //             meta: {title: '项目统计',permissions:[]}
+    //         }
+    //     ]
+    // },
     {
         path: '/count',
         component: Layout,
@@ -244,7 +260,7 @@ export const constantRoutes = [
             {
                 path: 'contact-index1',
                 name: 'contact_index1',
-                component: () => import('@/views/count/index'),
+                component: () => import('@/views/count-test/index'),
                 meta: {title: '项目统计',permissions:[]}
             }
         ]

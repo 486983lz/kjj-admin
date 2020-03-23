@@ -1,0 +1,148 @@
+<template>
+  <div id="myChart-map"   :style="{width: '100%', height: '845px'}"></div>
+    <!--,backgroundColor:'rgb(5, 27, 74)'-->
+</template>
+
+<script>
+    import echarts from 'echarts'
+    import mapJson from '../../../assets/map/150200.geo.Json'
+    export default {
+        data() {
+            return {
+                geoCoordMap2: [
+                    {'name': '昆都仑区', 'value': [109.822932,40.661, 900]},
+                    {'name': '达尔罕茂明安联合旗', 'value': [110.438452, 41.702836, 200]},
+                    {'name': '白云鄂博矿区', 'value': [109.97016, 41.769246, 1200]},
+                    {'name': '青山区', 'value': [109.880049, 40.668558, 200]},
+                    {'name': '东河区', 'value': [110.026895, 40.587056, 200]},
+                    {'name': '九原区', 'value': [109.968122, 40.600581, 200]},
+                    {'name': '石拐区', 'value': [110.272565, 40.672094, 200]},
+                    {'name': '固阳县', 'value': [110.063421, 41.030004, 200]},
+                    {'name': '土默特右旗', 'value': [110.526766, 40.566434, 200]},
+
+                ]
+            }
+        },
+        mounted() {
+            this.$nextTick(() => {
+                this.initChart()
+            })
+        },
+
+        methods: {
+            initChart() {
+                let option ={
+                    tooltip: {
+                        trigger: 'item',
+                        formatter: function (item) {
+                            return item.name+':'+'('+item.value[2]+')'
+                        }
+                    },
+                    geo: {
+                        show: true,
+                        map: 'baotou',
+                        zoom: 1,
+                        label: {
+                            emphasis: {
+                                show: false
+                            }
+                        },
+                        top:'0',
+                        bottom:'0',
+                        left:'15%',
+                        right:'15%',
+                        itemStyle: {
+                            normal: {
+                                borderColor: 'rgba(147, 235, 248, 1)',
+                                borderWidth: 1,
+                                areaColor: {
+                                    type: 'radial',
+                                    x: 0.5,
+                                    y: 0.5,
+                                    r: 0.8,
+                                    colorStops: [{
+                                        offset: 0,
+                                        color: 'rgba(147, 235, 248, 0)' // 0% 处的颜色
+                                    }, {
+                                        offset: 1,
+                                        color: 'rgba(147, 235, 248, .9)' // 100% 处的颜色
+                                    }],
+                                    globalCoord: false // 缺省为 false
+                                },
+                            },
+                            emphasis: {
+                                areaColor: 'rgba(147, 235, 248, .5)',
+                                borderWidth: 0
+                            }
+                        }
+                    },
+                    series: [
+                        {
+                            //文字和标志
+                            name: 'light',
+                            type: 'scatter',
+                            coordinateSystem: 'geo',
+                            data: this.geoCoordMap2,
+                            symbol: 'pin', //气泡
+                            symbolSize: function(val) {
+                                return 40;
+                            },
+                            label: {
+                                normal: {
+                                    formatter: '{@[2]}',
+                                    // position: 'right',
+                                    color: '#fff',
+                                    fontSize: 9,
+                                    show: true
+                                },
+                                emphasis: {
+                                    show: true
+                                }
+                            },
+                            itemStyle: {
+                                normal: {
+                                    color: '#F62157'
+                                    // color: colors[colorIndex][n]
+                                }
+                            }
+                        },
+                        {
+                            type: 'effectScatter',
+                            coordinateSystem: 'geo',
+                            data: this.geoCoordMap2,
+                            symbolSize: function(val) {
+                                return val[2] / 50;
+                            },
+                            showEffectOn: 'render',
+                            rippleEffect: {
+                                brushType: 'stroke'
+                            },
+                            hoverAnimation: true,
+                            label: {
+                                normal: {
+                                    formatter: '{b}',
+                                    position: 'bottom',
+                                    show: true
+                                }
+                            },
+                            zlevel: 1
+                        },
+                    ],
+
+
+
+
+                }
+
+                let myChart = echarts.init(document.getElementById('myChart-map'))
+                myChart.hideLoading();
+
+                echarts.registerMap('baotou', mapJson);
+                myChart.setOption(option)
+                // let me = this;
+
+                // mylineChart.setOption(this.map)
+            }
+        }
+    }
+</script>
