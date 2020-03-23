@@ -1,4 +1,4 @@
-import {getArea,saveTowCompany,getAllTwoCompany,deleteTwoCompany,editTwoCompany,updateTwoCompany} from '@/api/twoLevelCompany';
+import {getArea,saveTowCompany,getAllTwoCompany,deleteTwoCompany,editTwoCompany,updateTwoCompany,getAllTwoCompanyOption} from '@/api/twoLevelCompany';
 
 const state = {
     roles: []
@@ -28,7 +28,7 @@ const actions = {
         });
     },
 
-    //查看所有二级单位
+    //查看二级单位
     getAllTwoCompany({commit, state},data) {
         return new Promise((resolve, reject) => {
             getAllTwoCompany(data).then(response => {
@@ -66,6 +66,19 @@ const actions = {
     updateTwoCompany({commit, state},data) {
         return new Promise((resolve, reject) => {
             updateTwoCompany(data).then(response => {
+                const {data} = response;
+                resolve(data);
+            }).catch(error => {
+                reject(error);
+            });
+        });
+    },
+
+
+    //查看所有二级单位
+    getAllTwoCompanyOption({commit, state},data) {
+        return new Promise((resolve, reject) => {
+            getAllTwoCompanyOption(data).then(response => {
                 const {data} = response;
                 resolve(data);
             }).catch(error => {

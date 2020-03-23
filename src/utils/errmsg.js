@@ -17,7 +17,9 @@ const error_common_message = {
     50000: '新建成功',
     50010: '提交信息错误',
     50020: '删除成功',
-    50030: '修改成功 '
+    50030: '修改成功 ',
+
+    80000: '分配成功 '
 };
 
 const error_status_message = {

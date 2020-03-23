@@ -34,9 +34,6 @@
                 <!--</div>-->
             <!--</el-tab-pane>-->
         <!--</el-tabs>-->
-            <industryChart/>
-            <div class="border-bottom"></div>
-            <industryCapitalChart/>
             <el-row>
                 <el-col :span="24">
                     <mapChart />
@@ -44,6 +41,10 @@
             </el-row>
             <!--<capitalChart/>-->
             <regionChart/>
+            <industryChart/>
+            <div class="border-bottom"></div>
+            <industryCapitalChart/>
+            <yearStageChart/>
         </div>
 </template>
 

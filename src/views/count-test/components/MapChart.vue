@@ -162,10 +162,6 @@
                         let data = [];
                         for(let i=0;i<response.length; i++){
                             data.push( {'name': response[i].area_name, 'value': [response[i].x,response[i].y, response[i].count_num]});
-                            // this.tableData.push({
-                            //     region: response[i].industry_name,
-                            //     pz: response[i].count
-                            // });
                         }
                         this.option.series[0].data = data
                         this.option.series[1].data = data

@@ -1,6 +1,6 @@
 <template>
     <div class="app-top">
-        <el-button type="primary" class='btn_right' @click="Create">添加归口科室</el-button>
+        <el-button type="primary" class='btn_right' @click="createRole">添加角色</el-button>
         <div class="app-container" ref="appContainer">
             <!--搜索框-->
             <div class="header" ref="header">
@@ -24,7 +24,7 @@
                     <el-button type="info" @click="searchAll" style="margin-left: 1%;">查询</el-button>
                 </el-form>-->
             </div>
-            <!--归口科室列表-->
+            <!--角色列表-->
             <el-table
                     :header-cell-style="tableHeaderColor"
                     :data="tableData"
@@ -44,13 +44,18 @@
                 </el-table-column>
                 <el-table-column
                         align="center"
-                        prop="department_name"
-                        label="科室名称">
+                        prop="name"
+                        label="标识">
                 </el-table-column>
                 <el-table-column
                         align="center"
-                        prop="created_at"
-                        label="创建时间"
+                        prop="guard_name"
+                        label="角色组名">
+                </el-table-column>
+                <el-table-column
+                        align="center"
+                        prop="attribute"
+                        label="角色名"
                         width="300">
                 </el-table-column>
                 <el-table-column
@@ -59,14 +64,15 @@
                         label="操作"
                         width="200">
                     <template slot-scope="scope">
-                        <el-button type="text" size="medium" v-if="scope.row.id != 1 && scope.row.id != 2 && scope.row.id != 3" @click="editDepartment(scope.row)">编辑</el-button>
-                        <el-button type="text" disabled size="medium" v-else>编辑</el-button>
+                        <el-button type="text" size="medium " @click="updateRole(scope.row)">编辑</el-button>
+                        <el-button type="text" size="medium " @click="deleteRole(scope.row)">删除</el-button>
                     </template>
                 </el-table-column>
             </el-table>
             <!--分页-->
             <div class="page-block" ref="page">
                 <el-pagination
+                        @size-change="handleSizeChange"
                         @current-change="handleCurrentChange"
                         :current-page="search.page"
                         layout="total, prev, pager, next"
@@ -76,31 +82,51 @@
                 </el-pagination>
             </div>
 
-            <!--添加归口科室弹框-->
-            <el-dialog title="添加归口科室" :visible.sync="dialogFormVisible" width="38%">
-                <el-form ref="form" :model="form" label-width="120px" :rules="codeRules">
-                    <el-form-item label="科室名称：" prop="department_name">
-                        <el-input v-model="form.department_name" autocomplete="off" placeholder="请填写科室名称"></el-input>
+            <!--添加角色弹框-->
+            <el-dialog title="添加角色" :visible.sync="dialogFormVisible" width="38%">
+                <el-form ref="form" :model="form" label-position="left" label-width="100px" :rules="codeRules">
+                    <el-form-item label="角色编号" v-if="form.id">
+                        <el-input v-model="form.id" disabled=""></el-input>
                     </el-form-item>
+                    <el-form-item label="角色标识" prop="name" :error="errorMsg.name">
+                        <el-input ref="name" name="name" v-model="form.name"></el-input>
+                    </el-form-item>
+                    <el-form-item label="角色分组名">
+                        <el-input v-model="form.guard_name" disabled></el-input>
+                    </el-form-item>
+                    <el-form-item label="角色名称" prop="attribute" :error="errorMsg.attribute">
+                        <el-input ref="attribute" name="attribute" v-model="form.attribute"></el-input>
+                    </el-form-item>
+
                 </el-form>
                 <div slot="footer" class="dialog-footer">
                     <el-button @click="dialogFormVisible = false">取 消</el-button>
-                    <el-button type="primary" @click="saveDepartment">保 存</el-button>
+                    <el-button type="primary" @click="doCreateRole">保 存</el-button>
                 </div>
             </el-dialog>
 
-            <!--修改归口科室弹框-->
-            <el-dialog title="编辑归口科室" :visible.sync="editDialogFormVisible" width="38%">
-            <el-form ref="editForm" :model="editForm" label-width="120px" :rules="codeRules">
-                <el-form-item label="科室名称：" :error="errorMsg.department_name" prop="department_name">
-                    <el-input v-model="editForm.department_name" autocomplete="off"></el-input>
-                </el-form-item>
-            </el-form>
-            <div slot="footer" class="dialog-footer">
-                <el-button @click="editDialogFormVisible = false">取 消</el-button>
-                <el-button type="primary" @click="updateDepartment">修 改</el-button>
-            </div>
-        </el-dialog>
+            <!--修改帐号信息弹框-->
+            <el-dialog title="编辑二级单位" :visible.sync="editDialogFormVisible" width="38%">
+                <el-form ref="editForm" :model="editForm" label-position="left" label-width="100px" :rules="codeRules">
+                    <el-form-item label="角色编号" v-if="editForm.id">
+                        <el-input v-model="editForm.id" disabled=""></el-input>
+                    </el-form-item>
+                    <el-form-item label="角色标识" prop="name" :error="errorMsg.name">
+                        <el-input ref="name" name="name" v-model="editForm.name"></el-input>
+                    </el-form-item>
+                    <el-form-item label="角色分组名">
+                        <el-input v-model="editForm.guard_name" disabled></el-input>
+                    </el-form-item>
+                    <el-form-item label="角色名称" prop="attribute" :error="errorMsg.attribute">
+                        <el-input ref="attribute" name="attribute" v-model="editForm.attribute"></el-input>
+                    </el-form-item>
+
+                </el-form>
+                <div slot="footer" class="dialog-footer">
+                    <el-button @click="editDialogFormVisible = false">取 消</el-button>
+                    <el-button type="primary" @click="doUpdateRole">修 改</el-button>
+                </div>
+            </el-dialog>
         </div>
     </div>
 </template>
@@ -109,15 +135,22 @@
     import {validatePhone} from '@/utils/validate';
 
     export default {
-        name: 'data_index_department',
+        name: 'role',
         data() {
             return {
                 form: {
-                    department_name: '',
+                    id: '',
+                    name: '',
+                    guard_name: 'api',
+                    attribute: ''
                 },
-                editForm:{
-                    department_name: '',
+                editForm: {
+                    id: '',
+                    name: '',
+                    guard_name: 'api',
+                    attribute: ''
                 },
+                passwordForm:{},
                 tableData: [],
                 tableArea: {},
                 search: {
@@ -132,13 +165,16 @@
                 editDialogFormVisible: false,
                 // 前端验证
                 codeRules: {
-                    department_name: [
-                        { required: true, message: '请输入单位名称', trigger: 'blur' }
+                    name: [
+                        { required: true, message: '请输入角色标识', trigger: 'change' }
+                    ],
+                    attribute: [
+                        { required: true, message: '请输入角色名称', trigger: 'change' }
                     ],
                 },
                 // 后端验证提示
                 errorMsg: {
-                    department_name: '',
+                    name: '',
                 },
             }
         },
@@ -146,7 +182,7 @@
             this.getMaxHeight()
         },
         created() {
-            this.getAllDepartment();
+            this.getRoles();
         },
         methods: {
             //获取计算表格高度
@@ -157,76 +193,120 @@
                 this.maxHeight = appContainer-header-page-40;
             },
 
-            //添加归口可数弹窗
-            Create(){
+            //添加角色弹框
+            createRole(){
                 this.dialogFormVisible = true;
             },
 
-            //添加归口科室
-            saveDepartment() {
+            //添加角色
+            doCreateRole() {
                 let that = this;
                 this.$store.dispatch('common/resetObj', this.errorMsg);
                 this.$refs.form.validate(valid => {
                     if (valid) {
-                        this.$store.dispatch('department/saveDepartment', this.form)
+                        this.$store.dispatch('rbac/createRole', this.form)
                             .then((response) => {
                                 if (response.errors) {
+                                    that.errors = response.errors;
                                     for (const [key, val] of Object.entries(response.errors)) {
                                         that.errorMsg[key] = val[0];
                                     }
                                 } else {
+                                    that.getRoles();
+                                    that.cleanForm();
                                     this.dialogFormVisible = false;
-                                    this.getAllDepartment();
-                                    this.form = {};
                                 }
                             })
                             .catch(() => {
 
                             });
-
                     } else {
                         return false;
                     }
                 });
             },
 
-            //查看归口科室
-            getAllDepartment() {
+            //查看角色
+            getRoles() {
                 let that = this;
-                this.$store.dispatch('department/getAllDepartment',this.search)
+                this.$store.dispatch('rbac/getAllRoles',this.search)
                     .then((response) => {
                         that.tableData = response.data;
                         that.search.total = response.total;
                     })
                     .catch(() => {
+
                     });
             },
 
-            //编辑二级单位帐号
-            editDepartment(row) {
+            //删除角色
+            deleteRole(row) {
+                this.$confirm('此操作将永久删除该角色, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    let that = this;
+                    this.$store.dispatch('rbac/deleteRole', {id:row.id})
+                        .then((response) => {
+                            that.getRoles();
+                        })
+                        .catch(() => {
+
+                        });
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消删除'
+                    });
+                });
+
+
+            },
+
+            //编辑角色
+            updateRole(currentRow){
+                this.editForm = Object.assign({}, currentRow);
+                this.editDialogFormVisible = true;
+                this.$refs.editForm.clearValidate();
+
+            },
+            doUpdateRole() {
                 let that = this;
-                this.$store.dispatch('department/editDepartment',{id : row.id})
-                    .then((response) => {
-                        this.editForm = response;
-                        this.editDialogFormVisible = true;
-                    })
-                    .catch(() => {
+                this.$store.dispatch('common/resetObj', this.errorMsg);
+                this.$refs.editForm.validate(valid => {
+                    if (valid) {
+                        this.$store.dispatch('rbac/editRole', this.editForm)
+                            .then((response) => {
+                                if (response.errors) {
+                                    for (const [key, val] of Object.entries(response.errors)) {
+                                        that.errorMsg[key] = val[0];
+                                    }
 
-                    });
+                                } else {
+                                    that.getRoles();
+                                    this.editDialogFormVisible = false
+                                }
+                            })
+                            .catch(() => {
+
+                            });
+                    } else {
+                        return false;
+                    }
+                });
             },
-            updateDepartment() {
-                let that = this;
-                this.$store.dispatch('department/updateDepartment', this.editForm)
-                    .then((response) => {
-                        this.editDialogFormVisible = false;
-                        that.getAllDepartment();
-                    })
-                    .catch(() => {
 
-                    });
+
+            cleanForm() {
+                this.form = {
+                    id: '',
+                    name: '',
+                    guard_name: 'api',
+                    attribute: ''
+                };
+                this.$refs.form.clearValidate();
             },
-
-
             //设置表格表头样式
             tableHeaderColor ({ row, column, rowIndex, columnIndex }) {
                 if (rowIndex === 0) {
@@ -236,11 +316,11 @@
             //分页
             handleSizeChange(val) {
                 this.search.pageSize = val;
-                this.getAllTwoCompany();
+                this.getRoles();
             },
             handleCurrentChange(val) {
                 this.search.page = val;
-                this.getAllTwoCompany();
+                this.getRoles();
             },
 
         }

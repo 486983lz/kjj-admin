@@ -211,26 +211,32 @@ export const constantRoutes = [
                 path: 'project-admin-examine',
                 name: 'project_admin_examine',
                 component: () => import('@/views/project-admin/examine'),
-                meta: {title: '待审核项目',permissions:[]}
+                meta: {title: '项目申报库',permissions:[]}
             },
             {
                 path: 'project-admin-approval',
                 name: 'project_admin_approval',
                 component: () => import('@/views/project-admin/approval'),
-                meta: {title: '待立项项目',permissions:[]}
+                meta: {title: '项目储备库',permissions:[]}
             },
             {
                 path: 'project-admin-acceptance',
                 name: 'project_admin_acceptance',
                 component: () => import('@/views/project-admin/acceptance'),
-                meta: {title: '已验收项目',permissions:[]}
+                meta: {title: '立项项目库',permissions:[]}
+            },
+            {
+                path: 'project-admin-task',
+                name: 'project_admin_task',
+                component: () => import('@/views/project-admin/archives'),
+                meta: {title: '立项任务书审核',permissions:[]}
             },
             {
                 path: 'project-admin-archives',
                 name: 'project_admin_archives',
                 component: () => import('@/views/project-admin/archives'),
-                meta: {title: '项目档案',permissions:[]}
-            }
+                meta: {title: '项目电子档案库',permissions:[]}
+            },
         ]
     },
     // {
@@ -507,8 +513,8 @@ export const constantRoutes = [
         component: Layout,
         name: 'configure',
         meta: {
-            icon: 'configure',
             title: '功能配置',
+            icon: 'configure',
         },
         children: [
             {
@@ -522,10 +528,101 @@ export const constantRoutes = [
                 name: 'configure_index',
                 component: () => import('@/views/flow/panel'),
                 meta: {title: '状态管理',permissions:[]}
+            },
+            {
+                path: 'configure-index-distribution',
+                name: 'configure_index_distribution',
+                component: () => import('@/views/configure/area_distribution'),
+                meta: {title: '地区配置',permissions:[]}
             }
 
         ]
     },
+
+    {
+        path: '/system-management',
+        component: Layout,
+        name: 'system-management',
+        meta: {
+            title: '系统管理',
+            icon: 'phone1',
+            // permissions:['logo','device-manage','nvr','camera','video-manage','subject','role','assignation-role','permission','assignation-permission']
+        },
+        // redirect: '/dashboard',
+        // alwaysShow: false,
+        children:[
+            {
+                hidden: true,
+                path: 'role-administration',
+                name: 'role-administration',
+                meta: {title: '角色管理', icon: 'right'},
+                component: () => import('@/views/role/index'),
+            },
+           {
+                path: 'user',
+                name: 'user',
+                meta: {title: '用户管理', icon: 'dashboard'},
+               component: () => import('@/views/role/index'),
+                redirect: '/rbac/user/',
+                children: [
+                    {
+                        path: 'user-index',
+                        name: 'user.index',
+                    }
+                ]
+            },
+           {
+                path: 'role',
+                name: 'role',
+                component: () => import('@/views/role/index'),
+                meta: {title: '角色管理', icon: 'right',permissions:['role','assignation-role']},
+                redirect: '/rbac/role/',
+                children: [
+                    {
+                        path: 'role-index',
+                        name: 'role.index',
+                        component: () => import('@/views/role/index'),
+                        meta: {title: '角色管理', icon: 'right',permissions:['role']}
+                    },
+                    {
+
+                        path: 'assignation-role-to-user',
+                        name: 'role.assign.user',
+                        component: () => import('@/views/role/index'),
+                        meta: {title: '分配角色', icon: 'right',permissions:['assignation-role']}
+                    }
+                ]
+           },
+            /*  {
+                 path: 'permission',
+                 name: 'permission',
+                 meta: {title: '权限管理', icon: 'right',permissions:['permission','assignation-permission']},
+                 component: () => import('@/views/nested/common'),
+                 redirect: '/rbac/permission/',
+                 children: [
+                     // {
+                     //     path: 'permission-index',
+                     //     name: 'permission.index',
+                     //     component: () => import('@/views/rbac/permission/index'),
+                     //     meta: {title: '超级管理员权限', icon: 'right',permissions:['permission']}
+                     // },
+                     {
+                         path: 'permission-admin-index',
+                         name: 'permission_admin_index',
+                         component: () => import('@/views/rbac/permission/admin_index'),
+                         meta: {title: '权限管理', icon: 'right'}
+                     },
+                     {
+                         path: 'assignation-permission-to-role',
+                         name: 'permission.assign.role',
+                         component: () => import('@/views/rbac/permission/assignation_to_role'),
+                         meta: {title: '分配权限', icon: 'right',permissions:['assignation-permission']}
+                     },
+                 ]
+             },*/
+        ]
+    },
+
     {
         path: '/contact',
         component: Layout,

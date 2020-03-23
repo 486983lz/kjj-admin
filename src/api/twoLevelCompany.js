@@ -17,7 +17,7 @@ export function saveTowCompany(data) {
     data
   })
 }
-//查看所有二级单位
+//查看二级单位
 export function getAllTwoCompany(data) {
   return request({
     url: '/twoLevel/get-all-two-company',
@@ -46,6 +46,15 @@ export function editTwoCompany(data) {
 export function updateTwoCompany(data) {
   return request({
     url: '/twoLevel/update-two-company',
+    method: 'post',
+    data
+  })
+}
+
+//查看所有二级单位
+export function getAllTwoCompanyOption(data) {
+  return request({
+    url: '/twoLevel/get-all-two-company-option',
     method: 'post',
     data
   })
