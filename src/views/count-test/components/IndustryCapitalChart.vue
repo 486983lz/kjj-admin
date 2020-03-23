@@ -54,7 +54,7 @@
                         {
                             name: '访问来源',
                             type: 'pie',
-                            radius: ['50%', '70%'],
+                            // radius: ['50%', '70%'],
                             data: [
 
                             ],
@@ -103,7 +103,6 @@
 
                         this.pie.legend.data = yAxisData
                         this.pie.series[0].data = seriesData
-                        console.log(this.pie);
                         this.$nextTick(function () {
                             this.initChart()
                         })

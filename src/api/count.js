@@ -15,6 +15,13 @@ export function getIndustryCapitalCount(data) {
     data
   })
 }
+export function getAreaCount(data) {
+  return request({
+    url: '/admin/count/getAreaCount',
+    method: 'post',
+    data
+  })
+}
 
 
 

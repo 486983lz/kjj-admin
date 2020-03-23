@@ -1,40 +1,50 @@
 <template>
     <div class="app-container add-bg-box">
-        <el-tabs v-model="activeTab" type="border-card" @tab-click="" stretch>
-            <el-tab-pane label="地区统计" name="fourth" lazy>
-                <div class="region-box">
-                    <el-row>
-                        <el-col :span="24">
-                            <mapChart />
-                        </el-col>
-                    </el-row>
-                    <!--<capitalChart/>-->
-                    <regionChart/>
-                </div>
-            </el-tab-pane>
-            <el-tab-pane label="年度统计" name="second" lazy>
-                <div class="region-box">
-                    <p>项目阶段年度统计折现图 (项目阶段分为: 申报、二级单位推荐上报、初审、专家评审、项目立项、结题验收、终止)</p>
-                    <yearStageChart/>
-                    <div class="border-bottom"></div>
-                </div>
-            </el-tab-pane>
-            <el-tab-pane label="行业统计" name="third" lazy>
-                <div class="region-box">
-                    <!--<p>项目涉及行业领域统计图</p>-->
-                    <!--<p>(行业领域分为: 稀土及新材料、冶金（钢铁、铝业等）、装备制造、化工、电子信息、新能源、节能环保、农牧业、生物技术、医药卫生、社会发展、其他)</p>-->
-                    <industryChart/>
-                    <div class="border-bottom"></div>
-                </div>
-            </el-tab-pane>
-            <el-tab-pane label="资金统计" name="activity" lazy>
-                <div class="region-box">
-                    <!--<p>行业领域资金分布统计图 (统计单位: 万元)</p>-->
-                    <industryCapitalChart/>
-                </div>
-            </el-tab-pane>
-        </el-tabs>
-    </div>
+        <!--<el-tabs v-model="activeTab" type="border-card" @tab-click="" stretch>-->
+            <!--<el-tab-pane label="地区统计" name="fourth" lazy>-->
+                <!--<div class="region-box">-->
+                    <!--<el-row>-->
+                        <!--<el-col :span="24">-->
+                            <!--<mapChart />-->
+                        <!--</el-col>-->
+                    <!--</el-row>-->
+                    <!--&lt;!&ndash;<capitalChart/>&ndash;&gt;-->
+                    <!--<regionChart/>-->
+                <!--</div>-->
+            <!--</el-tab-pane>-->
+            <!--<el-tab-pane label="年度统计" name="second" lazy>-->
+                <!--<div class="region-box">-->
+                    <!--<p>项目阶段年度统计折现图 (项目阶段分为: 申报、二级单位推荐上报、初审、专家评审、项目立项、结题验收、终止)</p>-->
+                    <!--<yearStageChart/>-->
+                    <!--<div class="border-bottom"></div>-->
+                <!--</div>-->
+            <!--</el-tab-pane>-->
+            <!--<el-tab-pane label="行业统计" name="third" lazy>-->
+                <!--<div class="region-box">-->
+                    <!--&lt;!&ndash;<p>项目涉及行业领域统计图</p>&ndash;&gt;-->
+                    <!--&lt;!&ndash;<p>(行业领域分为: 稀土及新材料、冶金（钢铁、铝业等）、装备制造、化工、电子信息、新能源、节能环保、农牧业、生物技术、医药卫生、社会发展、其他)</p>&ndash;&gt;-->
+                    <!--<industryChart/>-->
+                    <!--<div class="border-bottom"></div>-->
+                <!--</div>-->
+            <!--</el-tab-pane>-->
+            <!--<el-tab-pane label="资金统计" name="activity" lazy>-->
+                <!--<div class="region-box">-->
+                    <!--&lt;!&ndash;<p>行业领域资金分布统计图 (统计单位: 万元)</p>&ndash;&gt;-->
+                    <!--<industryCapitalChart/>-->
+                <!--</div>-->
+            <!--</el-tab-pane>-->
+        <!--</el-tabs>-->
+            <industryChart/>
+            <div class="border-bottom"></div>
+            <industryCapitalChart/>
+            <el-row>
+                <el-col :span="24">
+                    <mapChart />
+                </el-col>
+            </el-row>
+            <!--<capitalChart/>-->
+            <regionChart/>
+        </div>
 </template>
 
 <script>
@@ -70,7 +80,7 @@
 </script>
 <style lang="scss" scoped>
     .app-container {
-        padding: 0;
+        padding: 50px;
     }
     .app-container /deep/ .el-tabs--border-card {
         background: #fff;

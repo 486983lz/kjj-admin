@@ -18,12 +18,6 @@
             >
             </el-table-column>
             <el-table-column
-                    prop="sb"
-                    label="申报总量"
-                    align="center"
-            >
-            </el-table-column>
-            <el-table-column
                     prop="pz"
                     label="立项总量"
                     align="center"
@@ -50,23 +44,15 @@
                     },
                     legend: {
                         bottom: 0,
-                        data: ['达尔罕茂明安联合旗', '白云鄂博矿区', '土默特右旗', '九原区', '东河区', '青山区', '固阳县', '昆都仑区', '石拐区']
+                        data: []
                     },
                     series: [
                         {
                             name: '访问来源',
                             type: 'pie',
-                            radius: ['50%', '70%'],
+                            // radius: ['50%', '70%'],
                             data: [
-                                {value: 335, name: '达尔罕茂明安联合旗', itemStyle: { normal: { color: 'rgb(58, 161, 255)' } }},
-                                {value: 310, name: '白云鄂博矿区', itemStyle: { normal: { color: 'rgb(136, 209, 234)' } }},
-                                {value: 234, name: '土默特右旗', itemStyle: { normal: { color: 'rgb(54, 203, 203)' } }},
-                                {value: 135, name: '九原区', itemStyle: { normal: { color: 'rgb(130, 223, 190)' } }},
-                                {value: 335, name: '东河区', itemStyle: { normal: { color: 'rgb(78, 203, 115)' } }},
-                                {value: 310, name: '青山区', itemStyle: { normal: { color: 'rgb(242, 199, 168)' } }},
-                                {value: 234, name: '固阳县', itemStyle: { normal: { color: 'rgb(172, 223, 130)' } }},
-                                {value: 135, name: '昆都仑区', itemStyle: { normal: { color: 'rgb(251, 212, 55)' } }},
-                                {value: 135, name: '石拐区', itemStyle: { normal: { color: 'rgb(242, 99, 123)' } }}
+
                             ],
                             label:{
                                 formatter: ' {b}：{c} ({d}%)',
@@ -74,53 +60,50 @@
                         }
                     ]
                 },
-                tableData: [{
-                    region: '达尔罕茂明安联合旗',
-                    pz: '1245',
-                    sb: '2305',
-                },{
-                    region: '白云鄂博矿区',
-                    pz: '515',
-                    sb: '787',
-                },{
-                    region: '土默特右旗',
-                    pz: '550',
-                    sb: '362',
-                },{
-                    region: '九原区',
-                    pz: '4616',
-                    sb: '5039',
-                },{
-                    region: '东河区',
-                    pz: '231',
-                    sb: '1422',
-                },{
-                    region: '青山区',
-                    pz: '66',
-                    sb: '833',
-                },{
-                    region: '固阳县',
-                    pz: '722',
-                    sb: '910',
-                },{
-                    region: '昆都仑区',
-                    pz: '42',
-                    sb: '872',
-                },{
-                    region: '石拐区',
-                    pz: '622',
-                    sb: '837',
-                }
-
-                ]
+                tableData: [
+                ],
+                color:[
+                    'rgb(58, 161, 255)',
+                    'rgb(136, 209, 234)',
+                    'rgb(54, 203, 203)',
+                    'rgb(130, 223, 190)',
+                    'rgb(78, 203, 115)',
+                    'rgb(242, 199, 168)',
+                    'rgb(172, 223, 130)',
+                    'rgb(251, 212, 55)',
+                    'rgb(242, 99, 123)',
+                    '#8e7fea',
+                    '#d465ac',
+                ],
             }
         },
         mounted() {
-            this.$nextTick(() => {
-                this.initChart()
-            })
+            this.getAreaCount();
         },
         methods: {
+            getAreaCount(){
+                this.$store.dispatch('count/getAreaCount')
+                    .then((response) => {
+                        let yAxisData = [];
+                        let seriesData = [];
+                        for(let i=0;i<response.length; i++){
+                            yAxisData.push(response[i].area_name);
+                            seriesData.push( {value: response[i].count_num, name: response[i].area_name, itemStyle: { normal: { color: this.color[i] } }});
+                            this.tableData.push({
+                                region: response[i].area_name,
+                                pz: response[i].count_num
+                            });
+                        }
+                        this.pie.legend.data = yAxisData
+                        this.pie.series[0].data = seriesData
+                        this.$nextTick(function () {
+                            this.initChart()
+                        })
+                    })
+                    .catch(() => {
+
+                    });
+            },
             initChart() {
                 let regionChart = echarts.init(document.getElementById('regionChart'))
                 regionChart.setOption(this.pie)
