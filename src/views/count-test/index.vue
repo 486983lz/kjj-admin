@@ -46,7 +46,7 @@
         <div class="border-bottom"></div>
         <industryCapitalChart/>
         <div class="border-bottom"></div>
-        <yearStageChart/>
+<!--        <yearStageChart/>-->
     </div>
 </template>
 
