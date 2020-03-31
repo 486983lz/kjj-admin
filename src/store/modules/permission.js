@@ -1,4 +1,4 @@
-import {asyncRoutes, constantRoutes} from '@/router'
+import {asyncRoutes, constantRoutes, recommendRouter} from '@/router'
 
 /**
  * Use meta.role to determine if the current user has permission
@@ -89,6 +89,20 @@ const actions = {
                 accessedRoutes = asyncRoutes || []
             } else {
                 accessedRoutes = filterCommonAsyncRoutes(asyncRoutes,permissions)
+            }
+
+            commit('SET_ROUTES', accessedRoutes);
+            resolve(accessedRoutes);
+        });
+    },
+
+    generateCommonRoutesRole({commit},permissions) {
+        return new Promise(resolve => {
+            let accessedRoutes;
+            if (permissions.includes('admin')) {
+                accessedRoutes = asyncRoutes || []
+            } else {
+                accessedRoutes = filterCommonAsyncRoutes(recommendRouter,permissions)
             }
 
             commit('SET_ROUTES', accessedRoutes);

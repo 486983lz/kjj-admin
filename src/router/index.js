@@ -182,75 +182,6 @@ export const asyncRoutes = [
         ]
     },
 
-    //推荐部门---推荐端首页
-    {
-        path: '/recommend',
-        component: Layout,
-        name: 'recommend',
-        meta: {
-            icon: 'data1',
-            permissions:['recommend_index']
-        },
-        children: [
-            {
-                path: 'recommend-index',
-                name: 'recommend_index',
-                component: () => import('@/views/recommend/index'),
-                meta: {title: '首页'}
-            }
-        ]
-    },
-    //推荐部门---项目筛选推荐
-    {
-        path: '/screen',
-        component: Layout,
-        name: 'screen',
-        meta: {
-            icon: 'problem',
-            permissions:['recommend_index']
-        },
-        children: [
-            {
-                path: 'screen-index',
-                name: 'screen_index',
-                component: () => import('@/views/screen/index'),
-                meta: {title: '项目筛选推荐'}
-            },
-            {
-                hidden:true,
-                path: 'problem-show',
-                name: 'problem_show',
-                component: () => import('@/views/screen/show'),
-                meta: {title: '预览'}
-            },
-        ]
-    },
-    //推荐部门---注册审核
-    {
-        path: '/registration',
-        component: Layout,
-        name: 'registration',
-        meta: {
-            icon: 'problem',
-            permissions:['recommend_index']
-        },
-        children: [
-            {
-                path: 'registration-index',
-                name: 'registration_index',
-                component: () => import('@/views/registration/index'),
-                meta: {title: '注册审核'}
-            },
-            {
-                hidden:true,
-                path: 'problem-show',
-                name: 'problem_show',
-                component: () => import('@/views/screen/show'),
-                meta: {title: '预览'}
-            },
-        ]
-    },
-
     //创新服务中心---项目审核
     {
         path: '/audit',
@@ -323,7 +254,7 @@ export const asyncRoutes = [
     },
 
     //项目统计
-    {
+    /*{
         path: '/count',
         component: Layout,
         name: 'count',
@@ -339,7 +270,7 @@ export const asyncRoutes = [
                 meta: {title: '项目统计'}
             }
         ]
-    },
+    },*/
 
     //历史项目统计
     {
@@ -745,6 +676,100 @@ export const asyncRoutes = [
         ]
     },
 
+];
+
+
+/**
+ * 推荐部门路由
+ * @type {Array}
+ */
+export const recommendRouter = [
+    {
+        path: '/',
+        component: Layout,
+        redirect: '/dashboard',
+        children: [
+            {
+                path: 'dashboard',
+                component: () => import('@/views/dashboard/index'),
+                name: 'Dashboard',
+                meta: {
+                    title: '首页',
+                    icon: 'data1',
+                    affix: true,
+                    // permissions:['admin']
+                }
+            }
+        ]
+    },
+    //推荐部门---推荐端首页
+    {
+        path: '/recommend',
+        component: Layout,
+        name: 'recommend',
+        meta: {
+            icon: 'data1',
+            // permissions:['recommend_index']
+        },
+        children: [
+            {
+                path: 'recommend-index',
+                name: 'recommend_index',
+                component: () => import('@/views/recommend/index'),
+                meta: {title: '首页'}
+            }
+        ]
+    },
+    //推荐部门---项目筛选推荐
+    {
+        path: '/screen',
+        component: Layout,
+        name: 'screen',
+        meta: {
+            icon: 'problem',
+            permissions:['recommend_index']
+        },
+        children: [
+            {
+                path: 'screen-index',
+                name: 'screen_index',
+                component: () => import('@/views/screen/index'),
+                meta: {title: '项目筛选推荐'}
+            },
+            {
+                hidden:true,
+                path: 'problem-show',
+                name: 'problem_show',
+                component: () => import('@/views/screen/show'),
+                meta: {title: '预览'}
+            },
+        ]
+    },
+    //推荐部门---注册审核
+    {
+        path: '/registration',
+        component: Layout,
+        name: 'registration',
+        meta: {
+            icon: 'problem',
+            permissions:['recommend_index']
+        },
+        children: [
+            {
+                path: 'registration-index',
+                name: 'registration_index',
+                component: () => import('@/views/registration/index'),
+                meta: {title: '注册审核'}
+            },
+            {
+                hidden:true,
+                path: 'problem-show',
+                name: 'problem_show',
+                component: () => import('@/views/screen/show'),
+                meta: {title: '预览'}
+            },
+        ]
+    },
 ];
 
 const createRouter = () => new Router({

@@ -58,6 +58,7 @@
 
 <script>
     import {validUsername, validSignInUsername} from '@/utils/validate'
+    import store from '@/store'
     import SocialSign from './components/SocialSignin'
     import HomePage from '@/components/HomePage'
     import HomeBottom from '@/components/HomeBottom'
@@ -103,6 +104,7 @@
                     ],
                     password: [{required: true, trigger: 'blur', validator: validatePassword}]
                 },
+                role : [],
                 passwordType: 'password',
                 capsTooltip: false,
                 loading: false,
@@ -167,7 +169,6 @@
                         this.loading = true;
                         this.$store.dispatch('user/signin', this.loginForm)
                             .then((response) => {
-                                // console.log(response);
                                 this.$router.push({path: this.redirect || '/', query: this.otherQuery});
                                 this.loading = false;
                             })

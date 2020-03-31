@@ -33,9 +33,15 @@ router.beforeEach(async (to, from, next) => {
                 next();
                 try {
                     const user_info = await store.dispatch('user/getAdminInfo');
+                    // console.log(user_info.role);
                     const permissions = store.getters.permissions;
-                    const accessRoutes = await store.dispatch('permission/generateCommonRoutes',permissions);
-                    router.addRoutes(accessRoutes);
+                    if (user_info.role == 2) {
+                        const accessRoutes = await store.dispatch('permission/generateCommonRoutesRole',permissions);
+                        router.addRoutes(accessRoutes);
+                    } else {
+                        const accessRoutes = await store.dispatch('permission/generateCommonRoutes',permissions);
+                        router.addRoutes(accessRoutes);
+                    }
                     next();
                 } catch (error) {
                     next(`/login?redirect=${to.path}`);
