@@ -24,7 +24,7 @@
             <el-dropdown class="avatar-container right-menu-item hover-effect" trigger="click">
                 <div class="avatar-wrapper">
                     <!--<img :src="avatar+'?imageView2/1/w/80/h/80'" class="user-avatar">-->
-                    战略规划科
+                    {{tableData}}
                     <i class="el-icon-arrow-down"/>
                 </div>
                 <el-dropdown-menu slot="dropdown">
@@ -48,6 +48,7 @@
 
 <script>
     import {mapGetters} from 'vuex'
+    import store from '@/store'
     // import Breadcrumb from '@/components/Breadcrumb'
     import Hamburger from '@/components/Hamburger'
     import ErrorLog from '@/components/ErrorLog'
@@ -71,6 +72,14 @@
                 'avatar',
                 'device'
             ])
+        },
+        data() {
+          return {
+              tableData: [],
+          }
+        },
+        mounted(){
+            this.tableData = store.getters.info.name;
         },
         methods: {
             toggleSideBar() {

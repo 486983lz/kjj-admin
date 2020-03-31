@@ -8,7 +8,9 @@ const state = {
     avatar: '',
     introduction: '',
     roles: [],
-    statusConf:{}
+    info:{},
+    statusConf:{},
+    permissions:[],
 };
 
 const mutations = {
@@ -24,11 +26,20 @@ const mutations = {
     SET_AVATAR: (state, avatar) => {
         state.avatar = avatar
     },
-    SET_ROLES: (state, roles) => {
+   /* SET_ROLES: (state, roles) => {
         state.roles = roles
-    },
+    },*/
     SET_STATUSCONF: (state, statusConf) => {
         state.statusConf = statusConf
+    },
+    SET_INFO: (state, info) => {
+        state.info = info
+    },
+    SET_PERMISSIONS:(state, permissions) => {
+        state.permissions = permissions
+    },
+    CLEAR_PERMISSIONS:(stste)=>{
+        state.permissions.splice(0)
     }
 };
 
@@ -54,14 +65,14 @@ const actions = {
         return new Promise((resolve, reject) => {
             signin({account: account.trim(), password: password}).then(response => {
                 const {data} = response;
-                console.log(data);
+                // console.log(data);
                 sessionStorage.setItem('userId',data.id);
                 sessionStorage.setItem('role',data.role);
                 commit('SET_TOKEN', data.token);
                 setToken(data.token);
                 resolve();
             }).catch(error => {
-                console.log(error);
+                // console.log(error);
                 reject(error);
             });
         })
@@ -98,9 +109,8 @@ const actions = {
         return new Promise((resolve, reject) => {
             getAdminInfo(state.token).then(response => {
                 const {roles, permissions, info,statusConf} = response.data;
-                // console.log(roles);
-                // return false;
-                commit('SET_ROLES', roles);
+                commit('SET_PERMISSIONS', permissions);
+                commit('SET_INFO', info);
                 commit('SET_STATUSCONF', statusConf);
                 //console.log(data);
                 resolve(info);

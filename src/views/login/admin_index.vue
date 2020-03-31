@@ -10,7 +10,7 @@
                     <el-form-item prop="account">
                         <span class="svg-container">
                             <svg-icon icon-class="user"/>
-                        </span><el-input ref="account" v-model="loginForm.account" placeholder="请输入手机号" name="account" type="text" tabindex="1"  autocomplete="on" />
+                        </span><el-input ref="account" v-model="loginForm.account" placeholder="请输入用户名" name="account" type="text" tabindex="1"  autocomplete="on" />
                     </el-form-item>
                     <!--密码-->
                     <el-tooltip v-model="capsTooltip" content="Caps lock is On" placement="right" manual>
@@ -93,7 +93,7 @@
             };
             return {
                 loginForm: {
-                    account: '18447078393',
+                    account: 'admin',
                     password: 'sysmaster109'
                 },
                 loginRules: {

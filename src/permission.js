@@ -33,11 +33,8 @@ router.beforeEach(async (to, from, next) => {
                 next();
                 try {
                     const user_info = await store.dispatch('user/getAdminInfo');
-                    // const accessRoutes = await store.dispatch('permission/generateCommonRoutes');
-                    // router.addRoutes(accessRoutes);
-                    // next({ ...to, replace: true })
-
-                    const accessRoutes = await store.dispatch('permission/generateCommonRoutes');
+                    const permissions = store.getters.permissions;
+                    const accessRoutes = await store.dispatch('permission/generateCommonRoutes',permissions);
                     router.addRoutes(accessRoutes);
                     next();
                 } catch (error) {
