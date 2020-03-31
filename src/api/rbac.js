@@ -83,11 +83,11 @@ export function editPermission(data) {
         data
     })
 }
-
-export function deletePermission() {
+export function deletePermission(data) {
     return request({
-        url: '',
-        method: 'post'
+        url: '/rbac/delete-permission',
+        method: 'post',
+        data
     })
 }
 
@@ -102,6 +102,39 @@ export function assignPermissionsToRole(data) {
 export function cancelPermissionsOfRole(data) {
     return request({
         url: '/rbac/cancel-permissions-role',
+        method: 'post',
+        data
+    })
+}
+
+//获取全部用户
+export function getAllUser(data) {
+    return request({
+        url: '/rbac/get-all-user',
+        method: 'post',
+        data
+    })
+}
+
+export function getRoleByUserId(data) {
+    return request({
+        url: '/rbac/get-role-user',
+        method: 'post',
+        data
+    })
+}
+
+export function assignRoleToUser(data) {
+    return request({
+        url: '/rbac/assign-role-user',
+        method: 'post',
+        data
+    })
+}
+
+export function cancelRoleUser(data) {
+    return request({
+        url: '/rbac/cancel-role-user',
         method: 'post',
         data
     })

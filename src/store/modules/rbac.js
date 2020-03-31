@@ -1,7 +1,8 @@
 import {
     getAllRoles,deleteRole, editRole, createRole, getAllPermissions,
     createPermission, getPermissionByRoleName, assignPermissionsToRole,
-    editPermission, cancelPermissionsOfRole}
+    editPermission, deletePermission, cancelPermissionsOfRole,getAllUser,
+    getRoleByUserId,assignRoleToUser,cancelRoleUser}
     from '@/api/rbac';
 
 const state = {
@@ -94,6 +95,17 @@ const actions = {
         });
     },
 
+    deletePermission({commit, state}, data) {
+        return new Promise((resolve, reject) => {
+            deletePermission(data).then(response => {
+                const {data} = response;
+                resolve(data);
+            }).catch(error => {
+                reject(error);
+            });
+        });
+    },
+
     assignPermissionsToRole({commit, state}, data) {
         return new Promise((resolve, reject) => {
             assignPermissionsToRole(data).then(response => {
@@ -112,7 +124,54 @@ const actions = {
                 reject(error);
             });
         });
-    }
+    },
+
+    //获取全部用户
+    getAllUser({commit, state}, data) {
+        return new Promise((resolve, reject) => {
+            getAllUser(data).then(response => {
+                const {data} = response;
+                resolve(data);
+            }).catch(error => {
+                reject(error);
+            });
+        });
+    },
+
+    getRoleByUserId({commit, state}, data) {
+        return new Promise((resolve, reject) => {
+            getRoleByUserId(data).then(response => {
+                const {data} = response;
+                resolve(data);
+            }).catch(error => {
+                reject(error);
+            });
+        });
+    },
+
+    assignRoleToUser({commit, state}, data) {
+        return new Promise((resolve, reject) => {
+            assignRoleToUser(data).then(response => {
+                const {data} = response;
+                resolve(data);
+            }).catch(error => {
+                reject(error);
+            });
+        });
+    },
+
+    cancelRoleUser({commit, state}, data) {
+        return new Promise((resolve, reject) => {
+            cancelRoleUser(data).then(response => {
+                const {data} = response;
+                resolve(data);
+            }).catch(error => {
+                reject(error);
+            });
+        });
+    },
+
+
 };
 
 export default {

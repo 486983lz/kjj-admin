@@ -1,6 +1,6 @@
 <template>
     <div class="app-top">
-        <el-button type="primary" class='btn_right' @click="createRole">添加角色</el-button>
+        <el-button type="primary" class='btn_right' @click="Permission">添加权限</el-button>
         <div class="app-container" ref="appContainer">
             <!--搜索框-->
             <div class="header" ref="header">
@@ -24,7 +24,7 @@
                     <el-button type="info" @click="searchAll" style="margin-left: 1%;">查询</el-button>
                 </el-form>-->
             </div>
-            <!--角色列表-->
+            <!--权限列表-->
             <el-table
                     :header-cell-style="tableHeaderColor"
                     :data="tableData"
@@ -64,8 +64,8 @@
                         label="操作"
                         width="200">
                     <template slot-scope="scope">
-                        <el-button type="text" size="medium " @click="updateRole(scope.row)">编辑</el-button>
-                        <el-button type="text" size="medium " @click="deleteRole(scope.row)">删除</el-button>
+                        <el-button type="text" size="medium " @click="editPermissions(scope.row)">编辑</el-button>
+                        <el-button type="text" size="medium " @click="deletePermission(scope.row)">删除</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -82,31 +82,30 @@
                 </el-pagination>
             </div>
 
-            <!--添加角色弹框-->
-            <el-dialog title="添加角色" :visible.sync="dialogFormVisible" width="38%">
+            <!--添加权限弹框-->
+            <el-dialog title="添加权限" :visible.sync="dialogFormVisible" width="38%">
                 <el-form ref="form" :model="form" label-position="left" label-width="100px" :rules="codeRules">
-                    <el-form-item label="角色编号" v-if="form.id">
+                    <el-form-item label="权限编号" v-if="form.id">
                         <el-input v-model="form.id" disabled=""></el-input>
                     </el-form-item>
-                    <el-form-item label="角色标识" prop="name" :error="errorMsg.name">
+                    <el-form-item label="权限标识" prop="name" :error="errorMsg.name">
                         <el-input ref="name" name="name" v-model="form.name"></el-input>
                     </el-form-item>
-                    <el-form-item label="角色分组名">
+                    <el-form-item label="权限分组名">
                         <el-input v-model="form.guard_name" disabled></el-input>
                     </el-form-item>
-                    <el-form-item label="角色名称" prop="attribute" :error="errorMsg.attribute">
+                    <el-form-item label="权限名称" prop="attribute" :error="errorMsg.attribute">
                         <el-input ref="attribute" name="attribute" v-model="form.attribute"></el-input>
                     </el-form-item>
-
                 </el-form>
                 <div slot="footer" class="dialog-footer">
                     <el-button @click="dialogFormVisible = false">取 消</el-button>
-                    <el-button type="primary" @click="doCreateRole">保 存</el-button>
+                    <el-button type="primary" @click="createPermission">保 存</el-button>
                 </div>
             </el-dialog>
 
-            <!--修改帐号信息弹框-->
-            <el-dialog title="编辑二级单位" :visible.sync="editDialogFormVisible" width="38%">
+            <!--修改权限弹框-->
+            <el-dialog title="编辑权限" :visible.sync="editDialogFormVisible" width="38%">
                 <el-form ref="editForm" :model="editForm" label-position="left" label-width="100px" :rules="codeRules">
                     <el-form-item label="角色编号" v-if="editForm.id">
                         <el-input v-model="editForm.id" disabled=""></el-input>
@@ -124,7 +123,7 @@
                 </el-form>
                 <div slot="footer" class="dialog-footer">
                     <el-button @click="editDialogFormVisible = false">取 消</el-button>
-                    <el-button type="primary" @click="doUpdateRole">修 改</el-button>
+                    <el-button type="primary" @click="updatePermissions">修 改</el-button>
                 </div>
             </el-dialog>
         </div>
@@ -132,27 +131,23 @@
 </template>
 
 <script>
-    import {validatePhone} from '@/utils/validate';
-
     export default {
-        name: 'role_index',
+        name: 'permission_admin_index',
         data() {
             return {
                 form: {
                     id: '',
                     name: '',
-                    guard_name: 'api',
-                    attribute: ''
+                    attribute: '',
+                    guard_name: 'api'
                 },
                 editForm: {
                     id: '',
                     name: '',
-                    guard_name: 'api',
-                    attribute: ''
+                    attribute: '',
+                    guard_name: 'api'
                 },
-                passwordForm:{},
                 tableData: [],
-                tableArea: {},
                 search: {
                     page: 1,
                     total: 0,
@@ -175,6 +170,7 @@
                 // 后端验证提示
                 errorMsg: {
                     name: '',
+                    attribute: '',
                 },
             }
         },
@@ -182,7 +178,7 @@
             this.getMaxHeight()
         },
         created() {
-            this.getRoles();
+            this.getPermissions();
         },
         methods: {
             //获取计算表格高度
@@ -193,18 +189,18 @@
                 this.maxHeight = appContainer-header-page-40;
             },
 
-            //添加角色弹框
-            createRole(){
+            //添加权限弹框
+            Permission(){
                 this.dialogFormVisible = true;
             },
 
-            //添加角色
-            doCreateRole() {
+            //添加权限
+            createPermission() {
                 let that = this;
                 this.$store.dispatch('common/resetObj', this.errorMsg);
                 this.$refs.form.validate(valid => {
                     if (valid) {
-                        this.$store.dispatch('rbac/createRole', this.form)
+                        this.$store.dispatch('rbac/createPermission', this.form)
                             .then((response) => {
                                 if (response.errors) {
                                     that.errors = response.errors;
@@ -212,44 +208,40 @@
                                         that.errorMsg[key] = val[0];
                                     }
                                 } else {
-                                    that.getRoles();
+                                    this.getPermissions();
                                     that.cleanForm();
                                     this.dialogFormVisible = false;
                                 }
                             })
-                            .catch(() => {
-
-                            });
                     } else {
                         return false;
                     }
                 });
             },
 
-            //查看角色
-            getRoles() {
+            //查看权限
+            getPermissions() {
                 let that = this;
-                this.$store.dispatch('rbac/getAllRoles',this.search)
+                this.$store.dispatch('rbac/getAllPermissions',this.search)
                     .then((response) => {
                         that.tableData = response.data;
                         that.search.total = response.total;
                     })
                     .catch(() => {
-
                     });
             },
 
-            //删除角色
-            deleteRole(row) {
+            //删除权限
+            deletePermission(row) {
                 this.$confirm('此操作将永久删除该角色, 是否继续?', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
                     let that = this;
-                    this.$store.dispatch('rbac/deleteRole', {id:row.id})
+                    this.$store.dispatch('rbac/deletePermission', {id:row.id})
                         .then((response) => {
-                            that.getRoles();
+                            that.getPermissions();
                         })
                         .catch(() => {
 
@@ -264,32 +256,29 @@
 
             },
 
-            //编辑角色
-            updateRole(currentRow){
+            //编辑权限
+            editPermissions(currentRow){
                 this.editForm = Object.assign({}, currentRow);
                 this.editDialogFormVisible = true;
                 this.$refs.editForm.clearValidate();
 
             },
-            doUpdateRole() {
+            updatePermissions() {
                 let that = this;
+                this.editDialogFormVisible = true;
                 this.$store.dispatch('common/resetObj', this.errorMsg);
                 this.$refs.editForm.validate(valid => {
                     if (valid) {
-                        this.$store.dispatch('rbac/editRole', this.editForm)
+                        this.$store.dispatch('rbac/editPermission', this.editForm)
                             .then((response) => {
                                 if (response.errors) {
                                     for (const [key, val] of Object.entries(response.errors)) {
                                         that.errorMsg[key] = val[0];
                                     }
-
                                 } else {
-                                    that.getRoles();
-                                    this.editDialogFormVisible = false
+                                    that.getPermissions();
+                                    this.editDialogFormVisible = false;
                                 }
-                            })
-                            .catch(() => {
-
                             });
                     } else {
                         return false;
@@ -297,13 +286,12 @@
                 });
             },
 
-
             cleanForm() {
                 this.form = {
                     id: '',
                     name: '',
-                    guard_name: 'api',
-                    attribute: ''
+                    attribute: '',
+                    guard_name: 'api'
                 };
                 this.$refs.form.clearValidate();
             },
@@ -316,11 +304,11 @@
             //分页
             handleSizeChange(val) {
                 this.search.pageSize = val;
-                this.getRoles();
+                this.getPermissions();
             },
             handleCurrentChange(val) {
                 this.search.page = val;
-                this.getRoles();
+                this.getPermissions();
             },
 
         }
