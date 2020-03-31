@@ -520,13 +520,20 @@ export const constantRoutes = [
             {
                 path: 'configure-index',
                 name: 'configure_index',
+                component: () => import('@/views/flow/index'),
+                meta: {title: '审批配置',permissions:[]}
+            },
+            {
+                path: 'configure-panel',
+                name: 'configure_panel',
+                hidden:true,
                 component: () => import('@/views/flow/panel'),
                 meta: {title: '审批配置',permissions:[]}
             },
             {
-                path: 'configure-index',
-                name: 'configure_index',
-                component: () => import('@/views/flow/panel'),
+                path: 'status-index',
+                name: 'status_index',
+                component: () => import('@/views/status/index'),
                 meta: {title: '状态管理',permissions:[]}
             },
             {

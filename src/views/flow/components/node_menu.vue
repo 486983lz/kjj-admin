@@ -57,14 +57,14 @@
                             {
                                 id: '11',
                                 type: 'timer',
-                                name: '数据接入',
+                                name: '数据接入(开始)',
                                 ico: 'el-icon-time',
                                 // 自定义覆盖样式
                                 style: {}
                             }, {
                                 id: '12',
                                 type: 'task',
-                                name: '接口调用',
+                                name: '接口调用(过程)',
                                 ico: 'el-icon-odometer',
                                 // 自定义覆盖样式
                                 style: {}
@@ -80,7 +80,7 @@
                             {
                                 id: '21',
                                 type: 'end',
-                                name: '流程结束',
+                                name: '流程结束(结束)',
                                 ico: 'el-icon-caret-right',
                                 // 自定义覆盖样式
                                 style: {}
@@ -217,7 +217,7 @@
         font-size: 12px;
         line-height: 30px;
         margin-left: 4px;
-        width: 70px;
+        width: 180px;
         /* 设置超出宽度文本显示方式*/
         white-space: nowrap;
         overflow: hidden;

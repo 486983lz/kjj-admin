@@ -7,7 +7,8 @@ const state = {
     name: '',
     avatar: '',
     introduction: '',
-    roles: []
+    roles: [],
+    statusConf:{}
 };
 
 const mutations = {
@@ -25,6 +26,9 @@ const mutations = {
     },
     SET_ROLES: (state, roles) => {
         state.roles = roles
+    },
+    SET_STATUSCONF: (state, statusConf) => {
+        state.statusConf = statusConf
     }
 };
 
@@ -93,10 +97,11 @@ const actions = {
     getAdminInfo({commit, state}) {
         return new Promise((resolve, reject) => {
             getAdminInfo(state.token).then(response => {
-                const {roles, permissions, info} = response.data;
+                const {roles, permissions, info,statusConf} = response.data;
                 // console.log(roles);
                 // return false;
                 commit('SET_ROLES', roles);
+                commit('SET_STATUSCONF', statusConf);
                 //console.log(data);
                 resolve(info);
             }).catch(error => {
