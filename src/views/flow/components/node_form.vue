@@ -2,24 +2,62 @@
     <div class="flow-node-form">
         <div class="flow-node-form-header">编辑</div>
         <div class="flow-node-form-body">
-            <el-form :model="node" ref="dataForm" label-width="80px">
-                <el-form-item label="类型">
-                    <el-input v-model="node.type" :disabled="true"></el-input>
+            <el-form :model="node" ref="dataForm" label-width="120px">
+                <el-form-item label="节点id">
+                    <el-input v-model="node.id" :disabled="true"></el-input>
                 </el-form-item>
                 <el-form-item label="名称">
                     <el-input v-model="node.name"></el-input>
                 </el-form-item>
-                <el-form-item label="left坐标">
-                    <el-input v-model="node.left"></el-input>
+                <el-form-item label="接收附加值">
+                    <el-input v-model="node.receiveVal" placeholder="没有则为空"></el-input>
                 </el-form-item>
-                <el-form-item label="top坐标">
-                    <el-input v-model="node.top"></el-input>
+                <el-form-item label="进度节点状态" >
+                    <el-select v-model="node.status_id" clearable placeholder="所属节点">
+                        <el-option
+                        v-for="item in statusList"
+                        :key="item.id"
+                        :label="item.status_name"
+                        :value="item.id">
+                        </el-option>
+                    </el-select>
                 </el-form-item>
-                <el-form-item label="ico图标">
-                    <el-input v-model="node.ico"></el-input>
+
+                <el-form-item label="审核部门" >
+                    <el-select v-model="node.department" multiple placeholder="请选择">
+                        <el-option
+                                v-for="item in departmentList"
+                                :key="item.id"
+                                :label="item.department_name"
+                                :value="item.id">
+                        </el-option>
+                    </el-select>
                 </el-form-item>
-                <el-form-item label="值">
-                    <el-input v-model="node.val"></el-input>
+
+                <el-form-item label="审核类型">
+                    <el-radio-group v-model="node.shType">
+                        <el-radio label="0">单线审批</el-radio>
+                        <el-radio label="1">联合审批</el-radio>
+                    </el-radio-group>
+                </el-form-item>
+
+
+                <el-form-item label="是否可以驳回">
+                    <el-tooltip content="是否可以驳回" placement="top">
+                        <el-switch
+                                v-model="node.isBack"
+                                active-color="#13ce66"
+                                inactive-color="#ff4949"
+                                active-value="1"
+                                inactive-value="0">
+                        </el-switch>
+                    </el-tooltip>
+                </el-form-item>
+                <el-form-item v-if="node.isBack == 1" label="驳回至节点">
+                    <el-input v-model="node.reBack"></el-input>
+                </el-form-item>
+                <el-form-item v-if="node.isBack == 1" label="驳回附加值">
+                    <el-input v-model="node.backVal"></el-input>
                 </el-form-item>
                 <el-form-item>
                     <el-button @click="reset" icon="el-icon-close">重置</el-button>
@@ -34,9 +72,11 @@
     import { cloneDeep } from 'lodash'
 
     export default {
+        props: ['statusList','departmentList'],
         data() {
             return {
-                node: {},
+                node: {
+                },
                 data: {}
             }
         },
@@ -64,9 +104,17 @@
             save() {
                 this.data.nodeList.filter((node) => {
                     if (node.id === this.node.id) {
-                        node.name = this.node.name
+                        node.name = this.node.name == undefined ?'': this.node.name
+                        node.backVal = this.node.backVal == undefined ?'': this.node.backVal
+                        node.reBack = this.node.reBack == undefined ?'': this.node.reBack
+                        node.isBack = this.node.isBack == undefined ?0: this.node.isBack
+                        node.receiveVal = this.node.receiveVal == undefined ?'': this.node.receiveVal
+                        node.shType = this.node.shType == undefined ?0: this.node.shType
+                        node.status_id = this.node.status_id == undefined ?'': this.node.status_id
+                        node.department = this.node.department == undefined ?'': this.node.department
                     }
                 })
+                console.log(this.data.nodeList)
             }
         }
     }

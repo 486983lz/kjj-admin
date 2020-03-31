@@ -7,10 +7,8 @@
                     <div class="flow-tooltar">
                         <el-link type="primary">{{data.name}}</el-link>
                         <el-button icon="el-icon-document" @click="dataInfo" size="mini">流程信息</el-button>
-                        <el-button @click="dataReloadA" icon="el-icon-refresh" size="mini">切换流程A</el-button>
-                        <el-button @click="dataReloadB" icon="el-icon-refresh" size="mini">切换流程B</el-button>
-                        <el-button @click="dataReloadC" icon="el-icon-refresh" size="mini">切换流程C</el-button>
-                        <el-button @click="changeLabel" icon="el-icon-edit-outline" size="mini">设置线</el-button>
+                        <!--<el-button @click="changeLabel" icon="el-icon-edit-outline" size="mini">设置线</el-button>-->
+                        <el-button class="btn_save" @click="saveFlow"  size="mini">保存配置</el-button>
                     </div>
                 </el-col>
             </el-row>
@@ -39,7 +37,7 @@
                             </div>
                         </el-col>
                         <el-col :span="6">
-                            <flow-node-form ref="nodeForm"></flow-node-form>
+                            <flow-node-form ref="nodeForm" v-bind:statusList="statusList" v-bind:departmentList="departmentList"></flow-node-form>
                         </el-col>
                     </el-row>
                 </el-col>
@@ -59,9 +57,7 @@
     import FlowInfo from './components/info'
     import FlowNodeForm from './components/node_form'
     import lodash from 'lodash'
-    import { getDataA } from './data_A'
-    import { getDataB } from './data_B'
-    import { getDataC } from './data_C'
+    import { getData } from './data'
 
     export default {
         data() {
@@ -75,7 +71,12 @@
                 // 是否加载完毕标志位
                 loadEasyFlowFinish: false,
                 // 数据
-                data: {}
+                data: {},
+                flowId:'',
+                flowInfo:{
+                },
+                statusList:{},
+                departmentList:{}
             }
         },
         // 一些基础配置移动该文件中
@@ -85,15 +86,69 @@
         },
         mounted() {
             this.jsPlumb = jsPlumb.getInstance()
-            this.$nextTick(() => {
-                // 默认加载流程A的数据、在这里可以根据具体的业务返回符合流程数据格式的数据即可
-                this.dataReload(getDataB())
-            })
+            this.flowId = this.$route.query.id
+            this.getInfo();
+            this.getStatusOption();
+            this.getAllDepartment();
         },
         methods: {
+            getStatusOption(){
+                let that = this
+                this.$store.dispatch('status/getStatusOption')
+                    .then((response) => {
+                        this.statusList = response
+                    })
+                    .catch(() => {
+                    });
+            },
+            //查看所有归口科室
+            getAllDepartment() {
+                let that = this;
+                this.$store.dispatch('department/allDepartment',this.search)
+                    .then((response) => {
+                        response.push({department_name:'二级推荐部门',id:0});
+                        this.departmentList = response
+                    })
+                    .catch(() => {
+                    });
+            },
+            saveFlow(){
+                let that = this
+                this.$store.dispatch('flow/saveFlowInfo',{id:this.flowId,info:JSON.stringify(this.data)})
+                    .then((response) => {
+                       if(response){
+                           this.$message({
+                               message: '保存流程成功',
+                               type: 'success'
+                           });
+                       }
+                    })
+                    .catch(() => {
+                        this.$message('保存失败');
+                    });
+            },
+            getInfo(){
+                let that = this
+                this.$store.dispatch('flow/getFlowInfo',{id:this.flowId})
+                    .then((response) => {
+                        that.flowInfo = response;
+                        this.$nextTick(() => {
+                            if(that.flowInfo.info){
+                                that.dataReload(eval('(' + that.flowInfo.info + ')'))
+                            }else{
+                                let data = getData()
+                                data.name = that.flowInfo.flow_name
+                                that.dataReload(data)
+                            }
+                        })
+                    })
+                    .catch(() => {
+
+                    });
+            },
             // 返回唯一标识
             getUUID() {
-                return Math.random().toString(36).substr(3, 10)
+                return this.flowInfo.id+'$$'+Math.random().toString(36).substr(3, 10)
             },
             jsPlumbInit() {
                 this.jsPlumb.ready(() => {
@@ -135,7 +190,6 @@
 
                     // 连线右击
                     this.jsPlumb.bind("contextmenu", (evt) => {
-                        console.log('contextmenu', evt)
                     })
 
                     // 连线
@@ -328,18 +382,6 @@
                     })
                 })
             },
-            // 模拟载入数据dataA
-            dataReloadA() {
-                this.dataReload(getDataA())
-            },
-            // 模拟载入数据dataB
-            dataReloadB() {
-                this.dataReload(getDataB())
-            },
-            // 模拟载入数据dataC
-            dataReloadC() {
-                this.dataReload(getDataC())
-            },
             changeLabel() {
                 var lines = this.jsPlumb.getConnections({
                     source: 'nodeA',
@@ -386,5 +428,10 @@
         z-index: 3;
         -webkit-box-shadow: 0 8px 12px 0 rgba(0, 52, 107, .04);
         box-shadow: 0 8px 12px 0 rgba(0, 52, 107, .04);
+    }
+    .btn_save {
+        background-color: #709fe1;
+        border: 0;
+        color:#fff;
     }
 </style>
