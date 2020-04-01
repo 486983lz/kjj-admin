@@ -169,7 +169,15 @@
                         this.loading = true;
                         this.$store.dispatch('user/signin', this.loginForm)
                             .then((response) => {
-                                this.$router.push({path: this.redirect || '/', query: this.otherQuery});
+                                if (response.role === 4) {
+                                    this.$router.push({ path:'/audit/audit-index'});
+                                } else if (response.role === 3) {
+                                    this.$router.push({ path:'/project/project-admin-approval'});
+                                } else if (response.role === 2) {
+                                    this.$router.push({ path:'/recommend/recommend-index'});
+                                } else if (response.role === 1) {
+                                    this.$router.push({path:'/dashboard'});
+                                }
                                 this.loading = false;
                             })
                             .catch(() => {

@@ -70,7 +70,7 @@ const actions = {
                 sessionStorage.setItem('role',data.role);
                 commit('SET_TOKEN', data.token);
                 setToken(data.token);
-                resolve();
+                resolve(data);
             }).catch(error => {
                 // console.log(error);
                 reject(error);

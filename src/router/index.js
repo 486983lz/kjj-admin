@@ -176,12 +176,11 @@ export const asyncRoutes = [
                     title: '首页',
                     icon: 'data1',
                     affix: true,
-                    // permissions:['admin']
+                    permissions:['admin']
                 }
             }
         ]
     },
-
     //创新服务中心---项目审核
     {
         path: '/audit',
@@ -254,7 +253,7 @@ export const asyncRoutes = [
     },
 
     //项目统计
-    /*{
+    {
         path: '/count',
         component: Layout,
         name: 'count',
@@ -270,7 +269,7 @@ export const asyncRoutes = [
                 meta: {title: '项目统计'}
             }
         ]
-    },*/
+    },
 
     //历史项目统计
     {
@@ -684,24 +683,6 @@ export const asyncRoutes = [
  * @type {Array}
  */
 export const recommendRouter = [
-    {
-        path: '/',
-        component: Layout,
-        redirect: '/dashboard',
-        children: [
-            {
-                path: 'dashboard',
-                component: () => import('@/views/dashboard/index'),
-                name: 'Dashboard',
-                meta: {
-                    title: '首页',
-                    icon: 'data1',
-                    affix: true,
-                    // permissions:['admin']
-                }
-            }
-        ]
-    },
     //推荐部门---推荐端首页
     {
         path: '/recommend',
