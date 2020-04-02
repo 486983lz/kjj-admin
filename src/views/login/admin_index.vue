@@ -178,6 +178,7 @@
                                 } else if (response.role === 1) {
                                     this.$router.push({path:'/dashboard'});
                                 }
+                                // this.$router.push({path: this.redirect || '/', query: this.otherQuery});
                                 this.loading = false;
                             })
                             .catch(() => {

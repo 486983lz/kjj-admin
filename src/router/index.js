@@ -86,16 +86,9 @@ export const constantRoutes = [
             },
         ]
     },
-    // 登录
-    {
-        path: '/login',
-        component: () => import('@/views/login/admin_index'),
-        name: 'login',
-        hidden: true
-    },
     // 管理员登录
     {
-        path: '/admin-login',
+        path: '/login',
         component: () => import('@/views/login/admin_index'),
         name: 'admin_login',
         hidden: true
@@ -657,7 +650,7 @@ export const asyncRoutes = [
 
 
     //技术支持
-    {
+    /*{
         path: '/contact',
         component: Layout,
         name: 'contact',
@@ -673,7 +666,7 @@ export const asyncRoutes = [
                 meta: {title: '技术支持'}
             }
         ]
-    },
+    },*/
 
 ];
 

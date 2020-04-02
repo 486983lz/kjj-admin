@@ -8,7 +8,7 @@ import getPageTitle from '@/utils/get-page-title'
 
 NProgress.configure({showSpinner: false}); // NProgress Configuration
 
-const whiteList = ['/', '/login','/admin-login', '/auth-redirect','/home-page','/declare-guide','/register']; // no redirect whitelist
+const whiteList = ['/', '/login', '/auth-redirect','/home-page','/declare-guide','/register']; // no redirect whitelist
 
 router.beforeEach(async (to, from, next) => {
     // start progress bar
@@ -33,7 +33,7 @@ router.beforeEach(async (to, from, next) => {
                 next();
                 try {
                     const user_info = await store.dispatch('user/getAdminInfo');
-                    // console.log(user_info.role);
+                    console.log(user_info);
                     const permissions = store.getters.permissions;
                     if (user_info.role == 2) {
                         const accessRoutes = await store.dispatch('permission/generateCommonRoutesRole',permissions);
