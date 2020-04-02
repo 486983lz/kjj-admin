@@ -24,11 +24,29 @@
                 </el-form-item>
 
                 <el-form-item label="审核部门" >
-                    <el-select v-model="node.department" multiple placeholder="请选择">
+                    <el-select v-model="node.department"  @change="getUserToDepartments" multiple placeholder="请选择">
                         <el-option
                                 v-for="item in departmentList"
                                 :key="item.id"
                                 :label="item.department_name"
+                                :value="item.id">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+
+                <el-form-item label="审核人员">
+                    <el-radio-group v-model="node.isShUser">
+                        <el-radio label="0">部门审批</el-radio>
+                        <el-radio label="1">人员审批</el-radio>
+                    </el-radio-group>
+                </el-form-item>
+
+                <el-form-item v-if="node.isShUser == 1" label="审核人员分配" >
+                    <el-select v-model="node.users" multiple placeholder="请选择">
+                        <el-option
+                                v-for="item in shList"
+                                :key="item.id"
+                                :label="item.name"
                                 :value="item.id">
                         </el-option>
                     </el-select>
@@ -77,7 +95,8 @@
             return {
                 node: {
                 },
-                data: {}
+                data: {},
+                shList:[]
             }
         },
         methods: {
@@ -90,6 +109,7 @@
                 this.data = data
                 data.nodeList.filter((node) => {
                     if (node.id === id) {
+                        this.getUserToDepartments(node.department)
                         this.node = cloneDeep(node)
                     }
                 })
@@ -111,10 +131,25 @@
                         node.receiveVal = this.node.receiveVal == undefined ?'': this.node.receiveVal
                         node.shType = this.node.shType == undefined ?0: this.node.shType
                         node.status_id = this.node.status_id == undefined ?'': this.node.status_id
-                        node.department = this.node.department == undefined ?'': this.node.department
+                        node.department = this.node.department == undefined ?[]: this.node.department
+                        node.isShUser = this.node.isShUser == undefined ?0: this.node.isShUser
+                        node.users = this.node.users == undefined ?[]: this.node.users
                     }
                 })
-                console.log(this.data.nodeList)
+            },
+            getUserToDepartments(ids){
+                let that = this;
+                if(ids){
+                    this.$store.dispatch('recommend/getUserToDepartments',{ids:ids})
+                        .then((response) => {
+                            that.shList = response;
+                        })
+                        .catch(() => {
+                        });
+                }else{
+                    that.shList = [];
+                }
+
             }
         }
     }

@@ -1,5 +1,5 @@
 import {saveAccounts,allRecommendAccounts,deleteRecommend,editRecommend,updateRecommend,
-        editPassword,updatePassword} from '@/api/recommend';
+        editPassword,updatePassword,getUserToDepartments} from '@/api/recommend';
 
 const state = {
     roles: []
@@ -90,6 +90,17 @@ const actions = {
     getAccounts({commit, state},data) {
         return new Promise((resolve, reject) => {
             getAccounts(data).then(response => {
+                const {data} = response;
+                resolve(data);
+            }).catch(error => {
+                reject(error);
+            });
+        });
+    },
+    //根据科室id获取用户
+    getUserToDepartments({commit, state},data) {
+        return new Promise((resolve, reject) => {
+            getUserToDepartments(data).then(response => {
                 const {data} = response;
                 resolve(data);
             }).catch(error => {

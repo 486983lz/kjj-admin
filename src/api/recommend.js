@@ -58,3 +58,10 @@ export function updatePassword(data) {
     data
   })
 }
+export function getUserToDepartments(data) {
+  return request({
+    url: '/admin/getUserToDepartments',
+    method: 'post',
+    data
+  })
+}

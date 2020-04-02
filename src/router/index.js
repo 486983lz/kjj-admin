@@ -199,6 +199,23 @@ export const constantRoutes = [
     //     ]
     // },
     {
+        path: '/project-recommend',
+        component: Layout,
+        meta: {
+            title: '项目筛选推荐',
+            icon: 'project',
+        },
+        children: [
+            {
+                path: 'project-recommend-list',
+                name: 'project_recommend_list',
+                component: () => import('@/views/project-recommend/index'),
+                meta: {title: '项目筛选推荐',permissions:[]}
+            },
+
+        ]
+    },
+    {
         path: '/project',
         component: Layout,
         name: 'project',
